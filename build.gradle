@@ -1,0 +1,97 @@
+buildscript {
+    ext {
+        springBootVersion = '1.3.3.RELEASE'
+        springPlatformVersion = '2.0.3.RELEASE'
+        springIntegrationVersion = '1.0.7.RELEASE'
+        dependencyManagementPlugin = '0.5.2.RELEASE'
+        springCloudVersion = '1.0.7.RELEASE'
+        apacheCommonsVersion = '3.3.2'
+        jacksonVersion = '2.7.2'
+        jacksonMapperVersion = '1.9.13'
+        swaggerVersion = '1.0.2'
+        guavaVersion = '19.0'
+        flywayVersion = '4.0'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://repo.spring.io/release" }
+        maven { url "https://plugins.gradle.org/m2/" }        
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:dependency-management-plugin:${dependencyManagementPlugin}")
+        classpath("gradle.plugin.com.palantir.gradle.docker:gradle-docker:0.6.0")
+    }
+}
+
+apply plugin: "io.spring.dependency-management"
+
+apply plugin: 'spring-boot'
+
+apply plugin: 'eclipse'
+
+apply plugin: 'maven'
+
+apply plugin: 'java'
+
+apply plugin: "com.palantir.docker"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
+        mavenBom("org.springframework.cloud:spring-cloud-netflix:${springCloudVersion}")
+        mavenBom("io.spring.platform:platform-bom:${springPlatformVersion}")
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter")
+    
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+        
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    
+    compile("org.springframework.boot:spring-boot-starter-undertow")
+    
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    compile("org.springframework.boot:spring-boot-starter-amqp")
+                
+    compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
+    
+    compile("org.springframework.cloud:spring-cloud-starter-eureka")
+        
+    compile("com.google.guava:guava:${guavaVersion}")
+        
+    compile("org.apache.commons:commons-lang3:${apacheCommonsVersion}")
+        
+    compile("com.fasterxml.jackson.core:jackson-core:${jacksonVersion}")
+        
+    compile("org.codehaus.jackson:jackson-mapper-asl:${jacksonMapperVersion}")
+        
+    compile("com.mangofactory:swagger-springmvc:$swaggerVersion")
+    
+    compile("br.jus.stf.digital:core:0.0.1-SNAPSHOT")
+    
+    compile("com.h2database:h2")
+    
+    compile("org.flywaydb:flyway-core:$flywayVersion")
+    
+    testCompile("com.jayway.jsonpath:json-path")
+    
+    compile("org.springframework.boot:spring-boot-starter-test")
+}
+
+docker {
+    name jar.baseName
+    dockerfile 'src/main/docker/Dockerfile'
+    dependsOn tasks.jar, tasks.bootRepackage, tasks.build
+}
