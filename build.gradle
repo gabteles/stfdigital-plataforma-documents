@@ -11,6 +11,11 @@ buildscript {
         swaggerVersion = '1.0.2'
         guavaVersion = '19.0'
         flywayVersion = '4.0'
+        itextpdfVersion = '5.5.7'
+        embedMongoVersion = '1.50.0'
+        bouncycastleVersion = '1.53'
+        springDataMongodbVersion = '1.8.0.RELEASE'
+        apachePoiVersion = '3.13'
     }
     repositories {
         mavenLocal()
@@ -67,6 +72,14 @@ dependencies {
                 
     compile("org.springframework.boot:spring-boot-starter-data-elasticsearch")
     
+    compile("org.springframework:spring-oxm")
+    
+    compile("org.springframework.data:spring-data-mongodb:$springDataMongodbVersion")
+
+    compile("org.mongodb:mongo-java-driver")
+
+    compile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$embedMongoVersion")
+    
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
         
     compile("com.google.guava:guava:${guavaVersion}")
@@ -79,6 +92,12 @@ dependencies {
         
     compile("com.mangofactory:swagger-springmvc:$swaggerVersion")
     
+    compile("com.itextpdf:itextpdf:$itextpdfVersion")
+
+    compile("org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion")
+
+    compile("org.apache.poi:poi-ooxml:$apachePoiVersion")
+
     compile("br.jus.stf.digital:core:0.0.1-SNAPSHOT")
     
     compile("com.h2database:h2")
