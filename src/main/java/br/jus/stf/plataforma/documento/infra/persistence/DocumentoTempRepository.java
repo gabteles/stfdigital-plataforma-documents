@@ -9,7 +9,7 @@ import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 /**
- * RepositÛrio tempor·rio de documentos.
+ * Reposit√≥rio tempor√°rio de documentos.
  * 
  * @author Tomas.Godoi
  *

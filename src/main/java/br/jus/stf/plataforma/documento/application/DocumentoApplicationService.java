@@ -55,7 +55,7 @@ public class DocumentoApplicationService {
 	private ConversorDocumentoService conversorDocumentoService;
 
 	/**
-	 * Salva os documentos tempor·rios no repositÛrio
+	 * Salva os documentos tempor√°rios no reposit√≥rio
 	 * 
 	 * @param documentosTemporarios
 	 * @return
@@ -71,7 +71,7 @@ public class DocumentoApplicationService {
 	 */
 	public String salvarDocumentoTemporario(DocumentoTemporario documentoTemporario) {
 		if (documentoTemporario.tamanho() > TAMANHO_MAXIMO) {
-			throw new IllegalArgumentException("O tamanho do arquivo excede o limite m·ximo de 10MB.");
+			throw new IllegalArgumentException("O tamanho do arquivo excede o limite m√°ximo de 10MB.");
 		}
 		
 		return documentoRepository.storeTemp(documentoTemporario);
@@ -107,7 +107,7 @@ public class DocumentoApplicationService {
 	}
 
 	/**
-	 * Une os documentos especificados em um sÛ.
+	 * Une os documentos especificados em um s√≥.
 	 * 
 	 * @param documentos
 	 * @return
@@ -121,7 +121,7 @@ public class DocumentoApplicationService {
 		}
 		
 		if (tamanhoNovoDocumento > TAMANHO_MAXIMO) {
-			throw new IllegalArgumentException("O tamanho do arquivo excede o limite m·ximo de 10MB.");
+			throw new IllegalArgumentException("O tamanho do arquivo excede o limite m√°ximo de 10MB.");
 		}
 		
 		DocumentoTemporario temp = documentoService.unirConteudos(conteudos);

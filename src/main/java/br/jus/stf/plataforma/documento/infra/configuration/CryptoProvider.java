@@ -5,7 +5,7 @@ import java.security.Security;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
- * Fornece mecanismo para registro de providers e recuperaÁ„o do provider padr„o
+ * Fornece mecanismo para registro de providers e recupera√ß√£o do provider padr√£o
  * a ser utilizado.
  * 
  * @author Tomas.Godoi
@@ -33,9 +33,9 @@ public final class CryptoProvider {
 	}
 
 	/**
-	 * Retorna o provider padr„o.
+	 * Retorna o provider padr√£o.
 	 * 
-	 * @return provider padr„o
+	 * @return provider padr√£o
 	 */
 	public static String provider() {
 		return PROVIDER;

@@ -51,7 +51,7 @@ public class OnlyofficeIntegrationRestResource {
 	@Qualifier("doocumentServerBaseUrl")
 	private String doocumentServerBaseUrl;
 
-	@ApiOperation("Recupera o conteúdo de um documento")
+	@ApiOperation("Recupera o conteÃºdo de um documento")
 	@RequestMapping(value = "/documentos/{documentoId}/conteudo.docx", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperarConteudo(@PathVariable("documentoId") Long documentoId)
 	        throws IOException {
@@ -72,7 +72,7 @@ public class OnlyofficeIntegrationRestResource {
 		return headers;
 	}
 
-	@ApiOperation("Gera ou reutiliza o número de edição para um documento")
+	@ApiOperation("Gera ou reutiliza o nÃºmero de ediÃ§Ã£o para um documento")
 	@RequestMapping(value = "/documentos/{documentoId}/edicao", method = RequestMethod.PUT)
 	public EdicaoDto recuperarEdicao(@PathVariable("documentoId") Long documentoId) throws IOException {
 		Documento documento = documentoRepository.findOne(new DocumentoId(documentoId));
@@ -80,7 +80,7 @@ public class OnlyofficeIntegrationRestResource {
 		return new EdicaoDto(edicao.numero(), edicao.ativo());
 	}
 
-	@ApiOperation("Verifica se um documento está em edição")
+	@ApiOperation("Verifica se um documento estÃ¡ em ediÃ§Ã£o")
 	@RequestMapping(value = "/documentos/{documentoId}/edicao")
 	public ResponseEntity<EdicaoDto> estaEmEdicao(@PathVariable("documentoId") Long documentoId) {
 		Edicao edicao = controladorEdicaoDocumento.recuperarEdicao(new DocumentoId(documentoId));

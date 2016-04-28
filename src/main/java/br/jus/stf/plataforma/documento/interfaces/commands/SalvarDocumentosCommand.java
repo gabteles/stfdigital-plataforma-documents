@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
- * Comando para persistir documentos tempor·rios
+ * Comando para persistir documentos tempor√°rios
  * 
  * @author Lucas.Rodrigues
  *

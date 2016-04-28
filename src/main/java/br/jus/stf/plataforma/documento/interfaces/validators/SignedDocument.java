@@ -19,7 +19,7 @@ import javax.validation.Payload;
 		DocumentSignatureValidatorMultipartFile.class })
 public @interface SignedDocument {
 
-	String message() default "Assinatura do documento inv·lida.";
+	String message() default "Assinatura do documento inv√°lida.";
 
 	Class<?>[] groups() default {};
 

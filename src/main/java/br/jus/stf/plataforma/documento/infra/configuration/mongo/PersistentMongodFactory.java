@@ -11,8 +11,8 @@ import de.flapdoodle.embed.mongo.distribution.IFeatureAwareVersion;
 import de.flapdoodle.embed.mongo.tests.MongodForTestsFactory;
 
 /**
- * Factory para criar um mongodb que persistir· em um diretÛrio do home do
- * usu·rio.
+ * Factory para criar um mongodb que persistir√° em um diret√≥rio do home do
+ * usu√°rio.
  * 
  * @author Tomas.Godoi
  *

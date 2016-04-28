@@ -7,13 +7,13 @@ import org.elasticsearch.common.lang3.Validate;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Comando para gerar documento com substituição de tags")
+@ApiModel("Comando para gerar documento com substituiÃ§Ã£o de tags")
 public class GerarDocumentoComTagsCommand {
 
 	@ApiModelProperty("Id do documento")
 	private Long documentoId;
 
-	@ApiModelProperty("Lista de substituições a serem realizadas")
+	@ApiModelProperty("Lista de substituiÃ§Ãµes a serem realizadas")
 	private List<SubstituicaoTagDocumento> substituicoes;
 
 	public GerarDocumentoComTagsCommand() {

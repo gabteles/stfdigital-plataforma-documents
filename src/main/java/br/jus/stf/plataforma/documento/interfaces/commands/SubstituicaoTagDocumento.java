@@ -5,7 +5,7 @@ import org.apache.commons.lang3.Validate;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Representa a substituição de uma tag em documento.")
+@ApiModel("Representa a substituiÃ§Ã£o de uma tag em documento.")
 public class SubstituicaoTagDocumento {
 
 	@ApiModelProperty("Nome da tag")

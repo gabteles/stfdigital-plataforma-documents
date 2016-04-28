@@ -45,7 +45,7 @@ public class SignatureApplicationService {
 	private PdfSigningSpecificationBuilder specBuilder;
 
 	/**
-	 * Recebe o certificado que vai assinar um documento, permitindo a criação
+	 * Recebe o certificado que vai assinar um documento, permitindo a criaÃ§Ã£o
 	 * de um assinador de documentos.
 	 * 
 	 * @param certificate
@@ -57,7 +57,7 @@ public class SignatureApplicationService {
 			throws SigningException {
 		CertificateValidation validation = certificateValidationService.validate(certificate, pkiIds);
 		if (validation.valid()) {
-			// Constrói uma especificação de assinatura de PDF.
+			// ConstrÃ³i uma especificaÃ§Ã£o de assinatura de PDF.
 			SigningSpecification spec = specBuilder.pkcs7Dettached().reason(reason).hashAlgorithm(HashType.SHA256).build();
 			DocumentSigner signer = signerFactory.create(documentSignerRepository.nextId(), spec, validation);
 			documentSignerRepository.save(signer);

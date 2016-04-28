@@ -24,7 +24,7 @@ public interface DocumentoRepository extends Repository<Documento, DocumentoId> 
 	 * Pesquisa um documento
 	 * 
 	 * @param documentoId
-	 * @return o stream do conte˙do
+	 * @return o stream do conte√∫do
 	 */
 	public ConteudoDocumento download(DocumentoId documentoId);
 	
@@ -43,15 +43,15 @@ public interface DocumentoRepository extends Repository<Documento, DocumentoId> 
 	public void delete(Documento documento);
 
 	/**
-	 * Salva um documento tempor·rio
+	 * Salva um documento tempor√°rio
 	 * 
 	 * @param documentoTemporario
-	 * @return identificacao do tempor·rio
+	 * @return identificacao do tempor√°rio
 	 */
 	public String storeTemp(DocumentoTemporario documentoTemporario);
 	
 	/**
-	 * Remove um arquivo tempor·rio
+	 * Remove um arquivo tempor√°rio
 	 * 
 	 * @param tempId
 	 * @return
@@ -59,7 +59,7 @@ public interface DocumentoRepository extends Repository<Documento, DocumentoId> 
 	public void removeTemp(String tempId);
 	
 	/**
-	 * Recupera o prÛximo id do documento
+	 * Recupera o pr√≥ximo id do documento
 	 * 
 	 * @return
 	 */

@@ -8,7 +8,7 @@ package br.jus.stf.plataforma.documento.infra;
  */
 public abstract class DocumentProfiles {
 
-	// Subprofile do desenvolvimento que mantÈm os dados entre execuÁıes
+	// Subprofile do desenvolvimento que mant√©m os dados entre execu√ß√µes
 	public static final String KEEP_DATA = "keepData";
 
 	public static final String MONGO_SERVER = "mongoServer";
@@ -21,8 +21,8 @@ public abstract class DocumentProfiles {
 	public static final String DOCUMENTO_FS = "documentoFs";
 
 	/**
-	 * Essa classe n„o possui propriedades ou mÈtodos de inst‚ncia. Adicionando
-	 * construtor privado para evitar instanciaÁ„o.
+	 * Essa classe n√£o possui propriedades ou m√©todos de inst√¢ncia. Adicionando
+	 * construtor privado para evitar instancia√ß√£o.
 	 */
 	private DocumentProfiles() {
 	}

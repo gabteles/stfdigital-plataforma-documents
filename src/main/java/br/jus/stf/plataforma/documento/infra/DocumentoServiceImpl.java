@@ -35,7 +35,7 @@ import br.jus.stf.plataforma.documento.domain.model.SubstituicaoTag;
 import br.jus.stf.plataforma.documento.domain.model.Tag;
 
 /**
- * Service para manipulação de documentos do tipo Pdf.
+ * Service para manipulaÃ§Ã£o de documentos do tipo Pdf.
  * 
  * @author Tomas.Godoi
  *
@@ -52,7 +52,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	private final Pattern pattern = Pattern.compile("@@(.*)@@");
 
 	/**
-	 * Realiza a contagem da quantidade de páginas em um arquivo de documento.
+	 * Realiza a contagem da quantidade de pÃ¡ginas em um arquivo de documento.
 	 * 
 	 * @param docTemp
 	 * @return
@@ -63,7 +63,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 	}
 
 	/**
-	 * Divide o conteúdo do documento.
+	 * Divide o conteÃºdo do documento.
 	 * 
 	 */
 	@Override
@@ -81,12 +81,12 @@ public class DocumentoServiceImpl implements DocumentoService {
 
 			return new DocumentoTemporario(new PDFMultipartFile("pdf-dividido", baos.toByteArray()));
 		} catch (IOException | DocumentException e) {
-			throw new RuntimeException("Erro ao dividir o conteúdo do documento.", e);
+			throw new RuntimeException("Erro ao dividir o conteÃºdo do documento.", e);
 		}
 	}
 
 	/**
-	 * Une vários conteúdos em um só.
+	 * Une vÃ¡rios conteÃºdos em um sÃ³.
 	 * 
 	 */
 	@Override
@@ -104,7 +104,7 @@ public class DocumentoServiceImpl implements DocumentoService {
 			document.close();
 			return new DocumentoTemporario(new PDFMultipartFile("pdf-unido", baos.toByteArray()));
 		} catch (IOException | DocumentException e) {
-			throw new RuntimeException("Erro ao unir os conteúdos dos documentos.", e);
+			throw new RuntimeException("Erro ao unir os conteÃºdos dos documentos.", e);
 		}
 	}
 
@@ -134,13 +134,13 @@ public class DocumentoServiceImpl implements DocumentoService {
 		if (todasPaginasForamContempladas(intervalos, documento)) {
 			return dividirDocumento(documento, intervalos);
 		} else {
-			throw new IllegalArgumentException("Nem todas as páginas do documento foram contempladas.");
+			throw new IllegalArgumentException("Nem todas as pÃ¡ginas do documento foram contempladas.");
 		}
 	}
 
 	private List<DocumentoTemporarioId> dividirDocumento(Documento documento, List<Range<Integer>> intervalos) {
 		if (!intervalosSaoContidosPeloDocumento(intervalos, documento)) {
-			throw new IllegalArgumentException("Há intervalos não contidos no documento.");
+			throw new IllegalArgumentException("HÃ¡ intervalos nÃ£o contidos no documento.");
 		}
 		ConteudoDocumento conteudo = documentoRepository.download(documento.identity());
 		List<DocumentoTemporarioId> documentosTemporariosDivididos = new ArrayList<>();

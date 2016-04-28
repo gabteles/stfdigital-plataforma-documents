@@ -30,13 +30,13 @@ public class FSConfiguration {
 	@PostConstruct
 	public void checkDocsDir() throws IOException {
 		File docsDir = new File(documentosDirPath());
-		if (env.acceptsProfiles(Profiles.DEVELOPMENT)) { // No desenvolvimento, tenta criar diret髍io
+		if (env.acceptsProfiles(Profiles.DEVELOPMENT)) { // No desenvolvimento, tenta criar diret贸rio
 			if (!docsDir.exists()) {
-				if (!docsDir.mkdir()) throw new RuntimeException("Erro ao criar o diret髍io de documentos.");
+				if (!docsDir.mkdir()) throw new RuntimeException("Erro ao criar o diret贸rio de documentos.");
 			}
 		} else {
 			if (!docsDir.exists()) {
-				throw new RuntimeException("Diret髍io de documentos inexistente.");
+				throw new RuntimeException("Diret贸rio de documentos inexistente.");
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public class FSConfiguration {
 	}
 
 	/**
-	 * Armazena em diret髍io tempor醨io no desenvolvimento e quando n鉶 se quer
+	 * Armazena em diret贸rio tempor谩rio no desenvolvimento e quando n茫o se quer
 	 * manter os dados.
 	 * 
 	 * @return

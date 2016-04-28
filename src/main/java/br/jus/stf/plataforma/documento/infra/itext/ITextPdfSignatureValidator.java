@@ -69,7 +69,7 @@ public class ITextPdfSignatureValidator implements DocumentValidator {
 
 			// Valida cada campo de assinatura.
 			for (String fieldName : fields) {
-				// Recupera um PdfPKCS7 para continuar a verificaÁ„o.
+				// Recupera um PdfPKCS7 para continuar a verifica√ß√£o.
 				PdfPKCS7 pdfPKCS7 = acroFields.verifySignature(fieldName, CryptoProvider.provider());
 
 				try {
@@ -91,7 +91,7 @@ public class ITextPdfSignatureValidator implements DocumentValidator {
 			
 			if (validSignatures == 0) {
 				throw new DocumentValidationException(
-						"Nenhuma assinatura existente no documento foi considerada v·lida.",
+						"Nenhuma assinatura existente no documento foi considerada v√°lida.",
 						invalidSignatureExceptions);
 			}
 		} catch (DocumentValidationException e) {
@@ -114,12 +114,12 @@ public class ITextPdfSignatureValidator implements DocumentValidator {
 
 	private void validateAcroFields(AcroFields acroFields) throws DocumentValidationException {
 		Optional.ofNullable(acroFields).orElseThrow(
-				() -> new DocumentValidationException("N„o foi possÌvel recuperar os campos de assinatura do pdf."));
+				() -> new DocumentValidationException("N√£o foi poss√≠vel recuperar os campos de assinatura do pdf."));
 	}
 
 	private void validateFields(List<String> fields) throws DocumentValidationException {
 		if (fields == null || fields.isEmpty()) {
-			throw new DocumentValidationException("N„o foi possÌvel recuperar os campos de assinatura do pdf.");
+			throw new DocumentValidationException("N√£o foi poss√≠vel recuperar os campos de assinatura do pdf.");
 		}
 	}
 
@@ -127,21 +127,21 @@ public class ITextPdfSignatureValidator implements DocumentValidator {
 		try {
 			// Verifica se o PdfPKCS7 do campo de assinatura foi encontrado
 			Optional.ofNullable(pdfPKCS7)
-					.orElseThrow(() -> new DocumentValidationException("Assinatura n„o encontrada no pdf."));
+					.orElseThrow(() -> new DocumentValidationException("Assinatura n√£o encontrada no pdf."));
 
 			// Verifica o digesto da assinatura
 			if (!pdfPKCS7.verify()) {
-				throw new DocumentValidationException("O digesto da assinatura n„o confere.");
+				throw new DocumentValidationException("O digesto da assinatura n√£o confere.");
 			}
 		} catch (GeneralSecurityException e) {
-			throw new DocumentValidationException("Erro de seguranÁa ao verificar o digesto da assinatura.", e);
+			throw new DocumentValidationException("Erro de seguran√ßa ao verificar o digesto da assinatura.", e);
 		}
 	}
 
 	private void validateField(AcroFields acroFields, String fieldName) throws DocumentValidationException {
 		// Verifica se a assinatura compreende o documento todo
 		if (!acroFields.signatureCoversWholeDocument(fieldName)) {
-			throw new DocumentValidationException("A assinatura n„o compreende o documento todo.");
+			throw new DocumentValidationException("A assinatura n√£o compreende o documento todo.");
 		}
 	}
 
@@ -168,16 +168,16 @@ public class ITextPdfSignatureValidator implements DocumentValidator {
 		X509Certificate[] pdfOriginalCertificateChain = (X509Certificate[]) pdfPKCS7.getSignCertificateChain();
 		if (!acceptSignatureWithoutChain) {
 			if (!Arrays.equals(pdfOriginalCertificateChain, validation.certificateChain())) {
-				throw new DocumentValidationException("Cadeia de certificaÁ„o incompleta.");
+				throw new DocumentValidationException("Cadeia de certifica√ß√£o incompleta.");
 			}
 		} else {
 			if (pdfOriginalCertificateChain.length > validation.certificateChain().length) {
-				throw new DocumentValidationException("Cadeia de certificaÁ„o inv·lida.");
+				throw new DocumentValidationException("Cadeia de certifica√ß√£o inv√°lida.");
 			} else {
 				int i = 0;
 				for (X509Certificate c : pdfOriginalCertificateChain) {
 					if (!c.equals(validation.certificateChain()[i])) {
-						throw new DocumentValidationException("Cadeia de certificaÁ„o inv·lida.");
+						throw new DocumentValidationException("Cadeia de certifica√ß√£o inv√°lida.");
 					}
 					i++;
 				}

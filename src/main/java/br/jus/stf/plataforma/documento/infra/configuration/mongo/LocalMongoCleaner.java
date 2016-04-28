@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import br.jus.stf.plataforma.documento.infra.LocalData;
 
 /**
- * Classe utilit·ria para matar processos remanescentes do mongo no ambiente
+ * Classe utilit√°ria para matar processos remanescentes do mongo no ambiente
  * local.
  * 
  * @author Tomas.Godoi
@@ -96,7 +96,7 @@ public final class LocalMongoCleaner {
 	}
 
 	/**
-	 * Realiza atÈ 30 tentativas de apagar o arquivo de lock do mongo a cada 100
+	 * Realiza at√© 30 tentativas de apagar o arquivo de lock do mongo a cada 100
 	 * milissegundos.
 	 * 
 	 */
@@ -107,7 +107,7 @@ public final class LocalMongoCleaner {
 		if (lockFile.exists()) {
 			while (true) {
 				if (timeout <= 0)
-					throw new RuntimeException("N„o conseguiu limpar lock do mongo.");
+					throw new RuntimeException("N√£o conseguiu limpar lock do mongo.");
 				try {
 					FileUtils.forceDelete(lockFile);
 					break;

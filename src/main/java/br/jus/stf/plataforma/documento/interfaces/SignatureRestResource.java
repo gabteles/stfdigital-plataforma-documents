@@ -41,7 +41,7 @@ import br.jus.stf.plataforma.documento.interfaces.dto.SignedDocumentDto;
 import br.jus.stf.plataforma.documento.interfaces.dto.SignerDto;
 
 /**
- * ServiÁos REST para a assinatura de documentos.
+ * Servi√ßos REST para a assinatura de documentos.
  * 
  * @author Tomas.Godoi
  *
@@ -97,7 +97,7 @@ public class SignatureRestResource {
 		}
 	}
 
-	@ApiOperation("Fornece um arquivo j· existente no servidor para assinatura.")
+	@ApiOperation("Fornece um arquivo j√° existente no servidor para assinatura.")
 	@RequestMapping(value = "/provide-to-sign", method = RequestMethod.POST)
 	public void provideToSign(@RequestBody ProvideToSignCommand command) throws SigningException {
 		signatureApplicationService.provideToSign(new DocumentSignerId(command.getSignerId()), command.getDocumentId());

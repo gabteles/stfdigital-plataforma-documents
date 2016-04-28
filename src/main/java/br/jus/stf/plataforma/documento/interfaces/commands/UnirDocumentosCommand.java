@@ -8,12 +8,12 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * Command para uni„o de documentos.
+ * Command para uni√£o de documentos.
  * 
  * @author Tomas.Godoi
  *
  */
-@ApiModel("ContÈm as informaÁıes necess·rias unir documentos")
+@ApiModel("Cont√©m as informa√ß√µes necess√°rias unir documentos")
 public class UnirDocumentosCommand {
 
 	@ApiModelProperty("Documentos a serem unidos")

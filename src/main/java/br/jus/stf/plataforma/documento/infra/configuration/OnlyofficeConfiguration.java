@@ -30,7 +30,7 @@ import org.springframework.web.client.RestTemplate;
 import br.jus.stf.plataforma.documento.infra.OnlyofficeConversionReply;
 
 /**
- * Configurações necessárias para a integração com o onlyoffice.
+ * ConfiguraÃ§Ãµes necessÃ¡rias para a integraÃ§Ã£o com o onlyoffice.
  * 
  * @author Tomas.Godoi
  *

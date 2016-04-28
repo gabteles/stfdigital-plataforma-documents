@@ -53,7 +53,7 @@ public class ITextPdfSignatureUtil {
 			messageDigest.update(bytes);
 			return messageDigest.digest();
 		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException("Algoritmo de hash SHA-256 n„o encontrado.", e);
+			throw new RuntimeException("Algoritmo de hash SHA-256 n√£o encontrado.", e);
 		}
 	}
 

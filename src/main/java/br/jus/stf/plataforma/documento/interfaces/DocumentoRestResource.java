@@ -61,7 +61,7 @@ public class DocumentoRestResource {
 	@Autowired
 	private Validator validator;
 
-	@ApiOperation("Salva os documentos tempor·rios")
+	@ApiOperation("Salva os documentos tempor√°rios")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public List<DocumentoTemporarioDto> salvar(@RequestBody SalvarDocumentosCommand command) {
@@ -72,7 +72,7 @@ public class DocumentoRestResource {
 		return documentoServiceFacade.salvarDocumentos(command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList()));
 	}	
 	
-	@ApiOperation("Recupera o conte˙do de um documento do repositÛrio")
+	@ApiOperation("Recupera o conte√∫do de um documento do reposit√≥rio")
 	@RequestMapping(value = "/{documentoId}/conteudo", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperar(@PathVariable("documentoId") Long documentoId) throws IOException {
 		ConteudoDocumento documento = documentoServiceFacade.pesquisaDocumento(documentoId);
@@ -87,16 +87,16 @@ public class DocumentoRestResource {
 	    return documentoServiceFacade.consultar(documentoId);
 	}
 	
-	@ApiOperation("Envia um documento para armazenamento tempor·rio e retorna o indentificador")
+	@ApiOperation("Envia um documento para armazenamento tempor√°rio e retorna o indentificador")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public String upload(UploadDocumentoCommand command) {
 		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
 	}
 	
-	@ApiOperation("Envia um documento assinado para armazenamento tempor·rio e retorna o indentificador")
+	@ApiOperation("Envia um documento assinado para armazenamento tempor√°rio e retorna o indentificador")
 	@RequestMapping(value = "/upload/assinado", method = RequestMethod.POST)
-	@ApiResponses(value = {@ApiResponse(code = 400, message = "O arquivo enviado n„o foi assinado digitalmente.")})
+	@ApiResponses(value = {@ApiResponse(code = 400, message = "O arquivo enviado n√£o foi assinado digitalmente.")})
 	@ResponseStatus(HttpStatus.CREATED)
 	public String uploadAssinado(@Valid UploadDocumentoAssinadoCommand command, BindingResult result) {
 		if (result.hasErrors()) {
@@ -106,7 +106,7 @@ public class DocumentoRestResource {
 		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
 	}
 	
-	@ApiOperation("Envia um documento para armazenamento tempor·rio e retorna o indentificador")
+	@ApiOperation("Envia um documento para armazenamento tempor√°rio e retorna o indentificador")
 	@RequestMapping(value = "/temporarios/delete", method = RequestMethod.POST)
 	public void deleteTemp(@Valid @RequestBody DeleteTemporarioCommand command, BindingResult result) {
 		if (result.hasErrors()) {
@@ -165,7 +165,7 @@ public class DocumentoRestResource {
 		return documentoServiceFacade.gerarDocumentoComTags(command.getDocumentoId(), command.getSubstituicoes());
 	}
 	
-	@ApiOperation("Gera um documento final a partir do edit·vel")
+	@ApiOperation("Gera um documento final a partir do edit√°vel")
 	@RequestMapping(value = "/gerar-final")
 	public Long gerarDocumentoFinal(GerarDocumentoFinalCommand command) {
 		return documentoServiceFacade.gerarDocumentoFinal(command.getDocumento());

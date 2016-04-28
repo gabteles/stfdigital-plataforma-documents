@@ -14,11 +14,11 @@ import org.springframework.util.MultiValueMap;
 
 /**
  * Classe para permitir utilizar o operador AND ao restringir
- * os profiles aos quais uma configuração se aplica. (O Spring
- * não suporta essa funcionalidade diretamente na anotação @Profile ainda).
+ * os profiles aos quais uma configuraÃ§Ã£o se aplica. (O Spring
+ * nÃ£o suporta essa funcionalidade diretamente na anotaÃ§Ã£o @Profile ainda).
  * 
  * Classe reaproveitada de https://jira.spring.io/browse/SPR-12458
- * com algumas alterações.
+ * com algumas alteraÃ§Ãµes.
  * 
  * @author Tomas.Godoi
  *

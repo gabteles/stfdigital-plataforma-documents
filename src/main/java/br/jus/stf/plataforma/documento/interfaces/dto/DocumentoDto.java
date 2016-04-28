@@ -18,7 +18,7 @@ public class DocumentoDto {
 	@ApiModelProperty(value = "Tamanho do documento em bytes.")
 	private Long tamanho;
 	
-	@ApiModelProperty(value = "Quantidade de p·ginas do documento.")
+	@ApiModelProperty(value = "Quantidade de p√°ginas do documento.")
 	private Integer quantidadePaginas;
 
 	public DocumentoDto(Long documentoId, Long tamanho, Integer quantidadePaginas){

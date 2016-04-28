@@ -78,19 +78,19 @@ public class PKCS7DettachedITextPdfSignatureFinisher implements ITextPdfSignatur
 			return new PreSignature(new AuthenticatedAttributes(authAttrs),
 					new HashToSign(ITextPdfSignatureUtil.applyHash(authAttrs, spec.hashType())), spec.hashType());
 		} catch (IOException e) {
-			throw new SigningException("Erro ler prÈ-assinatura do PDF..", e);
+			throw new SigningException("Erro ler pr√©-assinatura do PDF..", e);
 		} catch (DocumentException e) {
 			throw new SigningException("Erro ao inciar assinatura do PDF.", e);
 		} catch (NoSuchAlgorithmException e) {
 			throw new SigningException("Erro ao calcular hash do PDF.", e);
 		} catch (InvalidKeyException e) {
-			throw new SigningException("Erro gerar assinatura PKCS7. Chave n„o encontrada.", e);
+			throw new SigningException("Erro gerar assinatura PKCS7. Chave n√£o encontrada.", e);
 		} catch (NoSuchProviderException e) {
-			throw new SigningException("Erro gerar assinatura PKCS7. Provedor n„o encontrado.", e);
+			throw new SigningException("Erro gerar assinatura PKCS7. Provedor n√£o encontrado.", e);
 		} catch (CRLException e) {
 			throw new SigningException("Erro ao estimar tamanho da assinatura.", e);
 		} catch (GeneralSecurityException e) {
-			throw new SigningException("Erro genÈrico de seguranÁa.", e);
+			throw new SigningException("Erro gen√©rico de seguran√ßa.", e);
 		}
 	}
 

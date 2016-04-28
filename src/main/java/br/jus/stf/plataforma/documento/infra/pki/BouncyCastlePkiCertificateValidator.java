@@ -45,7 +45,7 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 
 	@Override
 	public CertificateValidation validateThen(X509Certificate cert, Calendar date) {
-		// TODO Recuperar as CRLs do perÌodo que inclui date.
+		// TODO Recuperar as CRLs do per√≠odo que inclui date.
 		return validateThenWithCRLs(cert, date, Collections.emptyList());
 	}
 
@@ -57,7 +57,7 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 			if (!pki.belongsToPki(cert)) {
 				validation.associateChain(new X509Certificate[] { cert });
 				throw new CertificateValidationException(
-						"Certificado n„o pertence a nehuma infraestrutura de chaves p˙blicas confi·vel.");
+						"Certificado n√£o pertence a nehuma infraestrutura de chaves p√∫blicas confi√°vel.");
 			}
 			X509Certificate[] chain = pki.certificateChainOf(cert);
 			validation.associateChain(chain);
@@ -82,15 +82,15 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 		} catch (CertificateExpiredException e) {
 			throw new CertificateValidationException("O certificado se encontra expirado.", e);
 		} catch (CertificateNotYetValidException e) {
-			throw new CertificateValidationException("O certificado ainda n„o È v·lido.", e);
+			throw new CertificateValidationException("O certificado ainda n√£o √© v√°lido.", e);
 		}
 	}
 
 	private void validateCertificateSignatureEnabled(X509Certificate certificate)
 			throws CertificateValidationException {
-		// Verifica se o certificado est· habilitado para assinatura digital.
+		// Verifica se o certificado est√° habilitado para assinatura digital.
 		if (certificate.getKeyUsage() == null || (!certificate.getKeyUsage()[0] && !certificate.getKeyUsage()[1])) {
-			throw new CertificateValidationException("Certificado n„o È habilitado para assinatura: "
+			throw new CertificateValidationException("Certificado n√£o √© habilitado para assinatura: "
 					+ CertificateUtils.subjectNameAsString(certificate));
 		}
 	}
@@ -108,9 +108,9 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 		} catch (CertificateException e) {
 			throw new CertificateValidationException("Erro do certificado.");
 		} catch (NoSuchProviderException e) {
-			throw new RuntimeException("Provider n„o encontrado ao validar o certificado.", e);
+			throw new RuntimeException("Provider n√£o encontrado ao validar o certificado.", e);
 		} catch (CertPathValidatorException e) {
-			throw new CertificateValidationException("Falha na validaÁ„o da cadeia do certificado.");
+			throw new CertificateValidationException("Falha na valida√ß√£o da cadeia do certificado.");
 		} catch (InvalidAlgorithmParameterException e) {
 			throw new RuntimeException("Erro algoritmo invalido ao validar o certificado.");
 		} catch (NoSuchAlgorithmException e) {
@@ -119,9 +119,9 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 	}
 
 	/**
-	 * ConstrÛi um objeto PKIXParameters, utilizado na validaÁ„o do certificado.
-	 * Indica que ser· utilizada a lista de revogaÁ„o. Insere o trustedAnchors,
-	 * com as autoridades certificadoras confi·veis.
+	 * Constr√≥i um objeto PKIXParameters, utilizado na valida√ß√£o do certificado.
+	 * Indica que ser√° utilizada a lista de revoga√ß√£o. Insere o trustedAnchors,
+	 * com as autoridades certificadoras confi√°veis.
 	 * 
 	 * @param crl
 	 * @return
@@ -139,7 +139,7 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 		List<X509Certificate> trusted = pki.getTrustedAnchors();
 
 		if (trusted == null || trusted.isEmpty()) {
-			throw new CertificateValidationException("Nenhuma raiz confi·vel foi encontrada.");
+			throw new CertificateValidationException("Nenhuma raiz confi√°vel foi encontrada.");
 		}
 
 		for (X509Certificate c : trusted) {
@@ -148,7 +148,7 @@ public class BouncyCastlePkiCertificateValidator implements CertificateValidator
 		// cria o pkixParameters
 		PKIXParameters pkixParameters = new PKIXParameters(trustedAnchors);
 
-		// TODO Implementar a validaÁ„o de CRL.
+		// TODO Implementar a valida√ß√£o de CRL.
 		pkixParameters.setRevocationEnabled(false);
 
 		// TODO Permitir validar em uma data.

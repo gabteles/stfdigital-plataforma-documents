@@ -16,11 +16,11 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 /**
- * Repositório de documentos.
+ * RepositÃ³rio de documentos.
  * 
- * O armazenamento dos documentos temporários é delegado para DocumentoTempoRepository.
+ * O armazenamento dos documentos temporÃ¡rios Ã© delegado para DocumentoTempoRepository.
  * 
- * O armazenamento do conteúdo dos documentos é delegado para alguma implementação de 
+ * O armazenamento do conteÃºdo dos documentos Ã© delegado para alguma implementaÃ§Ã£o de 
  * ConteudoDocumentoRepository.
  * 
  * @author Lucas Rodrigues

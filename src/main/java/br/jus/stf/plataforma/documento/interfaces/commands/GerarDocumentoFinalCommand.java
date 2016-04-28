@@ -5,10 +5,10 @@ import org.apache.commons.lang3.Validate;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Commando para geraÁ„o do documento final a partir do documento edit·vel")
+@ApiModel("Commando para gera√ß√£o do documento final a partir do documento edit√°vel")
 public class GerarDocumentoFinalCommand {
 
-	@ApiModelProperty("O id do documento edit·vel")
+	@ApiModelProperty("O id do documento edit√°vel")
 	private Long documento;
 
 	public GerarDocumentoFinalCommand(Long documento) {

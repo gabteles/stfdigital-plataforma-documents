@@ -21,7 +21,7 @@ public class ContadorPaginasPdf implements ContadorPaginas {
 			reader.close();
 			return paginas;
 		} catch (IOException e) {
-			throw new RuntimeException("Erro ao contar a quantidade de p·ginas do documento.", e);
+			throw new RuntimeException("Erro ao contar a quantidade de p√°ginas do documento.", e);
 		}
 	}
 

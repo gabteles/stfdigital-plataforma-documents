@@ -6,21 +6,21 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
- * Command para divis„o de um documento
+ * Command para divis√£o de um documento
  * 
  * @author Tomas.Godoi
  *
  */
-@ApiModel("ContÈm as informaÁıes necess·rias para dividir um documento")
+@ApiModel("Cont√©m as informa√ß√µes necess√°rias para dividir um documento")
 public class DividirDocumentoCommand {
 
 	@ApiModelProperty("Id do documento a ser dividido")
 	@NotNull
 	private Long documentoId;
-	@ApiModelProperty("P·gina inicial a ser dividida")
+	@ApiModelProperty("P√°gina inicial a ser dividida")
 	@NotNull
 	private Integer paginaInicial;
-	@ApiModelProperty("P·gina final a ser dividida")
+	@ApiModelProperty("P√°gina final a ser dividida")
 	@NotNull
 	private Integer paginaFinal;
 

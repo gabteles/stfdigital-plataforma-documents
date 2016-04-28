@@ -14,7 +14,7 @@ import br.jus.stf.plataforma.documento.domain.model.Tag;
 public interface DocumentoService {
 
 	/**
-	 * Realiza a contagem da quantidade de páginas em um arquivo PDF.
+	 * Realiza a contagem da quantidade de pÃ¡ginas em um arquivo PDF.
 	 * 
 	 * @param docTemp
 	 * @return
@@ -22,7 +22,7 @@ public interface DocumentoService {
 	Integer contarPaginas(DocumentoTemporario docTemp);
 	
 	/**
-	 * Divide o conteúdo de um documento no intervalo de página inicial e final especificado.
+	 * Divide o conteÃºdo de um documento no intervalo de pÃ¡gina inicial e final especificado.
 	 * 
 	 * @param conteudo
 	 * @param paginaInicial
@@ -32,7 +32,7 @@ public interface DocumentoService {
 	DocumentoTemporario dividirConteudo(ConteudoDocumento conteudo, Integer paginaInicial, Integer paginaFinal);
 
 	/**
-	 * Une os conteúdos especificados em um documento só.
+	 * Une os conteÃºdos especificados em um documento sÃ³.
 	 * 
 	 * @param conteudos
 	 * @return

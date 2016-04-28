@@ -75,7 +75,7 @@ public class ITextPdfSigningStrategy implements PdfSigningStrategy {
 		try {
 			return File.createTempFile(TEMP_FILE_PREFIX, PDF_EXTENSION);
 		} catch (IOException e) {
-			throw new SigningException("Eror ao criar arquivo tempor·rio para assinatura.", e);
+			throw new SigningException("Eror ao criar arquivo tempor√°rio para assinatura.", e);
 		}
 	}
 

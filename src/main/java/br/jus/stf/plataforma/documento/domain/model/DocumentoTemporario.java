@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.jus.stf.core.framework.domaindrivendesign.ValueObjectSupport;
 
 /**
- * Documento ainda n„o persistido
+ * Documento ainda n√£o persistido
  * 
  * @author Lucas Rodrigues
  */
@@ -67,7 +67,7 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 	}
 	
 	/**
-	 * Recupera um objeto para acesso aleatÛrio ao arquivo. 
+	 * Recupera um objeto para acesso aleat√≥rio ao arquivo. 
 	 * 
 	 * @return
 	 */
@@ -75,7 +75,7 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 		try {
 			return new RandomAccessFile(arquivo, "r");
 		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException("Erro ao recuperar o arquivo tempor·rio.", e);
+			throw new IllegalArgumentException("Erro ao recuperar o arquivo tempor√°rio.", e);
 		}
 	}
 	

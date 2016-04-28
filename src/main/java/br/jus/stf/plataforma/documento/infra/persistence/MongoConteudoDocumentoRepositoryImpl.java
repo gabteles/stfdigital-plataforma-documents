@@ -23,14 +23,14 @@ import br.jus.stf.plataforma.documento.infra.AndProfilesCondition;
 import br.jus.stf.plataforma.documento.infra.DocumentProfiles;
 
 /**
- * Implementação do repositório de conteúdo com armazenamento no Mongo.
+ * ImplementaÃ§Ã£o do repositÃ³rio de conteÃºdo com armazenamento no Mongo.
  * 
  * @author Tomas.Godoi
  *
  */
 @Repository
 //@Profile(Profiles.DOCUMENTO_MONGO)
-@Profile({"!" + DocumentProfiles.DOCUMENTO_FS, "!" + DocumentProfiles.DOCUMENTO_ORACLE }) // Setando o profile do mongo se os outros não forem ativados.
+@Profile({"!" + DocumentProfiles.DOCUMENTO_FS, "!" + DocumentProfiles.DOCUMENTO_ORACLE }) // Setando o profile do mongo se os outros nÃ£o forem ativados.
 @Conditional(AndProfilesCondition.class)
 public class MongoConteudoDocumentoRepositoryImpl implements ConteudoDocumentoRepository {
 
@@ -45,7 +45,7 @@ public class MongoConteudoDocumentoRepositoryImpl implements ConteudoDocumentoRe
 			byte[] bytes = IOUtils.toByteArray(gridFile.getInputStream());
 			return new ConteudoDocumento(bytes, gridFile.getLength());
 		} catch (Exception t) {
-			throw new RuntimeException("Não foi possível carregar o stream do arquivo ", t);
+			throw new RuntimeException("NÃ£o foi possÃ­vel carregar o stream do arquivo ", t);
 		}
 	}
 

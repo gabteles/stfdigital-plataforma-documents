@@ -1,7 +1,7 @@
 package br.jus.stf.plataforma.documento.interfaces.dto;
 
 /**
- * Dto para Edição de um documento.
+ * Dto para EdiÃ§Ã£o de um documento.
  * 
  * @author Tomas.Godoi
  *

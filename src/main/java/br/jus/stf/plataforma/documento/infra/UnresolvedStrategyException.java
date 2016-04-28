@@ -1,6 +1,6 @@
 package br.jus.stf.plataforma.documento.infra;
 /**
- * ExceÁ„o a ser lanÁada quando uma Strategy n„o for encontrada.
+ * Exce√ß√£o a ser lan√ßada quando uma Strategy n√£o for encontrada.
  * 
  * @author Tomas.Godoi
  *
@@ -9,7 +9,7 @@ public class UnresolvedStrategyException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String MESSAGE = "Strategy n„o encontrada para o identificador %s";
+	private static final String MESSAGE = "Strategy n√£o encontrada para o identificador %s";
 
 	public UnresolvedStrategyException(String identifier) {
 		super(String.format(MESSAGE, identifier));

@@ -20,7 +20,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 import br.jus.stf.plataforma.documento.infra.DocumentProfiles;
 
 /**
- * Implementação do repositório de conteúdo com armazenamento em File System.
+ * ImplementaÃ§Ã£o do repositÃ³rio de conteÃºdo com armazenamento em File System.
  * 
  * @author Tomas.Godoi
  *

@@ -11,8 +11,8 @@ public class CustomKeyStore {
 	private X509Certificate certificate;
 
 	public CustomKeyStore(KeyPair keyPair, X509Certificate certificate) {
-		Validate.notNull(keyPair, "KeyPair é obrigatório.");
-		Validate.notNull(certificate, "Certificate é obrigatório.");
+		Validate.notNull(keyPair, "KeyPair Ã© obrigatÃ³rio.");
+		Validate.notNull(certificate, "Certificate Ã© obrigatÃ³rio.");
 
 		this.keyPair = keyPair;
 		this.certificate = certificate;

@@ -5,7 +5,7 @@ import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 /**
- * Repositório de conteúdo do documento.
+ * RepositÃ³rio de conteÃºdo do documento.
  * 
  * @author Tomas.Godoi
  *
@@ -13,7 +13,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 public interface ConteudoDocumentoRepository {
 
 	/**
-	 * Faz o download do conteúdo especificado.
+	 * Faz o download do conteÃºdo especificado.
 	 * 
 	 * @param numeroConteudo
 	 * @return
@@ -21,19 +21,19 @@ public interface ConteudoDocumentoRepository {
 	ConteudoDocumento downloadConteudo(String numeroConteudo);
 
 	/**
-	 * Remove o conteúdo de um documento.
+	 * Remove o conteÃºdo de um documento.
 	 * 
-	 * @param numeroConteudo Número do conteúdo
+	 * @param numeroConteudo NÃºmero do conteÃºdo
 	 */
 	void deleteConteudo(String numeroConteudo);
 
 	/**
-	 * Salva o conteúdo do documento temporário com o id especificado,
-	 * retornando o número do conteúdo do documento.
+	 * Salva o conteÃºdo do documento temporÃ¡rio com o id especificado,
+	 * retornando o nÃºmero do conteÃºdo do documento.
 	 * 
 	 * @param documentoId Id do Documento
-	 * @param documentoTemporario Documento Temporário cujo documento será armazenado
-	 * @return Número do conteúdo do documento
+	 * @param documentoTemporario Documento TemporÃ¡rio cujo documento serÃ¡ armazenado
+	 * @return NÃºmero do conteÃºdo do documento
 	 */
 	String save(DocumentoId documentoId, DocumentoTemporario documentoTemporario);
 

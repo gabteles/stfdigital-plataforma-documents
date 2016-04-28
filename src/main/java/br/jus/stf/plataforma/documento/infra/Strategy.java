@@ -1,7 +1,7 @@
 package br.jus.stf.plataforma.documento.infra;
 
 /**
- * Interface de marcação para Strategies.
+ * Interface de marcaÃ§Ã£o para Strategies.
  * 
  * @author Tomas.Godoi
  *

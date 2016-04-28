@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Classe genérica para resolução de uma Strategy a partir de um identificador.
+ * Classe genÃ©rica para resoluÃ§Ã£o de uma Strategy a partir de um identificador.
  * 
  * @author Tomas.Godoi
  *

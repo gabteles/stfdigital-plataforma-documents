@@ -24,7 +24,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 import br.jus.stf.plataforma.documento.infra.DocumentProfiles;
 
 /**
- * Implementação do repositório de conteúdo com armazenamento no Oracle.
+ * ImplementaÃ§Ã£o do repositÃ³rio de conteÃºdo com armazenamento no Oracle.
  * 
  * @author Tomas.Godoi
  *
@@ -53,7 +53,7 @@ public class OracleConteudoDocumentoRepositoryImpl implements ConteudoDocumentoR
 				byte[] bytes = IOUtils.toByteArray(blob.getBinaryStream());
 				return new ConteudoDocumento(bytes, new Long(bytes.length));
 			} catch (IOException e) {
-				throw new SQLException("Erro ao recuperar o conteúdo do documento.", e);
+				throw new SQLException("Erro ao recuperar o conteÃºdo do documento.", e);
 			}
 		}
 

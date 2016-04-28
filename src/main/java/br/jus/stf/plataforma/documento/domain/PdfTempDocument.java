@@ -48,7 +48,7 @@ public class PdfTempDocument implements Document {
 		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			throw new IllegalStateException("Erro ao abrir pdf tempor·rio para assinatura.", e);
+			throw new IllegalStateException("Erro ao abrir pdf tempor√°rio para assinatura.", e);
 		}
 	}
 
