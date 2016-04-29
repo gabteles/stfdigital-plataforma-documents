@@ -18,7 +18,7 @@ import br.jus.stf.core.framework.domaindrivendesign.ValueObjectSupport;
 import br.jus.stf.plataforma.documento.domain.model.pki.PkiType;
 
 @Entity
-@Table(name = "CERTIFICADO_DIGITAL", schema = "PLATAFORMA")
+@Table(name = "CERTIFICADO_DIGITAL", schema = "DOCUMENTO")
 public class Certificate extends ValueObjectSupport<Certificate> {
 
 	@Id
@@ -45,9 +45,6 @@ public class Certificate extends ValueObjectSupport<Certificate> {
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "TXT_CERTIFICADO_DIGITAL")
 	private byte[] content;
-
-	@Column(name = "SEQ_USUARIO")
-	private Long user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SEQ_CERTIFICADO_EMISSOR", nullable = true)
@@ -87,10 +84,6 @@ public class Certificate extends ValueObjectSupport<Certificate> {
 
 	public byte[] content() {
 		return content;
-	}
-
-	public Long user() {
-		return user;
 	}
 
 	public Certificate issuer() {

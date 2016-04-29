@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
  * @since 1.0.0
  * @since 25.04.2016
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="br.jus.stf")
 @EnableEurekaClient
 public class ApplicationContextInitializer {
 	

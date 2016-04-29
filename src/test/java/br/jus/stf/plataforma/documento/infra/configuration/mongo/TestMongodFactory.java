@@ -17,9 +17,9 @@ import de.flapdoodle.embed.mongo.tests.MongodForTestsFactory;
  * @author Tomas.Godoi
  *
  */
-public class PersistentMongodFactory extends MongodForTestsFactory {
+public class TestMongodFactory extends MongodForTestsFactory {
 
-	public PersistentMongodFactory() throws IOException {
+	public TestMongodFactory() throws IOException {
 		super();
 	}
 

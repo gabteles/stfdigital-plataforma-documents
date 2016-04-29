@@ -16,7 +16,7 @@ import br.jus.stf.core.shared.documento.DocumentoId;
  * @created 14-ago-2015 18:34:02
  */
 @javax.persistence.Entity
-@Table(name = "DOCUMENTO", schema = "CORPORATIVO")
+@Table(name = "DOCUMENTO", schema = "DOCUMENTO")
 public class Documento implements Entity<Documento, DocumentoId> {
 
 	@EmbeddedId

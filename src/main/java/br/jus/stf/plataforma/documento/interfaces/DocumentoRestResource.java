@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.Validator;
 
 import org.apache.commons.lang3.Range;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,16 +54,12 @@ public class DocumentoRestResource {
 	
 	@Autowired
 	private DocumentoServiceFacade documentoServiceFacade;
-	
-	@Autowired
-	private Validator validator;
 
 	@ApiOperation("Salva os documentos temporários")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public List<DocumentoTemporarioDto> salvar(@RequestBody SalvarDocumentosCommand command) {
-		Set<ConstraintViolation<SalvarDocumentosCommand>> result = validator.validate(command);
-		if (!result.isEmpty()) {
+	public List<DocumentoTemporarioDto> salvar(@Valid @RequestBody SalvarDocumentosCommand command, BindingResult result) {
+		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
 		return documentoServiceFacade.salvarDocumentos(command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList()));
@@ -78,13 +71,13 @@ public class DocumentoRestResource {
 		ConteudoDocumento documento = documentoServiceFacade.pesquisaDocumento(documentoId);
 		InputStreamResource is = new InputStreamResource(documento.stream());
 		HttpHeaders headers = createResponseHeaders(documento.tamanho());
-	    return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
+		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
 	}
 	
 	@ApiOperation("Retornda os dados de um documento")
 	@RequestMapping(value = "/{documentoId}", method = RequestMethod.GET)
 	public DocumentoDto consultar(@PathVariable("documentoId") Long documentoId) throws IOException {
-	    return documentoServiceFacade.consultar(documentoId);
+		return documentoServiceFacade.consultar(documentoId);
 	}
 	
 	@ApiOperation("Envia um documento para armazenamento temporário e retorna o indentificador")
@@ -101,7 +94,7 @@ public class DocumentoRestResource {
 	public String uploadAssinado(@Valid UploadDocumentoAssinadoCommand command, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new ValidationException(result.getAllErrors());
-		}		
+		}
 		
 		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
 	}
@@ -111,7 +104,7 @@ public class DocumentoRestResource {
 	public void deleteTemp(@Valid @RequestBody DeleteTemporarioCommand command, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
-		}		
+		}
 		documentoServiceFacade.apagarDocumentosTemporarios(command.getFiles());
 	}
 

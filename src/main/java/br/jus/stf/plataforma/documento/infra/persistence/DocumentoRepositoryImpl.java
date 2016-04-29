@@ -78,7 +78,7 @@ public class DocumentoRepositoryImpl extends SimpleJpaRepository<Documento, Docu
 
 	@Override
 	public DocumentoId nextId() {
-		javax.persistence.Query query = entityManager.createNativeQuery("SELECT CORPORATIVO.SEQ_DOCUMENTO.NEXTVAL FROM DUAL");
+		javax.persistence.Query query = entityManager.createNativeQuery("SELECT DOCUMENTO.SEQ_DOCUMENTO.NEXTVAL FROM DUAL");
 		Long sequencial = ((BigInteger) query.getSingleResult()).longValue();
 		return new DocumentoId(sequencial);
 	}

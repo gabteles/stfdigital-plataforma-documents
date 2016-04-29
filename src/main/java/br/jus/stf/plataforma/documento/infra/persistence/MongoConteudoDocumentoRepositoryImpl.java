@@ -5,8 +5,6 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -19,8 +17,6 @@ import com.mongodb.gridfs.GridFSDBFile;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
-import br.jus.stf.plataforma.documento.infra.AndProfilesCondition;
-import br.jus.stf.plataforma.documento.infra.DocumentProfiles;
 
 /**
  * Implementação do repositório de conteúdo com armazenamento no Mongo.
@@ -29,9 +25,6 @@ import br.jus.stf.plataforma.documento.infra.DocumentProfiles;
  *
  */
 @Repository
-//@Profile(Profiles.DOCUMENTO_MONGO)
-@Profile({"!" + DocumentProfiles.DOCUMENTO_FS, "!" + DocumentProfiles.DOCUMENTO_ORACLE }) // Setando o profile do mongo se os outros não forem ativados.
-@Conditional(AndProfilesCondition.class)
 public class MongoConteudoDocumentoRepositoryImpl implements ConteudoDocumentoRepository {
 
 	@Autowired

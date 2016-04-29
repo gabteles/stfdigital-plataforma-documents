@@ -77,8 +77,6 @@ dependencies {
     compile("org.springframework.data:spring-data-mongodb:$springDataMongodbVersion")
 
     compile("org.mongodb:mongo-java-driver")
-
-    compile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$embedMongoVersion")
     
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
         
@@ -96,6 +94,8 @@ dependencies {
 
     compile("org.bouncycastle:bcprov-jdk15on:$bouncycastleVersion")
 
+    compile("org.bouncycastle:bcmail-jdk15on:$bouncycastleVersion")
+	
     compile("org.apache.poi:poi-ooxml:$apachePoiVersion")
     
     compile("org.apache.poi:poi:$apachePoiVersion")
@@ -107,6 +107,8 @@ dependencies {
     compile("org.flywaydb:flyway-core:$flywayVersion")
     
     testCompile("com.jayway.jsonpath:json-path")
+
+    testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$embedMongoVersion")
     
     compile("org.springframework.boot:spring-boot-starter-test")
 }
