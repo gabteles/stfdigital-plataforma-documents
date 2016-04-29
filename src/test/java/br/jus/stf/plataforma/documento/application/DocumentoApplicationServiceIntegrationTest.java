@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.mock.web.MockMultipartFile;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -31,6 +32,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
  *
  */
 @SpringApplicationConfiguration(ApplicationContextInitializer.class)
+@WebIntegrationTest({"server.port:0", "eureka.client.enabled:false"})
 public class DocumentoApplicationServiceIntegrationTest extends IntegrationTestsSupport {
 
 	@Autowired
