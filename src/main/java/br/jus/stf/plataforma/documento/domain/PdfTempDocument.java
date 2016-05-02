@@ -27,7 +27,7 @@ public class PdfTempDocument implements Document {
 	private File createTempFile(InputStream stream) {
 		File tempFile = null;
 		try (InputStream in = stream) {
-			tempFile = File.createTempFile(FILE_NAME_PREFFIX, FILE_NAME_EXTENSION);
+			tempFile = File.createTempFile(FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_", FILE_NAME_EXTENSION);
 			FileUtils.copyInputStreamToFile(in, tempFile);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
