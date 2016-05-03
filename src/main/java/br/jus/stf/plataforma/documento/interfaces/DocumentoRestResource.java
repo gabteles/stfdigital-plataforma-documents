@@ -74,7 +74,7 @@ public class DocumentoRestResource {
 		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
 	}
 	
-	@ApiOperation("Retornda os dados de um documento")
+	@ApiOperation("Retorna os dados de um documento")
 	@RequestMapping(value = "/{documentoId}", method = RequestMethod.GET)
 	public DocumentoDto consultar(@PathVariable("documentoId") Long documentoId) throws IOException {
 		return documentoServiceFacade.consultar(documentoId);
@@ -99,7 +99,7 @@ public class DocumentoRestResource {
 		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
 	}
 	
-	@ApiOperation("Envia um documento para armazenamento temporário e retorna o indentificador")
+	@ApiOperation("Exclui um documento temporário")
 	@RequestMapping(value = "/temporarios/delete", method = RequestMethod.POST)
 	public void deleteTemp(@Valid @RequestBody DeleteTemporarioCommand command, BindingResult result) {
 		if (result.hasErrors()) {
