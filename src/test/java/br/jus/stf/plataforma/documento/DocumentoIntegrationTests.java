@@ -16,8 +16,6 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -27,12 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.jayway.jsonpath.JsonPath;
 
-import br.jus.stf.core.framework.testing.IntegrationTestsSupport;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDto;
 
-@SpringApplicationConfiguration(ApplicationContextInitializer.class)
-@WebIntegrationTest({"server.port:0", "eureka.client.enabled:false"})
-public class DocumentoIntegrationTests extends IntegrationTestsSupport {
+public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests {
 	
 	private String dividirDocumentoCommand;
 	

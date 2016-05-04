@@ -9,17 +9,14 @@ import org.apache.commons.lang3.Range;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.mock.web.MockMultipartFile;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
-import br.jus.stf.core.framework.testing.IntegrationTestsSupport;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
-import br.jus.stf.plataforma.documento.ApplicationContextInitializer;
+import br.jus.stf.plataforma.documento.AbstractDocumentoIntegrationTests;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
@@ -31,9 +28,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
  * @author Tomas.Godoi
  *
  */
-@SpringApplicationConfiguration(ApplicationContextInitializer.class)
-@WebIntegrationTest({"server.port:0", "eureka.client.enabled:false"})
-public class DocumentoApplicationServiceIntegrationTest extends IntegrationTestsSupport {
+public class DocumentoApplicationServiceIntegrationTest extends AbstractDocumentoIntegrationTests {
 
 	@Autowired
 	private DocumentoApplicationService documentoApplicationService;
