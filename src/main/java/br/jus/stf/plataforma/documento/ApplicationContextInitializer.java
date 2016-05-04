@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.h2.tools.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -15,14 +16,14 @@ import org.springframework.context.annotation.Profile;
  * @since 1.0.0
  * @since 25.04.2016
  */
-@SpringBootApplication(scanBasePackages="br.jus.stf")
+@SpringBootApplication(scanBasePackages = "br.jus.stf", exclude = { EmbeddedMongoAutoConfiguration.class })
 @EnableEurekaClient
 public class ApplicationContextInitializer {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(ApplicationContextInitializer.class, args);
 	}
-	
+
 	@Profile("development")
 	@Bean(initMethod = "start", destroyMethod = "stop")
 	public Server h2WebServer() throws SQLException {

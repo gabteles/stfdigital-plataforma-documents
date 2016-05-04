@@ -15,7 +15,7 @@ import com.mongodb.MongoClient;
  *
  */
 @Configuration
-@Profile("development")
+@Profile({"development", "!test"})
 public class MongoConfiguration extends AbstractMongoConfiguration {
 
 	@Value("${mongo.host}")
