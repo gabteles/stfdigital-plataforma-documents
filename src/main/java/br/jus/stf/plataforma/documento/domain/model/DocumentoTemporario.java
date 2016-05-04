@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,10 +36,10 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 	private File createTempFile(MultipartFile file) {
 		File tempFile = null;
 		try {
-			tempFile = File.createTempFile(FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_", extractExtension(file.getOriginalFilename()));
+			tempFile = new File(FileUtils.getTempDirectory(), FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_" + RandomStringUtils.randomNumeric(20) + "." + extractExtension(file.getOriginalFilename()));
 			file.transferTo(tempFile);
 		} catch (IllegalStateException | IOException e) {
-			throw new DocumentoTempRuntimeException(e);		
+			throw new DocumentoTempRuntimeException(e);
 		}
 		return tempFile;
 	}
