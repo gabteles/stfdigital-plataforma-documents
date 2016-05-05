@@ -36,7 +36,7 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 	private File createTempFile(MultipartFile file) {
 		File tempFile = null;
 		try {
-			tempFile = new File(FileUtils.getTempDirectory(), FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_" + RandomStringUtils.randomNumeric(20) + "." + extractExtension(file.getOriginalFilename()));
+			tempFile = new File(FileUtils.getTempDirectory(), FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_" + RandomStringUtils.randomNumeric(20) + extractExtension(file.getOriginalFilename()));
 			file.transferTo(tempFile);
 		} catch (IllegalStateException | IOException e) {
 			throw new DocumentoTempRuntimeException(e);
