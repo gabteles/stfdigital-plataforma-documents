@@ -16,6 +16,7 @@ buildscript {
         bouncycastleVersion = '1.53'
         springDataMongodbVersion = '1.8.0.RELEASE'
         apachePoiVersion = '3.13'
+        apacheTikaVersion = '1.12'
     }
     repositories {
         mavenLocal()
@@ -99,6 +100,8 @@ dependencies {
     compile("org.apache.poi:poi-ooxml:$apachePoiVersion")
     
     compile("org.apache.poi:poi:$apachePoiVersion")
+	
+    compile("org.apache.tika:tika-core:$apacheTikaVersion")
 
     compile("br.jus.stf.digital:core:0.0.1-SNAPSHOT")
     
@@ -116,6 +119,6 @@ dependencies {
 docker {
     name jar.baseName
     dockerfile 'src/main/docker/Dockerfile'
-    files 'truststores/truststore.jks'
+    files 'src/main/docker/docker-entrypoint.sh', 'truststores/truststore.jks'
     dependsOn tasks.jar, tasks.bootRepackage, tasks.build
 }

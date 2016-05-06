@@ -5,11 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.file.Files;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.tika.Tika;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.jus.stf.core.framework.domaindrivendesign.ValueObjectSupport;
@@ -54,7 +54,7 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 	
 	public String contentType() {
 		try {
-			return Files.probeContentType(arquivo.toPath());
+			return new Tika().detect(arquivo.toPath());
 		} catch (IOException e) {
 			throw new IllegalArgumentException(e);
 		}
