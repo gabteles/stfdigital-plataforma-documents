@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "system",
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "removeComments": false
+    },
+    "exclude": [
+      "typings/browser",
+      "typings/browser.d.ts",
+      "node_modules",
+      "build",
+      "src/test/ui"
+    ]
+}

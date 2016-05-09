@@ -2,6 +2,7 @@ package br.jus.stf.plataforma.documento.infra;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.MapBindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
@@ -49,7 +51,7 @@ public class DocumentRestAdapter implements DocumentAdapter {
 	public DocumentoId save(DocumentoTemporarioId tempDocument) {
 		SalvarDocumentosCommand command = new SalvarDocumentosCommand();
 		command.setIdsDocumentosTemporarios(Arrays.asList(tempDocument.toString()));
-		LinkedHashSet<DocumentoId> docs = docRestResource.salvar(command, null).stream()
+		LinkedHashSet<DocumentoId> docs = docRestResource.salvar(command, new MapBindingResult(new HashMap<>(), "errors")).stream()
 				.map(dto -> new DocumentoId(dto.getDocumentoId()))
 				.collect(Collectors.toCollection(() -> new LinkedHashSet<DocumentoId>()));
 		return docs.iterator().next();

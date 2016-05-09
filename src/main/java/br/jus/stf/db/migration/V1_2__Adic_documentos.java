@@ -41,7 +41,7 @@ public class V1_2__Adic_documentos implements SpringJdbcMigration {
 	}
 
 	private Long inserirDocumento(JdbcTemplate jdbcTemplate, String path, int quantidadePaginas) throws IOException {
-		Long documentoId = jdbcTemplate.queryForObject("SELECT CORPORATIVO.SEQ_DOCUMENTO.NEXTVAL FROM DUAL",
+		Long documentoId = jdbcTemplate.queryForObject("SELECT DOCUMENTO.SEQ_DOCUMENTO.NEXTVAL FROM DUAL",
 		        Long.class);
 		Resource resource = resourceLoader.getResource(path);
 		String conteudoId = storeOnMongo(documentoId, path, resource);
