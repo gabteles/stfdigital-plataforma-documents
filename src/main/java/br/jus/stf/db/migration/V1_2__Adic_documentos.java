@@ -36,7 +36,7 @@ public class V1_2__Adic_documentos implements SpringJdbcMigration {
 		Long documentoId = inserirDocumento(jdbcTemplate,
 		        "classpath:documentos/modelos/modelo-oficio-devolucao-remessa-indevida.docx", 1);
 		jdbcTemplate.update(
-		        "INSERT INTO DOCUMENTO.MODELO (SEQ_MODELO, NOM_MODELO, SEQ_TIPO_MODELO, SEQ_DOCUMENTO_TEMPLATE) VALUES (CORPORATIVO.SEQ_MODELO.NEXTVAL, ?, ?, ?)",
+		        "INSERT INTO DOCUMENTO.MODELO (SEQ_MODELO, NOM_MODELO, SEQ_TIPO_DOCUMENTO, SEQ_DOCUMENTO_TEMPLATE) VALUES (DOCUMENTO.SEQ_MODELO.NEXTVAL, ?, ?, ?)",
 		        "Ofício de devolução de petição por remessa indevida", 8L, documentoId);
 	}
 
