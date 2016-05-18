@@ -1,0 +1,23 @@
+<div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+    <!-- CONTENT -->
+    <div class="content" layout="column">
+        <div class="md-title mt-10">Editar Conteúdo de Modelo</div>
+        <div class="pb-16">Edite o conteúdo de modelo</div>
+        <div layout="row">
+            <!-- BASIC FORM -->
+            <div class="form-wrapper md-whiteframe-1dp" flex="100">
+                <form name="formularioConteudoModelo" ng-submit="vm.finalizarEdicao()" class="md-inline-form">
+                    <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
+                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" aguardar-conclusao="false"></div>
+                    </div>
+                    <md-button type="submit" class="md-raised md-accent" id="btnCriarModelo" aria-label="Criar Modelo" ng-disabled="formularioModelo.$invalid || formularioModelo.$pristine">
+                        Criar
+                    </md-button>
+                      
+                </form>
+            </div>
+            <!-- / BASIC FORM -->
+        </div>
+    </div>
+    <!-- / CONTENT -->
+</div>

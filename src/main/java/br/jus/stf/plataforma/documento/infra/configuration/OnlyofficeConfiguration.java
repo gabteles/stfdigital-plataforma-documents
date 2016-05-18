@@ -47,7 +47,7 @@ public class OnlyofficeConfiguration {
 	@Value("${host:}")
 	private String host;
 	
-	@Value("${port:8443}")
+	@Value("${port:8765}")
 	private Integer port;
 
 	@Bean(name = "onlyofficeRestTemplate")
@@ -72,9 +72,9 @@ public class OnlyofficeConfiguration {
 	@Bean(name = "doocumentServerBaseUrl")
 	public String documentServerHost() throws UnknownHostException {
 		if (StringUtils.isBlank(host)) {
-			return "https://" + InetAddress.getLocalHost().getHostName() + ":" + port;
+			return "http://" + InetAddress.getLocalHost().getHostName() + ":" + port;
 		} else {
-			return "https://" + host + ":" + port;
+			return "http://" + host + ":" + port;
 		}
 	}
 	

@@ -2,6 +2,7 @@ import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoad
 import IStateProvider = angular.ui.IStateProvider;
 import IModule = angular.IModule;
 import {TipoModeloService} from "./tipo-modelo.service";
+import {ModeloService} from "./modelo.service";
 
 /** @ngInject **/
 function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider,
@@ -10,8 +11,11 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
 
     $translatePartialLoaderProvider.addPart(properties.apiUrl + '/documents/modelos');
 
-    $stateProvider.state('app.novo-processo.modelos', {
-        url : '/modelos',
+    $stateProvider/*.state('app.novo-processo.modelos', {
+    	url: '/modelos',
+    	abstract: true
+    })*/.state('app.novo-processo.modelos-criar', {
+        url : '/modelos/criar',
         views : {
             'content@app.autenticado' : {
                 templateUrl : properties.apiUrl + '/documents/modelos/criacao-modelo.tpl.html',
@@ -24,10 +28,24 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
                 return tipoModeloService.listar();
             }]
         }
+    }).state('app.novo-processo.modelos-editar', {
+        url : '/modelos/editar',
+        views : {
+            'content@app.autenticado' : {
+                templateUrl : properties.apiUrl + '/documents/modelos/edicao-modelo.tpl.html',
+                controller : 'app.novo-processo.modelos.EdicaoModeloController',
+                controllerAs: 'vm'
+            }
+        },
+        resolve : {
+            modelo : ['app.novo-processo.modelos.ModeloService', (modeloService: ModeloService) => {
+            	return modeloService.consultar(1);
+            }]
+        }
     });
 }
 
-let documents: IModule = angular.module('app.novo-processo.modelos', ['app.novo-processo', 'app.constants']);
+let documents: IModule = angular.module('app.novo-processo.modelos', ['app.novo-processo', 'app.constants', 'app.documentos']);
 documents.config(config);
 
 export default documents;
