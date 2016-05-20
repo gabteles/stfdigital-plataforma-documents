@@ -44,10 +44,13 @@ public class OnlyofficeConfiguration {
 	@Value("${http.client.ssl.trust-store-password}")
 	private char[] trustStorePassword;
 	
-	@Value("${host:}")
-	private String host;
+	@Value("${onlyoffice.documentserver.host:}")
+	private String documentServerHost;
 	
-	@Value("${port:8765}")
+	@Value("${onlyoffice.documentserver.protocol:http}")
+	private String documentServerProtocol;
+	
+	@Value("${onlyoffice.documentserver.port:8765}")
 	private Integer port;
 
 	@Bean(name = "onlyofficeRestTemplate")
@@ -71,10 +74,10 @@ public class OnlyofficeConfiguration {
 	
 	@Bean(name = "doocumentServerBaseUrl")
 	public String documentServerHost() throws UnknownHostException {
-		if (StringUtils.isBlank(host)) {
-			return "http://" + InetAddress.getLocalHost().getHostName() + ":" + port;
+		if (StringUtils.isBlank(documentServerHost)) {
+			return documentServerProtocol + "://" + InetAddress.getLocalHost().getHostName() + ":" + port;
 		} else {
-			return "http://" + host + ":" + port;
+			return documentServerProtocol + "://" + documentServerHost + ":" + port;
 		}
 	}
 	
