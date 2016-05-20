@@ -8,10 +8,10 @@
             <div class="form-wrapper md-whiteframe-1dp" flex="100">
                 <form name="formularioConteudoModelo" ng-submit="vm.finalizarEdicao()" class="md-inline-form">
                     <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
-                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" aguardar-conclusao="false"></div>
+                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" aguardar-conclusao="true" style="width: 100%;"></div>
                     </div>
                     <md-button type="submit" class="md-raised md-accent" id="btnCriarModelo" aria-label="Criar Modelo" ng-disabled="formularioModelo.$invalid || formularioModelo.$pristine">
-                        Criar
+                        Salvar
                     </md-button>
                       
                 </form>

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,9 @@ public class OnlyofficeIntegrationRestResource {
 	@Autowired
 	@Qualifier("doocumentServerBaseUrl")
 	private String doocumentServerBaseUrl;
+	
+	@Value("${onlyoffice.server.address}")
+	private String onlyofficeAddress;
 
 	@ApiOperation("Recupera o conteúdo de um documento")
 	@RequestMapping(value = "/documentos/{documentoId}/conteudo.docx", method = RequestMethod.GET)
@@ -81,7 +85,7 @@ public class OnlyofficeIntegrationRestResource {
 	}
 
 	@ApiOperation("Verifica se um documento está em edição")
-	@RequestMapping(value = "/documentos/{documentoId}/edicao")
+	@RequestMapping(value = "/documentos/{documentoId}/edicao", method = RequestMethod.GET)
 	public ResponseEntity<EdicaoDto> estaEmEdicao(@PathVariable("documentoId") Long documentoId) {
 		Edicao edicao = controladorEdicaoDocumento.recuperarEdicao(new DocumentoId(documentoId));
 		if (edicao != null) {
@@ -102,6 +106,12 @@ public class OnlyofficeIntegrationRestResource {
 	@RequestMapping(value = "/server/baseUrl", method = RequestMethod.GET)
 	public String serverBaseUrl() {
 		return doocumentServerBaseUrl;
+	}
+	
+	@ApiOperation("Recupera a url base do servidor onlyoffice")
+	@RequestMapping(value = "/baseUrl", method = RequestMethod.GET)
+	public String onlyofficeBaseUrl() {
+		return onlyofficeAddress;
 	}
 	
 }
