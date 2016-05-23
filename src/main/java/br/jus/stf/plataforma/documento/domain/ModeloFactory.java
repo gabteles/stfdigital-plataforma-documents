@@ -14,10 +14,10 @@ public interface ModeloFactory {
 	/**
 	 * Cria um modelo a partir do template padrão.
 	 * 
-	 * @param tipoModelo Tipo do Modelo
+	 * @param tipoDocumento Tipo do Documento
 	 * @param nome Nome do modelo
 	 * @return
 	 */
-	DocumentoId criarDocumentoModeloPadrao(TipoDocumentoId tipoModelo, String nome);
+	DocumentoId criarDocumentoModeloPadrao(TipoDocumentoId tipoDocumento, String nome);
 
 }

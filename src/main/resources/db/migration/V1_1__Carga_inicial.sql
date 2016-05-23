@@ -7,15 +7,15 @@ insert into documento.certificado_digital (SEQ_CERTIFICADO_DIGITAL, DSC_CERTIFIC
 insert into documento.certificado_digital (SEQ_CERTIFICADO_DIGITAL, DSC_CERTIFICADO_DIGITAL, COD_SERIAL, TXT_CERTIFICADO_DIGITAL, DAT_VALIDADE_INICIAL, DAT_VALIDADE_FINAL, SEQ_CERTIFICADO_EMISSOR, TIP_CERTIFICADO_DIGITAL, TIP_PKI) VALUES (documento.seq_certificado_digital.nextval, 'cn=AC CAIXA v2 ou=Autoridade Certificadora Raiz Brasileira v2 o=ICP-Brasil c=BR', '0b', FILE_READ('classpath:certification/pkis/icp-brasil/ac-caixa-v2.cer'), parsedatetime('02/12/2011 10:16:53','dd/MM/yyyy hh:mm:ss'), parsedatetime('02/12/2021 10:16:53','dd/MM/yyyy hh:mm:ss'), documento.seq_certificado_digital.currval-3, 'A', 'ICP_BRASIL');
 insert into documento.certificado_digital (SEQ_CERTIFICADO_DIGITAL, DSC_CERTIFICADO_DIGITAL, COD_SERIAL, TXT_CERTIFICADO_DIGITAL, DAT_VALIDADE_INICIAL, DAT_VALIDADE_FINAL, SEQ_CERTIFICADO_EMISSOR, TIP_CERTIFICADO_DIGITAL, TIP_PKI) VALUES (documento.seq_certificado_digital.nextval, 'cn=AC CAIXA PF v2 ou=Caixa Economica Federal o=ICP-Brasil c=BR', '28eea57c362904d8', FILE_READ('classpath:certification/pkis/icp-brasil/ac-caixa-pf-v2.cer'), parsedatetime('23/12/2011 11:52:58','dd/MM/yyyy hh:mm:ss'), parsedatetime('21/12/2019 11:52:58','dd/MM/yyyy hh:mm:ss'), documento.seq_certificado_digital.currval-1, 'A', 'ICP_BRASIL');
 
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Alvará');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Carta');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Carta Postal');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Certidão');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Edital');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Mandado');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Mensagem');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Ofício');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Ofício Fax');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Ofício Telegrama');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Salvo Conduto');
-insert into documento.tipo_modelo (seq_tipo_documento, dsc_tipo_modelo) values (documento.seq_tipo_documento.nextval, 'Fax');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Alvará');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Carta');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Carta Postal');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Certidão');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Edital');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Mandado');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Mensagem');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Ofício');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Ofício Fax');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Ofício Telegrama');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Salvo Conduto');
+insert into documento.tipo_documento (seq_tipo_documento, dsc_tipo_documento) values (documento.seq_tipo_documento.nextval, 'Fax');

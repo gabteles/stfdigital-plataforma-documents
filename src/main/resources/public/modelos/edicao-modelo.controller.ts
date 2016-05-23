@@ -1,44 +1,36 @@
 import IStateService = angular.ui.IStateService;
 import IPromise = angular.IPromise;
 import documents from "./modelos.module";
-import {TipoModelo} from "./tipo-modelo.service";
-import {ModeloService, Modelo} from "./modelo.service";
-import {Documento} from "./documento";
+import {TipoDocumento} from "./tipo-documento.service";
+import {ModeloService, Modelo, EditarModeloCommand} from "./modelo.service";
 
 export class EdicaoModeloController {
 	
-	static $inject = ['modelo', '$state', 'app.novo-processo.modelos.ModeloService'];
+	static $inject = ['tiposDocumento', 'modelo', '$state', 'app.novo-processo.modelos.ModeloService'];
 	
-	private _documento: Documento;
-	
-	public editor: any = {};
+	public tipoDocumento: number;
+	public nomeModelo: string;
 
-	constructor(private _modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService) {
-		this._documento = {
-			id: this._modelo.documento,
-			nome: 'Modelo ' + this._modelo.tipoModelo.descricao + ' - ' + this._modelo.nome
-		}
+	constructor(private _tiposDocumento, private _modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService) {
+		this.tipoDocumento = _modelo.tipoDocumento.id;
+		this.nomeModelo = _modelo.nome;
 	}
 	
-	get documento(): Documento {
-		return this._documento;
+	get tiposDocumento(): TipoDocumento[] {
+		return this._tiposDocumento;
 	}
 
+	get modelo(): Modelo {
+		return this._modelo;
+	}
 	
-	concluiuEdicao() {
-		//messages.success('Modelo editado com sucesso.');
-		//$state.go('dashboard');
-		console.log('Modelo editado com sucesso.');
-		this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
-	};
-	
-	timeoutEdicao() {
-		//messages.error('Não foi possível concluir a edição do modelo.');
-		console.log('Não foi possível concluir a edição do modelo.');
-	};
-	
-	finalizarEdicao() {
-		this.editor.api.salvar();
+	editarModelo() {
+		let command: EditarModeloCommand = new EditarModeloCommand(this._modelo.id, this.tipoDocumento, this.nomeModelo);
+		this._modeloService.editar(command).then(() => {
+			this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
+		}, () => {
+			
+		});
 	}
 }
 

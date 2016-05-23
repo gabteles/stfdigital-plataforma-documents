@@ -1,19 +1,19 @@
 <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
     <!-- CONTENT -->
     <div class="content" layout="column">
-        <div class="md-title mt-10">Novo Modelo</div>
-        <div class="pb-16">Informe o tipo e o nome do modelo a ser criado</div>
+        <div class="md-title mt-10"><span translate="DOCUMENTS.MODELOS.NOVO">Novo Modelo</span></div>
+        <div class="pb-16">Informe o tipo de documento e o nome do modelo a ser criado</div>
         <div layout="row">
             <!-- BASIC FORM -->
             <div class="form-wrapper md-whiteframe-1dp" flex="100">
                 <form name="formularioModelo" ng-submit="vm.criarModelo()" class="md-inline-form">
                     <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
                         <md-input-container flex>
-                            <label for="tipoModelo">Tipo do modelo</label>
-                            <md-select ng-model="vm.tipoModelo" id="tipoModelo">
+                            <label for="tipoDocumento">Tipo do documento</label>
+                            <md-select ng-model="vm.tipoDocumento" id="tipoDocumento">
                                 <md-option></md-option>
-                                <md-option ng-repeat="tipoModelo in vm.tiposModelo" value="{{tipoModelo.id}}">
-                                    {{tipoModelo.descricao}}
+                                <md-option ng-repeat="tipoDocumento in vm.tiposDocumento" value="{{tipoDocumento.id}}">
+                                    {{tipoDocumento.descricao}}
                                 </md-option>
                             </md-select>
                         </md-input-container>
@@ -25,7 +25,6 @@
                     <md-button type="submit" class="md-raised md-accent" id="btnCriarModelo" aria-label="Criar Modelo" ng-disabled="formularioModelo.$invalid || formularioModelo.$pristine">
                         Criar
                     </md-button>
-                      
                 </form>
             </div>
             <!-- / BASIC FORM -->

@@ -11,11 +11,11 @@ alter table documento.certificado_digital add constraint ck_tip_certificado_digi
 alter table documento.certificado_digital add constraint ck_tip_pki_cedi check (tip_pki in ('ICP_BRASIL'));
 
 create sequence documento.seq_tipo_documento increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;
-create table documento.tipo_modelo (seq_tipo_documento bigint not null, dsc_tipo_modelo varchar2(100) not null, constraint pk_tipo_modelo primary key (seq_tipo_documento));
-alter table documento.tipo_modelo add constraint uk_timo_dsc_tipo_modelo unique (dsc_tipo_modelo);
+create table documento.tipo_documento (seq_tipo_documento bigint not null, dsc_tipo_documento varchar2(100) not null, constraint pk_tipo_documento primary key (seq_tipo_documento));
+alter table documento.tipo_documento add constraint uk_timo_dsc_tipo_documento unique (dsc_tipo_documento);
 
 create sequence documento.seq_modelo increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;
 create table documento.modelo (seq_modelo bigint not null, nom_modelo varchar2(100) not null, seq_tipo_documento bigint not null, seq_documento_template bigint not null, constraint pk_modelo primary key (seq_modelo));
 alter table documento.modelo add constraint fk_documento_mode foreign key (seq_documento_template) references documento.documento(seq_documento);
-alter table documento.modelo add constraint fk_tipo_modelo_mode foreign key (seq_tipo_documento) references documento.tipo_modelo(seq_tipo_documento);
+alter table documento.modelo add constraint fk_tipo_documento_mode foreign key (seq_tipo_documento) references documento.tipo_documento(seq_tipo_documento);
 alter table documento.modelo add constraint uk_mode_seq_tipo_documento  unique (seq_tipo_documento, nom_modelo);

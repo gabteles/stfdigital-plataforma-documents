@@ -30,7 +30,7 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 
 	@ManyToOne
 	@JoinColumn(name = "SEQ_TIPO_DOCUMENTO", nullable = false)
-	private TipoModelo tipoModelo;
+	private TipoDocumento tipoDocumento;
 
 	@Column(name = "NOM_MODELO", nullable = false)
 	private String nome;
@@ -43,15 +43,15 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 
 	}
 
-	public Modelo(final ModeloId id, final TipoModelo tipoModelo, final String nome, final DocumentoId documento) {
+	public Modelo(final ModeloId id, final TipoDocumento tipoDocumento, final String nome, final DocumentoId documento) {
 		Validate.notNull(id, "modelo.id.required");
-		Validate.notNull(nome, "modelo.tipoModelo.required");
+		Validate.notNull(tipoDocumento, "modelo.tipoDocumento.required");
 		Validate.notBlank(nome, "modelo.nome.required");
 		Validate.notNull(documento, "modelo.documento.required");
 
 		this.id = id;
 		this.nome = nome;
-		this.tipoModelo = tipoModelo;
+		this.tipoDocumento = tipoDocumento;
 		this.documento = documento;
 	}
 
@@ -64,14 +64,22 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 		return nome;
 	}
 
-	public TipoModelo tipoModelo() {
-		return tipoModelo;
+	public TipoDocumento tipoDocumento() {
+		return tipoDocumento;
 	}
 
 	public DocumentoId documento() {
 		return documento;
 	}
 
+	public void editar(final TipoDocumento tipoDocumento, final String nome) {
+		Validate.notNull(tipoDocumento, "modelo.tipoDocumento.required");
+		Validate.notBlank(nome, "modelo.nome.required");
+		
+		this.tipoDocumento = tipoDocumento;
+		this.nome = nome;
+	}
+	
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(id).toHashCode();

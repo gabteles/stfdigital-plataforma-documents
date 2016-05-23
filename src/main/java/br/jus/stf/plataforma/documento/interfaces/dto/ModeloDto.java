@@ -9,8 +9,8 @@ public class ModeloDto {
 	@ApiModelProperty("O id do modelo")
 	private Long id;
 
-	@ApiModelProperty("O tipo do modelo")
-	private TipoModeloDto tipoModelo;
+	@ApiModelProperty("O tipo do documento")
+	private TipoDocumentoDto tipoDocumento;
 
 	@ApiModelProperty("O nome do modelo")
 	private String nome;
@@ -18,9 +18,9 @@ public class ModeloDto {
 	@ApiModelProperty("O id do documento do modelo")
 	private Long documento;
 
-	public ModeloDto(final Long id, final TipoModeloDto tipoModelo, final String nome, final Long documento) {
+	public ModeloDto(final Long id, final TipoDocumentoDto tipoDocumento, final String nome, final Long documento) {
 		this.id = id;
-		this.tipoModelo = tipoModelo;
+		this.tipoDocumento = tipoDocumento;
 		this.nome = nome;
 		this.documento = documento;
 	}
@@ -33,12 +33,12 @@ public class ModeloDto {
 		this.id = id;
 	}
 
-	public TipoModeloDto getTipoModelo() {
-		return tipoModelo;
+	public TipoDocumentoDto getTipoDocumento() {
+		return tipoDocumento;
 	}
 
-	public void setTipoModelo(TipoModeloDto tipoModelo) {
-		this.tipoModelo = tipoModelo;
+	public void setTipoDocumento(TipoDocumentoDto tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
 
 	public String getNome() {

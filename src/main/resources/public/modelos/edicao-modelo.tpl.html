@@ -1,17 +1,29 @@
 <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
     <!-- CONTENT -->
     <div class="content" layout="column">
-        <div class="md-title mt-10">Editar Conteúdo de Modelo</div>
-        <div class="pb-16">Edite o conteúdo de modelo</div>
+        <div class="md-title mt-10">Editar Modelo</div>
+        <div class="pb-16">Edite o de modelo</div>
         <div layout="row">
             <!-- BASIC FORM -->
             <div class="form-wrapper md-whiteframe-1dp" flex="100">
-                <form name="formularioConteudoModelo" ng-submit="vm.finalizarEdicao()" class="md-inline-form">
+                <form name="formularioModelo" ng-submit="vm.editarModelo()" class="md-inline-form">
                     <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
-                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" aguardar-conclusao="true" style="width: 100%;"></div>
+                        <md-input-container flex>
+                            <label for="tipoDocumento">Tipo do documento</label>
+                            <md-select ng-model="vm.tipoDocumento" id="tipoDocumento">
+                                <md-option></md-option>
+                                <md-option ng-repeat="tipoDocumento in vm.tiposDocumento" value="{{tipoDocumento.id}}">
+                                    {{tipoDocumento.descricao}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex>
+                            <label for="nomeModelo">Nome do modelo</label>
+                            <input ng-model="vm.nomeModelo" id="nomeModelo" class="ng-pristine ng-valid md-input ng-not-empty" aria-invalid="false">
+                        </md-input-container>
                     </div>
-                    <md-button type="submit" class="md-raised md-accent" id="btnCriarModelo" aria-label="Criar Modelo" ng-disabled="formularioModelo.$invalid || formularioModelo.$pristine">
-                        Salvar
+                    <md-button type="submit" class="md-raised md-accent" id="btnEditarModelo" aria-label="Editar Modelo" ng-disabled="formularioModelo.$invalid">
+                        Editar
                     </md-button>
                       
                 </form>

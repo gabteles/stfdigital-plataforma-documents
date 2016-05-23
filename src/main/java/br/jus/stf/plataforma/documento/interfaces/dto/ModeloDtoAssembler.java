@@ -16,12 +16,12 @@ import br.jus.stf.plataforma.documento.domain.model.Modelo;
 public class ModeloDtoAssembler {
 
 	@Autowired
-	private TipoModeloDtoAssembler tipoModeloDtoAssembler;
+	private TipoDocumentoDtoAssembler tipoDocumentoDtoAssembler;
 
 	public ModeloDto toDto(Modelo modelo) {
 		Validate.notNull(modelo);
 
-		return new ModeloDto(modelo.identity().toLong(), tipoModeloDtoAssembler.toDto(modelo.tipoModelo()), modelo.nome(),
+		return new ModeloDto(modelo.identity().toLong(), tipoDocumentoDtoAssembler.toDto(modelo.tipoDocumento()), modelo.nome(),
 		        modelo.documento().toLong());
 	}
 

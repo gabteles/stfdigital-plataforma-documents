@@ -1,7 +1,7 @@
 import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
 import IStateProvider = angular.ui.IStateProvider;
 import IModule = angular.IModule;
-import {TipoModeloService} from "./tipo-modelo.service";
+import {TipoDocumentoService} from "./tipo-documento.service";
 import {ModeloService} from "./modelo.service";
 
 /** @ngInject **/
@@ -24,8 +24,8 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
             }
         },
         resolve : {
-        	tiposModelo : ['app.novo-processo.modelos.TipoModeloService', (tipoModeloService: TipoModeloService) => {
-                return tipoModeloService.listar();
+        	tiposDocumento : ['app.novo-processo.modelos.TipoDocumentoService', (tipoDocumentoService: TipoDocumentoService) => {
+                return tipoDocumentoService.listar();
             }]
         }
     }).state('app.novo-processo.modelos-editar', {
@@ -34,6 +34,23 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
             'content@app.autenticado' : {
                 templateUrl : properties.apiUrl + '/documents/modelos/edicao-modelo.tpl.html',
                 controller : 'app.novo-processo.modelos.EdicaoModeloController',
+                controllerAs: 'vm'
+            }
+        },
+        resolve : {
+            tiposDocumento : ['app.novo-processo.modelos.TipoDocumentoService', (tipoDocumentoService: TipoDocumentoService) => {
+                return tipoDocumentoService.listar();
+            }],
+            modelo : ['app.novo-processo.modelos.ModeloService', (modeloService: ModeloService) => {
+            	return modeloService.consultar(1);
+            }]
+        }
+    }).state('app.novo-processo.modelos-conteudo-editar', {
+        url : '/modelos/conteudo/editar',
+        views : {
+            'content@app.autenticado' : {
+                templateUrl : properties.apiUrl + '/documents/modelos/edicao-conteudo-modelo.tpl.html',
+                controller : 'app.novo-processo.modelos.EdicaoConteudoModeloController',
                 controllerAs: 'vm'
             }
         },

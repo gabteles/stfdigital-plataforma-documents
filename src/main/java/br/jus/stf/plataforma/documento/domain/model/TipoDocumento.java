@@ -17,22 +17,22 @@ import br.jus.stf.core.shared.documento.TipoDocumentoId;
  *
  */
 @javax.persistence.Entity
-@Table(name = "TIPO_MODELO", schema = "DOCUMENTO")
-public class TipoModelo implements Entity<TipoModelo, TipoDocumentoId> {
+@Table(name = "TIPO_DOCUMENTO", schema = "DOCUMENTO")
+public class TipoDocumento implements Entity<TipoDocumento, TipoDocumentoId> {
 
 	@EmbeddedId
 	private TipoDocumentoId id;
 
-	@Column(name = "DSC_TIPO_MODELO", nullable = false)
+	@Column(name = "DSC_TIPO_DOCUMENTO", nullable = false)
 	private String descricao;
 
-	TipoModelo() {
+	TipoDocumento() {
 
 	}
 
-	public TipoModelo(final TipoDocumentoId id, final String descricao) {
-		Validate.notNull(id, "tipoModelo.id.required");
-		Validate.notBlank(descricao, "tipoModelo.descricao.required");
+	public TipoDocumento(final TipoDocumentoId id, final String descricao) {
+		Validate.notNull(id, "tipoDocumento.id.required");
+		Validate.notBlank(descricao, "tipoDocumento.descricao.required");
 
 		this.id = id;
 		this.descricao = descricao;
@@ -62,12 +62,12 @@ public class TipoModelo implements Entity<TipoModelo, TipoDocumentoId> {
 			return false;
 		}
 
-		TipoModelo other = (TipoModelo) obj;
+		TipoDocumento other = (TipoDocumento) obj;
 		return sameIdentityAs(other);
 	}
 
 	@Override
-	public boolean sameIdentityAs(TipoModelo other) {
+	public boolean sameIdentityAs(TipoDocumento other) {
 		return other != null && this.id.sameValueAs(other.id);
 	}
 

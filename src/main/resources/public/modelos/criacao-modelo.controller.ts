@@ -1,25 +1,25 @@
 import IStateService = angular.ui.IStateService;
 import IPromise = angular.IPromise;
 import documents from "./modelos.module";
-import {TipoModelo} from "./tipo-modelo.service";
+import {TipoDocumento} from "./tipo-documento.service";
 import {ModeloService, CriarModeloCommand} from "./modelo.service";
 
 export class CriacaoModeloController {
 
-	public tipoModelo: number;
+	public tipoDocumento: number;
 	public nomeModelo: string;
 	
-	static $inject = ['tiposModelo', '$state', 'app.novo-processo.modelos.ModeloService'];
+	static $inject = ['tiposDocumento', '$state', 'app.novo-processo.modelos.ModeloService'];
 
-	constructor(private _tiposModelo: TipoModelo[], private $state: IStateService, private _modeloService: ModeloService) {
+	constructor(private _tiposDocumento: TipoDocumento[], private $state: IStateService, private _modeloService: ModeloService) {
 	}
 	
-	get tiposModelo(): TipoModelo[] {
-		return this._tiposModelo;
+	get tiposDocumento(): TipoDocumento[] {
+		return this._tiposDocumento;
 	}
 	
 	criarModelo() {
-		let command: CriarModeloCommand = new CriarModeloCommand(this.tipoModelo, this.nomeModelo);
+		let command: CriarModeloCommand = new CriarModeloCommand(this.tipoDocumento, this.nomeModelo);
 		this._modeloService.criar(command).then(() => {
 			this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
 		}, () => {

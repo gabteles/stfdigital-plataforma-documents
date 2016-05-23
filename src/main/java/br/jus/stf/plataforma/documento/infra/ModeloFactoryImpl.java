@@ -30,11 +30,11 @@ public class ModeloFactoryImpl implements ModeloFactory {
 	private ResourceLoader resourceLoader;
 
 	@Override
-	public DocumentoId criarDocumentoModeloPadrao(TipoDocumentoId tipoModelo, String nome) {
+	public DocumentoId criarDocumentoModeloPadrao(TipoDocumentoId tipoDocumento, String nome) {
 		Resource resource = resourceLoader.getResource("classpath:templates/modelo/padrao-brasao.docx");
 		DocumentoTemporarioId documentoTemporarioId;
 		try {
-			documentoTemporarioId = documentoAdapter.upload(tipoModelo.toLong() + nome + ".docx",
+			documentoTemporarioId = documentoAdapter.upload(tipoDocumento.toLong() + nome + ".docx",
 			        IOUtils.toByteArray(resource.getInputStream()));
 			return documentoAdapter.salvar(documentoTemporarioId);
 		} catch (IOException e) {

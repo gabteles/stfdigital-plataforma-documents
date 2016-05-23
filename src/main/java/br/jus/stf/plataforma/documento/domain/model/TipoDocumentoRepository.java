@@ -7,15 +7,15 @@ import org.springframework.data.repository.Repository;
 import br.jus.stf.core.shared.documento.TipoDocumentoId;
 
 /**
- * Repositório de Tipo de Modelo.
+ * Repositório de Tipo de Documento.
  * 
  * @author Tomas.Godoi
  *
  */
-public interface TipoModeloRepository extends Repository<TipoModelo, TipoDocumentoId> {
+public interface TipoDocumentoRepository extends Repository<TipoDocumento, TipoDocumentoId> {
 
-	List<TipoModelo> findAll();
+	List<TipoDocumento> findAll();
 
-	TipoModelo findOne(TipoDocumentoId id);
+	TipoDocumento findOne(TipoDocumentoId id);
 
 }

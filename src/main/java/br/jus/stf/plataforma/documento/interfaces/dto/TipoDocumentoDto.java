@@ -3,16 +3,16 @@ package br.jus.stf.plataforma.documento.interfaces.dto;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel("Representa um tipo de modelo")
-public class TipoModeloDto {
+@ApiModel("Representa um tipo de documento")
+public class TipoDocumentoDto {
 
-	@ApiModelProperty("O id do tipo de modelo")
+	@ApiModelProperty("O id do tipo de documento")
 	private Long id;
 
-	@ApiModelProperty("A descrição do tipo de modelo")
+	@ApiModelProperty("A descrição do tipo de documento")
 	private String descricao;
 
-	public TipoModeloDto(Long id, String descricao) {
+	public TipoDocumentoDto(Long id, String descricao) {
 		this.id = id;
 		this.descricao = descricao;
 	}

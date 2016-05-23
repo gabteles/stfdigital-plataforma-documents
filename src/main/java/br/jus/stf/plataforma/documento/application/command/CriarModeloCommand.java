@@ -1,4 +1,4 @@
-package br.jus.stf.plataforma.documento.interfaces.commands;
+package br.jus.stf.plataforma.documento.application.command;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,23 +8,29 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "Contém as informações para criação de um novo modelo")
+/**
+ * Command para criação de um novo modelo.
+ * 
+ * @author Tomas.Godoi
+ *
+ */
+@ApiModel(value = "Contém as informações para a criação de um novo modelo")
 public class CriarModeloCommand {
 
 	@NotNull
-	@ApiModelProperty(value = "Identificador do tipo de modelo a ser criado", required = true)
-	private Long tipoModelo;
+	@ApiModelProperty(value = "Identificador do tipo de documento", required = true)
+	private Long tipoDocumento;
 
 	@NotBlank
-	@ApiModelProperty(value = "Nome do modelo a ser criado", required = true)
+	@ApiModelProperty(value = "Nome do modelo", required = true)
 	private String nome;
 
-	public Long getTipoModelo() {
-		return tipoModelo;
+	public Long getTipoDocumento() {
+		return tipoDocumento;
 	}
 
-	public void setTipoModelo(Long tipoModelo) {
-		this.tipoModelo = tipoModelo;
+	public void setTipoDocumento(Long tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
 	}
 
 	public String getNome() {
