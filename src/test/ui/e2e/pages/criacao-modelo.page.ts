@@ -2,10 +2,6 @@ import ElementFinder = protractor.ElementFinder;
 
 export class CriacaoModeloPage {
 	
-	public preencherQtdVolumes(quantidade : number) : void {
-		element(by.id('qtdVolumes')).sendKeys(quantidade.toString());
-	};
-	
 	public selecionarTipoDocumento() : void {
 		element(by.id('tipoDocumento')).click();
 		element.all(by.repeater('tipoDocumento in vm.tiposDocumento')).get(0).click();
