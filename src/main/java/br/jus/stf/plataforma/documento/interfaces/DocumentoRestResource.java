@@ -1,14 +1,11 @@
 package br.jus.stf.plataforma.documento.interfaces;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -29,10 +26,9 @@ import com.wordnik.swagger.annotations.ApiResponses;
 
 import br.jus.stf.core.framework.errorhandling.ValidationException;
 import br.jus.stf.core.shared.documento.DocumentoId;
-import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.plataforma.documento.application.DocumentoApplicationService;
 import br.jus.stf.plataforma.documento.application.command.DeleteTemporarioCommand;
-import br.jus.stf.plataforma.documento.application.command.DividirDocumentoCommand;
+import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCompletamenteCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarDocumentoComTagsCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarDocumentoFinalCommand;
 import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosCommand;
@@ -43,8 +39,6 @@ import br.jus.stf.plataforma.documento.domain.DocumentoService;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
-import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
-import br.jus.stf.plataforma.documento.domain.model.SubstituicaoTag;
 import br.jus.stf.plataforma.documento.domain.model.Tag;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDto;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDtoAssembler;
@@ -83,9 +77,9 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		return documentoApplicationService.salvarDocumentos(command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList())).entrySet().stream()
-		.map(entry -> documentoTemporarioDtoAssembler.toDto(entry.getKey(), entry.getValue()))
-		.collect(Collectors.toList());
+		return documentoApplicationService.handle(command).entrySet().stream()
+				.map(entry -> documentoTemporarioDtoAssembler.toDto(entry.getKey(), entry.getValue()))
+				.collect(Collectors.toList());
 	}	
 	
 	@ApiOperation("Recupera o conteúdo de um documento do repositório")
@@ -108,8 +102,7 @@ public class DocumentoRestResource {
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public String upload(UploadDocumentoCommand command) {
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return documentoApplicationService.salvarDocumentoTemporario(documentoTemporario);
+		return documentoApplicationService.handle(command);
 	}
 	
 	@ApiOperation("Envia um documento assinado para armazenamento temporário e retorna o indentificador")
@@ -121,8 +114,7 @@ public class DocumentoRestResource {
 			throw new ValidationException(result.getAllErrors());
 		}
 		
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return documentoApplicationService.salvarDocumentoTemporario(documentoTemporario);
+		return documentoApplicationService.handle(command);
 	}
 	
 	@ApiOperation("Exclui um documento temporário")
@@ -131,22 +123,16 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		documentoApplicationService.apagarDocumentosTemporarios(command.getFiles());
+		documentoApplicationService.handle(command);
 	}
 
 	@ApiOperation("Divide um documento")
 	@RequestMapping(value = "/dividir", method = RequestMethod.POST)
-	public List<Long> dividirDocumento(@Valid @RequestBody List<DividirDocumentoCommand> commands, BindingResult result) {
+	public List<Long> dividirDocumento(@Valid @RequestBody DividirDocumentosCompletamenteCommand command, BindingResult result) {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		Map<Long, List<DividirDocumentoCommand>> commandsById = commands.stream().collect(Collectors.groupingBy(DividirDocumentoCommand::getDocumentoId));
-		List<DocumentoId> documentosDivididos = new ArrayList<>();
-		for (Long id : commandsById.keySet()) {
-			List<Range<Integer>> intervalos = commandsById.get(id).stream().map(d -> Range.between(d.getPaginaInicial(), d.getPaginaFinal())).collect(Collectors.toList());
-			documentosDivididos.addAll(documentoApplicationService.dividirDocumentoCompletamente(new DocumentoId(id), intervalos));
-		}
-		return documentosDivididos.stream().map(d -> d.toLong()).collect(Collectors.toList());
+		return documentoApplicationService.handle(command).stream().map(d -> d.toLong()).collect(Collectors.toList());
 	}
 	
 	@ApiOperation("Une documentos")
@@ -155,7 +141,7 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		return documentoApplicationService.unirDocumentos(command.getIdsDocumentos().stream().map(id -> new DocumentoId(id)).collect(Collectors.toList())).toLong();
+		return documentoApplicationService.handle(command).toLong();
 	}
 	
 	/**
@@ -183,16 +169,14 @@ public class DocumentoRestResource {
 	@ApiOperation("Gera um documento subsitituindo as tags")
 	@RequestMapping(value = "/gerar-com-tags")
 	public Long gerarDocumentoComTags(GerarDocumentoComTagsCommand command) {
-		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
-		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
-		DocumentoId documentoGeradoId = documentoApplicationService.gerarDocumentoComTags(new DocumentoId(command.getDocumentoId()), substituicoesTag);
+		DocumentoId documentoGeradoId = documentoApplicationService.handle(command);
 		return documentoGeradoId.toLong();
 	}
 	
 	@ApiOperation("Gera um documento final a partir do editável")
 	@RequestMapping(value = "/gerar-final")
 	public Long gerarDocumentoFinal(GerarDocumentoFinalCommand command) {
-		return documentoApplicationService.gerarDocumentoFinal(new DocumentoId(command.getDocumento())).toLong();
+		return documentoApplicationService.handle(command).toLong();
 	}
 	
 }

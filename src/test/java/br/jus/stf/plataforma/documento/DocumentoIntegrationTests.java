@@ -30,10 +30,12 @@ import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDto;
 public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests {
 	
 	private String dividirDocumentoCommand;
+	private String intervaloJson;
 	
 	@Before
 	public void setUp() {
-		dividirDocumentoCommand = "{\"documentoId\": %d, \"paginaInicial\": %d, \"paginaFinal\": %d}";
+		dividirDocumentoCommand = "{\"documentoId\": %d, \"intervalos\": [%s]}";
+		intervaloJson = "{\"paginaInicial\": %d, \"paginaFinal\": %d}";
 	}
 	
 	@Test
@@ -89,10 +91,10 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	public void dividirEUnirDocumentos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		
-		String dividirDocumentoCommands = "[" + String.format(dividirDocumentoCommand,
-				documentoId, 1, 7) + ", " + String.format(dividirDocumentoCommand, documentoId, 8, 14) + "]";
+		String dividirDocumentoCommandJsonStr = String.format(dividirDocumentoCommand,
+				documentoId, String.format(intervaloJson, 1, 7) + ", " + String.format(intervaloJson, 8, 14));
 		String documentosDivididos = mockMvc.perform(post("/api/documentos/dividir").contentType(MediaType.APPLICATION_JSON)
-				.content(dividirDocumentoCommands)).andExpect(status().is2xxSuccessful())
+				.content(dividirDocumentoCommandJsonStr)).andExpect(status().is2xxSuccessful())
 				.andExpect(jsonPath("$", hasSize(2))).andReturn().getResponse()
 				.getContentAsString();
 		
@@ -108,10 +110,10 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	public void dividirDocumentoIntervalosInvalidos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		
-		String dividirDocumentoCommands = "[" + String.format(dividirDocumentoCommand,
-				documentoId, 1, 7) + ", " + String.format(dividirDocumentoCommand, documentoId, 9, 14) + "]";
+		String dividirDocumentoCommandJsonStr = String.format(dividirDocumentoCommand,
+				documentoId, String.format(intervaloJson, 1, 7) + ", " + String.format(intervaloJson, 9, 14));
 		String json = mockMvc.perform(post("/api/documentos/dividir").contentType(MediaType.APPLICATION_JSON)
-				.content(dividirDocumentoCommands)).andExpect(status().is4xxClientError()).andReturn().getResponse().getContentAsString();
+				.content(dividirDocumentoCommandJsonStr)).andExpect(status().is4xxClientError()).andReturn().getResponse().getContentAsString();
 		String erro = JsonPath.read(json, "$.errors[0].message");
 		Assert.assertEquals("Nem todas as páginas do documento foram contempladas.", erro);
 	}

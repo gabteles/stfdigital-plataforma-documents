@@ -1,9 +1,11 @@
 package br.jus.stf.plataforma.documento.application;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Range;
 import org.junit.Assert;
@@ -15,12 +17,16 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
-import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.plataforma.documento.AbstractDocumentoIntegrationTests;
+import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCommand;
+import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCompletamenteCommand;
+import br.jus.stf.plataforma.documento.application.command.Intervalo;
+import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosCommand;
+import br.jus.stf.plataforma.documento.application.command.UnirDocumentosCommand;
+import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
-import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 /**
  * Testes de integração.
@@ -117,29 +123,56 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractDocument
 	
 	private List<DocumentoId> dividirDocumentoComIntervalos(List<Range<Integer>> intervalos) throws IOException {
 		String idDocumentoTemporario = salvarDocumentoTemporarioParaTeste("pdf-14-pgs.pdf");
-		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.salvarDocumentos(Arrays.asList(new DocumentoTemporarioId(idDocumentoTemporario)));
+		SalvarDocumentosCommand command = new SalvarDocumentosCommand();
+		command.setIdsDocumentosTemporarios(Arrays.asList(idDocumentoTemporario));
+		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.handle(command);
 		
 		DocumentoId docParaDividir = documentosSalvos.get(idDocumentoTemporario);
 		
-		List<DocumentoId> documentos = documentoApplicationService.dividirDocumento(docParaDividir, intervalos);
+		DividirDocumentosCommand dividirCommand = new DividirDocumentosCommand();
+		dividirCommand.setDocumentoId(docParaDividir.toLong());
+		List<Intervalo> intervalosEnt = new ArrayList<>();
+		for (Range<Integer> intervalo : intervalos) {
+			Intervalo inter = new Intervalo();
+			inter.setPaginaInicial(intervalo.getMinimum());
+			inter.setPaginaFinal(intervalo.getMaximum());
+			intervalosEnt.add(inter);
+		}
+		dividirCommand.setIntervalos(intervalosEnt);
+		
+		List<DocumentoId> documentos = documentoApplicationService.handle(dividirCommand);
 		return documentos;
 	}
 	
 	private List<DocumentoId> dividirDocumentoComIntervalosCompletos(List<Range<Integer>> intervalos) throws IOException {
 		String idDocumentoTemporario = salvarDocumentoTemporarioParaTeste("pdf-14-pgs.pdf");
-		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.salvarDocumentos(Arrays.asList(new DocumentoTemporarioId(idDocumentoTemporario)));
+		SalvarDocumentosCommand command = new SalvarDocumentosCommand();
+		command.setIdsDocumentosTemporarios(Arrays.asList(idDocumentoTemporario));
+		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.handle(command);
 		
 		DocumentoId docParaDividir = documentosSalvos.get(idDocumentoTemporario);
 		
-		List<DocumentoId> documentos = documentoApplicationService.dividirDocumentoCompletamente(docParaDividir, intervalos);
+		DividirDocumentosCompletamenteCommand dividirCommand = new DividirDocumentosCompletamenteCommand();
+		dividirCommand.setDocumentoId(docParaDividir.toLong());
+		List<Intervalo> intervalosEnt = new ArrayList<>();
+		for (Range<Integer> intervalo : intervalos) {
+			Intervalo inter = new Intervalo();
+			inter.setPaginaInicial(intervalo.getMinimum());
+			inter.setPaginaFinal(intervalo.getMaximum());
+			intervalosEnt.add(inter);
+		}
+		dividirCommand.setIntervalos(intervalosEnt);
+		
+		List<DocumentoId> documentos = documentoApplicationService.handle(dividirCommand);
 		return documentos;
 	}
 
 	private String salvarDocumentoTemporarioParaTeste(String nomeArquivo) throws IOException {
 		mockMultiFile = createMockMultiFile(nomeArquivo);
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(mockMultiFile);
 		
-		return documentoApplicationService.salvarDocumentoTemporario(documentoTemporario);
+		UploadDocumentoCommand command = new UploadDocumentoCommand(mockMultiFile);
+		
+		return documentoApplicationService.handle(command);
 	}
 
 	private MockMultipartFile createMockMultiFile(String nomeArquivo) throws IOException {
@@ -157,13 +190,19 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractDocument
 		String idDocumentoTemporario1 = salvarDocumentoTemporarioParaTeste("pdf-14-pgs.pdf");
 		String idDocumentoTemporario2 = salvarDocumentoTemporarioParaTeste("pdf-A-5-pgs.pdf");
 		String idDocumentoTemporario3 = salvarDocumentoTemporarioParaTeste("pdf-B-3-pgs.pdf");
-		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.salvarDocumentos(Arrays.asList(
-		        new DocumentoTemporarioId(idDocumentoTemporario1), new DocumentoTemporarioId(idDocumentoTemporario2),
-		        new DocumentoTemporarioId(idDocumentoTemporario3)));
+		
+		SalvarDocumentosCommand command = new SalvarDocumentosCommand();
+		command.setIdsDocumentosTemporarios(Arrays.asList(idDocumentoTemporario1, idDocumentoTemporario2, idDocumentoTemporario3));
+		
+		Map<String, DocumentoId> documentosSalvos = documentoApplicationService.handle(command);
+		
+		List<DocumentoId> documentosASeremUnidos = Arrays.asList(documentosSalvos.get(idDocumentoTemporario1),
+                documentosSalvos.get(idDocumentoTemporario2), documentosSalvos.get(idDocumentoTemporario3));
+		
+		UnirDocumentosCommand unirDocumentosCommand = new UnirDocumentosCommand(documentosASeremUnidos.stream().map(d -> d.toLong()).collect(Collectors.toList()));
 		
 		DocumentoId documentoUnidoId = documentoApplicationService
-		        .unirDocumentos(Arrays.asList(documentosSalvos.get(idDocumentoTemporario1),
-		                documentosSalvos.get(idDocumentoTemporario2), documentosSalvos.get(idDocumentoTemporario3)));
+		        .handle(unirDocumentosCommand);
 		Documento documentoUnido = documentoRepository.findOne(documentoUnidoId);
 		
 		Assert.assertEquals("Deveria ter unido os documentos em um com 22 páginas.", new Integer(22), documentoUnido.quantidadePaginas());

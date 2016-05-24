@@ -17,11 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import br.jus.stf.core.shared.documento.DocumentoId;
-import br.jus.stf.core.shared.documento.DocxMultipartFile;
-import br.jus.stf.plataforma.documento.application.DocumentoApplicationService;
+import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumento;
 import br.jus.stf.plataforma.documento.domain.ControladorEdicaoDocumento;
-import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 @Component
 public class OnlyofficeCallbackApplicationService {
@@ -74,8 +71,9 @@ public class OnlyofficeCallbackApplicationService {
 
 		String numeroEdicao = (String) json.get("key");
 
-		documentoApplicationService.concluirEdicaoDocumento(numeroEdicao, new DocumentoId(documentoId),
-		        new DocumentoTemporario(new DocxMultipartFile("documento.docx", response.getBody())));
+		ConcluirEdicaoDocumento command = new ConcluirEdicaoDocumento(numeroEdicao, documentoId, response.getBody());
+		
+		documentoApplicationService.handle(command);
 
 		return new HashMap<>();
 	}
