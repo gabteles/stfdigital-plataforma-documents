@@ -3,15 +3,20 @@ package br.jus.stf.plataforma.documento.application;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
+import br.jus.stf.core.shared.documento.PDFMultipartFile;
+import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
 import br.jus.stf.plataforma.documento.domain.CertificateValidationService;
-import br.jus.stf.plataforma.documento.domain.DocumentAdapter;
 import br.jus.stf.plataforma.documento.domain.PdfSigningSpecificationBuilder;
+import br.jus.stf.plataforma.documento.domain.PdfTempDocument;
 import br.jus.stf.plataforma.documento.domain.model.Document;
+import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.pki.PkiIds;
 import br.jus.stf.plataforma.documento.domain.model.signature.DocumentSignature;
 import br.jus.stf.plataforma.documento.domain.model.signature.DocumentSigner;
@@ -36,13 +41,16 @@ public class SignatureApplicationService {
 	private CertificateValidationService certificateValidationService;
 
 	@Autowired
-	private DocumentAdapter documentAdapter;
+	private DocumentoRepository documentoRepository;
 
 	@Autowired
 	private DocumentSignerFactory signerFactory;
 	
 	@Autowired
 	private PdfSigningSpecificationBuilder specBuilder;
+	
+	@Autowired
+	private DocumentoApplicationService documentoApplicationService;
 
 	/**
 	 * Recebe o certificado que vai assinar um documento, permitindo a criação
@@ -73,12 +81,12 @@ public class SignatureApplicationService {
 	}
 
 	public void provideToSign(DocumentSignerId signerId, Long documentId) throws SigningException {
-		try {
-			Document document = documentAdapter.retrieve(new DocumentoId(documentId));
-			attachToSign(signerId, document);
-		} catch (IOException e) {
-			throw new RuntimeException("Erro ao recuperar documento.", e);
-		}
+		Document document = retrieve(new DocumentoId(documentId));
+		attachToSign(signerId, document);
+	}
+
+	private Document retrieve(DocumentoId documentoId) {
+		return new PdfTempDocument(documentoRepository.download(documentoId).stream());
 	}
 
 	public PreSignature preSign(DocumentSignerId signerId) throws SigningException {
@@ -98,7 +106,16 @@ public class SignatureApplicationService {
 
 	public DocumentoTemporarioId saveSigned(DocumentSignerId signerId) {
 		SignedDocument signedDocument = recoverSignedDocument(signerId);
-		return documentAdapter.upload(signerId.id(), signedDocument.document());
+		return upload(signerId.id(), signedDocument.document());
+	}
+
+	private DocumentoTemporarioId upload(String name, Document document) {
+		try {
+			MultipartFile file = new PDFMultipartFile(name, IOUtils.toByteArray(document.stream()));
+			return new DocumentoTemporarioId(documentoApplicationService.handle(new UploadDocumentoCommand(file)));
+		} catch (IOException e) {
+			throw new IllegalStateException("Erro ao ler documento para upload.", e);
+		}
 	}
 
 }
