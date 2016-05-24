@@ -1,4 +1,4 @@
-package br.jus.stf.plataforma.documento.application;
+package br.jus.stf.plataforma.documento.domain;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,11 +17,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import br.jus.stf.plataforma.documento.application.DocumentoApplicationService;
 import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumento;
-import br.jus.stf.plataforma.documento.domain.ControladorEdicaoDocumento;
 
 @Component
-public class OnlyofficeCallbackApplicationService {
+public class OnlyofficeCallbackService {
 
 	@Autowired
 	@Qualifier("onlyofficeRestTemplate")

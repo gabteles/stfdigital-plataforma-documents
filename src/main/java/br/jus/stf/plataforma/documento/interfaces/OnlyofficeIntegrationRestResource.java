@@ -25,8 +25,8 @@ import org.springframework.web.client.RestClientException;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
-import br.jus.stf.plataforma.documento.application.OnlyofficeCallbackApplicationService;
 import br.jus.stf.plataforma.documento.domain.ControladorEdicaoDocumento;
+import br.jus.stf.plataforma.documento.domain.OnlyofficeCallbackService;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
@@ -44,7 +44,7 @@ public class OnlyofficeIntegrationRestResource {
 	private ControladorEdicaoDocumento controladorEdicaoDocumento;
 
 	@Autowired
-	private OnlyofficeCallbackApplicationService onlyofficeCallbackApplicationService;
+	private OnlyofficeCallbackService onlyofficeCallbackService;
 	
 	@Autowired
 	@Qualifier("doocumentServerBaseUrl")
@@ -97,7 +97,7 @@ public class OnlyofficeIntegrationRestResource {
 	@RequestMapping(value = "/documentos/{documentoId}/callback", method = RequestMethod.POST)
 	public Map<String, Object> callback(@PathVariable("documentoId") Long documentoId,
 	        @RequestBody Map<String, Object> json) throws RestClientException, URISyntaxException {
-		return onlyofficeCallbackApplicationService.callback(documentoId, json);
+		return onlyofficeCallbackService.callback(documentoId, json);
 	}
 
 	@ApiOperation("Recupera a url base do servidor de documentos")
