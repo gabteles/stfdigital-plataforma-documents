@@ -8,11 +8,11 @@ node_modules
 node
 
 # Typings
-typings
+src/main/ui/typings
+src/test/ui/typings
 
 # JS Main
-src/main/resources/public/**/*.js
-src/main/resources/public/**/*.js.map
+src/main/resources/public
 
 # --------------------------------
 

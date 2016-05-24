@@ -20,10 +20,6 @@ export class EdicaoConteudoModeloController {
 		}
 	}
 	
-	get tiposDocumento(): TipoDocumento[] {
-		return this._tiposDocumento;
-	}
-	
 	get documento(): Documento {
 		return this._documento;
 	}

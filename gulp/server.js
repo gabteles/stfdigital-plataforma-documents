@@ -18,8 +18,7 @@ function browserSyncInit()
 
     browserSync.instance = browserSync.init({
         startPath: '/',
-        proxy : proxy,
-        open : false
+        proxy : proxy
     });
 }
 
@@ -27,7 +26,7 @@ browserSync.use(browserSyncSpa({
     selector: '[ng-app]'// Only needed for angular apps
 }));
 
-gulp.task('serve:e2e', ['compile-e2e-ts'], function ()
+gulp.task('serve:e2e', ['build', 'compile-ts:e2e'], function ()
 {
     browserSyncInit();
 });

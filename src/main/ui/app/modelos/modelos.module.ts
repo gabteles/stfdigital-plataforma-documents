@@ -18,7 +18,7 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
         url : '/modelos/criar',
         views : {
             'content@app.autenticado' : {
-                templateUrl : properties.apiUrl + '/documents/modelos/criacao-modelo.tpl.html',
+                templateUrl : 'criacao-modelo.tpl.html',
                 controller : 'app.novo-processo.modelos.CriacaoModeloController',
                 controllerAs: 'vm'
             }
@@ -32,7 +32,7 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
         url : '/modelos/editar',
         views : {
             'content@app.autenticado' : {
-                templateUrl : properties.apiUrl + '/documents/modelos/edicao-modelo.tpl.html',
+                templateUrl : 'edicao-modelo.tpl.html',
                 controller : 'app.novo-processo.modelos.EdicaoModeloController',
                 controllerAs: 'vm'
             }
@@ -49,7 +49,7 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
         url : '/modelos/conteudo/editar',
         views : {
             'content@app.autenticado' : {
-                templateUrl : properties.apiUrl + '/documents/modelos/edicao-conteudo-modelo.tpl.html',
+                templateUrl : 'edicao-conteudo-modelo.tpl.html',
                 controller : 'app.novo-processo.modelos.EdicaoConteudoModeloController',
                 controllerAs: 'vm'
             }

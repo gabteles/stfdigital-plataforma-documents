@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path');
-var conf = require('./gulp/conf');
+var conf = require('./../../../gulp/conf');
 
 var _ = require('lodash');
 var wiredep = require('wiredep');
@@ -69,8 +69,8 @@ module.exports = function(config) {
       //'karma-coverage',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor',
-	    'karma-html-reporter',
-	    'karma-mocha-reporter' 
+	  'karma-html-reporter',
+	  'karma-mocha-reporter' 
     ],
 
     coverageReporter: {
