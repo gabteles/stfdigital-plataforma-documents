@@ -1,4 +1,4 @@
-package br.jus.stf.plataforma.documento.interfaces;
+package br.jus.stf.plataforma.documento.application;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,7 +24,7 @@ import br.jus.stf.plataforma.documento.domain.ControladorEdicaoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 
 @Component
-public class OnlyofficeCallbackFacade {
+public class OnlyofficeCallbackApplicationService {
 
 	@Autowired
 	@Qualifier("onlyofficeRestTemplate")
