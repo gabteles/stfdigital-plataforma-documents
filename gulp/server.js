@@ -25,8 +25,3 @@ function browserSyncInit()
 browserSync.use(browserSyncSpa({
     selector: '[ng-app]'// Only needed for angular apps
 }));
-
-gulp.task('serve:e2e', ['build', 'compile-ts:e2e'], function ()
-{
-    browserSyncInit();
-});

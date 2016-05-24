@@ -14,6 +14,10 @@ src/test/ui/typings
 # JS Main
 src/main/resources/public
 
+# JS Test E2E
+src/test/ui/**/*.js
+src/test/ui/e2e/results
+
 # --------------------------------
 
 # Visual Studio Code

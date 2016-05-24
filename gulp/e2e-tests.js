@@ -35,4 +35,4 @@ function runProtractor(done)
 }
 
 gulp.task('test:e2e', ['protractor']);
-gulp.task('protractor', ['serve:e2e', 'webdriver-update'], runProtractor);
+gulp.task('protractor', ['webdriver-update', 'compile-ts:e2e'], runProtractor);

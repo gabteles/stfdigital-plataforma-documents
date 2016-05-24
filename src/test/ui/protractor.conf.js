@@ -23,7 +23,7 @@ exports.config = {
       '-browserTimeout=60' 
   ],
 
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'http://docker:8080',
 
   // Spec patterns are relative to the current working directory when
   // protractor is called.
@@ -42,7 +42,7 @@ exports.config = {
 	  return browser.getCapabilities().then(function() {
 		  jasmine.getEnv().addReporter(new SpecReporter({displayStacktrace: 'all'}));
 		  jasmine.getEnv().addReporter(new Jasmine2HtmlReporter({
-			  savePath : 'src/ui/test/e2e/results/',
+			  savePath : 'src/test/ui/e2e/results/',
 			  screenshotsFolder: 'screenshots',
 			  takeScreenshots: true,
 			  takeScreenshotsOnlyOnFailures: true
