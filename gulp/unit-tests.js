@@ -7,11 +7,13 @@ var conf = require('./conf');
 var karma = require('karma');
 
 var pathSrcHtml = [
-    path.join(conf.paths.src, '/**/*.html')
+	path.join(conf.paths.dist, '/**/*.html'),
+	path.resolve(path.join(conf.paths.ui, '/**/*.html'))
 ];
 
 var pathSrcJs = [
-    path.join(conf.paths.src, '/**/!(*.spec).js')
+	path.join(conf.paths.dist, '/**/!(*.spec).js'),
+	path.resolve(path.join(conf.paths.ui, '/**/!(*.spec).js'))
 ];
 
 function runTests(singleRun, done)
@@ -34,7 +36,7 @@ function runTests(singleRun, done)
     }
 
     var localConfig = {
-        configFile   : path.join(conf.paths.test, '/karma.conf.js'),
+        configFile   : path.resolve(path.join(conf.paths.test, '/karma.conf.js')),
         singleRun    : singleRun,
         autoWatch    : !singleRun,
         reporters    : reporters,

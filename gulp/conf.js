@@ -7,6 +7,7 @@
  */
 
 var gutil = require('gulp-util');
+var path = require('path');
 
 /**
  *  The main paths of your project handle these with care
@@ -17,7 +18,9 @@ exports.paths = {
     dist: './src/main/resources/public',
     tmp : './build/tmp',
     e2e : './src/test/ui/e2e',
-    test: './src/test/ui'
+    test: './src/test/ui',
+    unit: './src/test/ui/unit',
+    ui: '../ui'
 };
 
 /**
@@ -26,7 +29,7 @@ exports.paths = {
  *  to inject css preprocessor deps and js files in karma
  */
 exports.wiredep = {
-    directory: 'bower_components'
+    cwd: exports.paths.ui,
 };
 
 /**

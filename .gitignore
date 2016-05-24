@@ -9,7 +9,8 @@ node
 
 # Typings
 src/main/ui/typings
-src/test/ui/typings
+src/test/ui/e2e/typings
+src/test/ui/unit/typings
 
 # JS Main
 src/main/resources/public
