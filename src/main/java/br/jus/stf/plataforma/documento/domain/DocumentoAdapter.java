@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
-import br.jus.stf.plataforma.documento.interfaces.commands.SubstituicaoTagTexto;
+import br.jus.stf.plataforma.documento.application.command.SubstituicaoTagTexto;
 
 /**
  * Adaptador para o contexto de documentos.

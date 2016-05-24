@@ -18,13 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.DocxMultipartFile;
+import br.jus.stf.plataforma.documento.application.command.GerarDocumentoComTagsCommand;
+import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosCommand;
+import br.jus.stf.plataforma.documento.application.command.SubstituicaoTagDocumento;
+import br.jus.stf.plataforma.documento.application.command.SubstituicaoTagTexto;
+import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
 import br.jus.stf.plataforma.documento.domain.DocumentoAdapter;
 import br.jus.stf.plataforma.documento.interfaces.DocumentoRestResource;
-import br.jus.stf.plataforma.documento.interfaces.commands.GerarDocumentoComTagsCommand;
-import br.jus.stf.plataforma.documento.interfaces.commands.SalvarDocumentosCommand;
-import br.jus.stf.plataforma.documento.interfaces.commands.SubstituicaoTagDocumento;
-import br.jus.stf.plataforma.documento.interfaces.commands.SubstituicaoTagTexto;
-import br.jus.stf.plataforma.documento.interfaces.commands.UploadDocumentoCommand;
 
 @Component("suporteDocumentoRestAdapter")
 public class DocumentoRestAdapter implements DocumentoAdapter {

@@ -1,4 +1,4 @@
-package br.jus.stf.plataforma.documento.interfaces.commands;
+package br.jus.stf.plataforma.documento.application.command;
 
 import java.util.List;
 

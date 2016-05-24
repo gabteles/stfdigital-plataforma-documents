@@ -17,12 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.PDFMultipartFile;
+import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosCommand;
+import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
 import br.jus.stf.plataforma.documento.domain.DocumentAdapter;
 import br.jus.stf.plataforma.documento.domain.PdfTempDocument;
 import br.jus.stf.plataforma.documento.domain.model.Document;
 import br.jus.stf.plataforma.documento.interfaces.DocumentoRestResource;
-import br.jus.stf.plataforma.documento.interfaces.commands.SalvarDocumentosCommand;
-import br.jus.stf.plataforma.documento.interfaces.commands.UploadDocumentoCommand;
 
 @Component
 public class DocumentRestAdapter implements DocumentAdapter {
