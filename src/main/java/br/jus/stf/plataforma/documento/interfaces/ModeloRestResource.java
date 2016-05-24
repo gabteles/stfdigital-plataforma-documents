@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 
+import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
+import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.Modelo;
 import br.jus.stf.plataforma.documento.domain.model.ModeloRepository;
 import br.jus.stf.plataforma.documento.interfaces.dto.ModeloDto;
@@ -43,7 +45,7 @@ public class ModeloRestResource {
 	private ModeloDtoAssembler modeloDtoAssembler;
 	
 	@Autowired
-	private DocumentoServiceFacade documentoServiceFacade;
+	private DocumentoRepository documentoRepository;
 
 	@ApiOperation("Recupera os modelos existentes")
 	@RequestMapping(value = "", method = RequestMethod.GET)
@@ -64,7 +66,7 @@ public class ModeloRestResource {
 	public ResponseEntity<InputStreamResource> recuperarConteudo(@PathVariable("modeloId") Long modeloId)
 	        throws IOException {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(modeloId));
-		ConteudoDocumento documento = documentoServiceFacade.pesquisaDocumento(modelo.documento().toLong());
+		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(modelo.documento().toLong()));
 		byte[] bytes = IOUtils.toByteArray(documento.stream());
 		InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(bytes));
 		HttpHeaders headers = createResponseHeaders(new Long(bytes.length));

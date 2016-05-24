@@ -37,9 +37,6 @@ import br.jus.stf.plataforma.documento.interfaces.dto.EdicaoDto;
 public class OnlyofficeIntegrationRestResource {
 
 	@Autowired
-	private DocumentoServiceFacade documentoServiceFacade;
-
-	@Autowired
 	private DocumentoRepository documentoRepository;
 
 	@Autowired
@@ -59,7 +56,7 @@ public class OnlyofficeIntegrationRestResource {
 	@RequestMapping(value = "/documentos/{documentoId}/conteudo.docx", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperarConteudo(@PathVariable("documentoId") Long documentoId)
 	        throws IOException {
-		ConteudoDocumento documento = documentoServiceFacade.pesquisaDocumento(documentoId);
+		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(documentoId));
 		InputStream is = documento.stream();
 		byte[] bytes = IOUtils.toByteArray(is);
 		InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(bytes));

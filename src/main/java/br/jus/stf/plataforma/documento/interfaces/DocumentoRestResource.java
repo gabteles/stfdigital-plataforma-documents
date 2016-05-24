@@ -30,6 +30,7 @@ import com.wordnik.swagger.annotations.ApiResponses;
 import br.jus.stf.core.framework.errorhandling.ValidationException;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
+import br.jus.stf.plataforma.documento.application.DocumentoApplicationService;
 import br.jus.stf.plataforma.documento.application.command.DeleteTemporarioCommand;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentoCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarDocumentoComTagsCommand;
@@ -38,9 +39,17 @@ import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosComma
 import br.jus.stf.plataforma.documento.application.command.UnirDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.UploadDocumentoAssinadoCommand;
 import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
+import br.jus.stf.plataforma.documento.domain.DocumentoService;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
+import br.jus.stf.plataforma.documento.domain.model.Documento;
+import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
+import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
+import br.jus.stf.plataforma.documento.domain.model.SubstituicaoTag;
+import br.jus.stf.plataforma.documento.domain.model.Tag;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDto;
+import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDtoAssembler;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDto;
+import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDtoAssembler;
 import br.jus.stf.plataforma.documento.interfaces.dto.TagDto;
 
 /**
@@ -53,7 +62,19 @@ import br.jus.stf.plataforma.documento.interfaces.dto.TagDto;
 public class DocumentoRestResource {
 	
 	@Autowired
-	private DocumentoServiceFacade documentoServiceFacade;
+	private DocumentoRepository documentoRepository;
+	
+	@Autowired
+	private DocumentoApplicationService documentoApplicationService;
+
+	@Autowired
+	private DocumentoTemporarioDtoAssembler documentoTemporarioDtoAssembler;
+	
+	@Autowired
+	private DocumentoDtoAssembler documentoDtoAssembler;
+
+	@Autowired
+	private DocumentoService documentoService;
 
 	@ApiOperation("Salva os documentos temporários")
 	@RequestMapping(value = "", method = RequestMethod.POST)
@@ -62,13 +83,15 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		return documentoServiceFacade.salvarDocumentos(command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList()));
+		return documentoApplicationService.salvarDocumentos(command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList())).entrySet().stream()
+		.map(entry -> documentoTemporarioDtoAssembler.toDto(entry.getKey(), entry.getValue()))
+		.collect(Collectors.toList());
 	}	
 	
 	@ApiOperation("Recupera o conteúdo de um documento do repositório")
 	@RequestMapping(value = "/{documentoId}/conteudo", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperar(@PathVariable("documentoId") Long documentoId) throws IOException {
-		ConteudoDocumento documento = documentoServiceFacade.pesquisaDocumento(documentoId);
+		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(documentoId));
 		InputStreamResource is = new InputStreamResource(documento.stream());
 		HttpHeaders headers = createResponseHeaders(documento.tamanho());
 		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
@@ -77,14 +100,16 @@ public class DocumentoRestResource {
 	@ApiOperation("Retorna os dados de um documento")
 	@RequestMapping(value = "/{documentoId}", method = RequestMethod.GET)
 	public DocumentoDto consultar(@PathVariable("documentoId") Long documentoId) throws IOException {
-		return documentoServiceFacade.consultar(documentoId);
+		Documento documento = documentoRepository.findOne(new DocumentoId(documentoId));
+		return documentoDtoAssembler.toDo(documento.identity().toLong(), documento.tamanho(), documento.quantidadePaginas());
 	}
 	
 	@ApiOperation("Envia um documento para armazenamento temporário e retorna o indentificador")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public String upload(UploadDocumentoCommand command) {
-		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
+		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
+		return documentoApplicationService.salvarDocumentoTemporario(documentoTemporario);
 	}
 	
 	@ApiOperation("Envia um documento assinado para armazenamento temporário e retorna o indentificador")
@@ -96,7 +121,8 @@ public class DocumentoRestResource {
 			throw new ValidationException(result.getAllErrors());
 		}
 		
-		return documentoServiceFacade.salvarDocumentoTemporario(command.getFile());
+		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
+		return documentoApplicationService.salvarDocumentoTemporario(documentoTemporario);
 	}
 	
 	@ApiOperation("Exclui um documento temporário")
@@ -105,7 +131,7 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		documentoServiceFacade.apagarDocumentosTemporarios(command.getFiles());
+		documentoApplicationService.apagarDocumentosTemporarios(command.getFiles());
 	}
 
 	@ApiOperation("Divide um documento")
@@ -118,7 +144,7 @@ public class DocumentoRestResource {
 		List<DocumentoId> documentosDivididos = new ArrayList<>();
 		for (Long id : commandsById.keySet()) {
 			List<Range<Integer>> intervalos = commandsById.get(id).stream().map(d -> Range.between(d.getPaginaInicial(), d.getPaginaFinal())).collect(Collectors.toList());
-			documentosDivididos.addAll(documentoServiceFacade.dividirDocumento(new DocumentoId(id), intervalos));
+			documentosDivididos.addAll(documentoApplicationService.dividirDocumentoCompletamente(new DocumentoId(id), intervalos));
 		}
 		return documentosDivididos.stream().map(d -> d.toLong()).collect(Collectors.toList());
 	}
@@ -129,7 +155,7 @@ public class DocumentoRestResource {
 		if (result.hasErrors()) {
 			throw new IllegalArgumentException(result.toString());
 		}
-		return documentoServiceFacade.unirDocumentos(command.getIdsDocumentos().stream().map(id -> new DocumentoId(id)).collect(Collectors.toList())).toLong();
+		return documentoApplicationService.unirDocumentos(command.getIdsDocumentos().stream().map(id -> new DocumentoId(id)).collect(Collectors.toList())).toLong();
 	}
 	
 	/**
@@ -149,19 +175,24 @@ public class DocumentoRestResource {
 	@ApiOperation("Extrai as tags de um documento")
 	@RequestMapping(value = "/{documentoId}/tags", method = RequestMethod.GET)
 	public List<TagDto> extrairTags(@PathVariable("documentoId") Long documentoId) {
-		return documentoServiceFacade.extrairTags(new DocumentoId(documentoId)).stream().map(t -> new TagDto(t.nome())).collect(Collectors.toList());
+		ConteudoDocumento conteudoDocumento = documentoRepository.download(new DocumentoId(documentoId));
+		List<Tag> tags = documentoService.extrairTags(conteudoDocumento);
+		return tags.stream().map(t -> new TagDto(t.nome())).collect(Collectors.toList());
 	}
 	
 	@ApiOperation("Gera um documento subsitituindo as tags")
 	@RequestMapping(value = "/gerar-com-tags")
 	public Long gerarDocumentoComTags(GerarDocumentoComTagsCommand command) {
-		return documentoServiceFacade.gerarDocumentoComTags(command.getDocumentoId(), command.getSubstituicoes());
+		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
+		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
+		DocumentoId documentoGeradoId = documentoApplicationService.gerarDocumentoComTags(new DocumentoId(command.getDocumentoId()), substituicoesTag);
+		return documentoGeradoId.toLong();
 	}
 	
 	@ApiOperation("Gera um documento final a partir do editável")
 	@RequestMapping(value = "/gerar-final")
 	public Long gerarDocumentoFinal(GerarDocumentoFinalCommand command) {
-		return documentoServiceFacade.gerarDocumentoFinal(command.getDocumento());
+		return documentoApplicationService.gerarDocumentoFinal(new DocumentoId(command.getDocumento())).toLong();
 	}
 	
 }
