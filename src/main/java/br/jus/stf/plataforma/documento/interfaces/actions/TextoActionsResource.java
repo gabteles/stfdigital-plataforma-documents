@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import br.jus.stf.plataforma.documento.application.TextoApplicationService;
-import br.jus.stf.plataforma.documento.application.command.GerarTextoPeticaoCommand;
+import br.jus.stf.plataforma.documento.application.command.GerarTextoCommand;
 import br.jus.stf.plataforma.documento.domain.model.Texto;
 import br.jus.stf.plataforma.documento.interfaces.dto.TextoDto;
 
@@ -32,7 +32,7 @@ public class TextoActionsResource {
 	@ApiOperation("Gera um Texto")
 	@RequestMapping(value = "gerar-texto", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public TextoDto gerarTextoDePeticao(@RequestBody @Valid GerarTextoPeticaoCommand command) {
+	public TextoDto gerarTextoDePeticao(@RequestBody @Valid GerarTextoCommand command) {
 		Texto texto = textoApplicationService.handle(command);
 		return new TextoDto(texto.identity().toLong(), texto.documento().toLong());
 	}

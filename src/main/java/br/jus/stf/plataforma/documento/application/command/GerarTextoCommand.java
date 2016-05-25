@@ -14,7 +14,7 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
  *
  */
 @ApiModel("Comando para geração de texto")
-public class GerarTextoPeticaoCommand {
+public class GerarTextoCommand {
 	
 	@ApiModelProperty("O id do modelo de texto")
 	private Long modeloId;
