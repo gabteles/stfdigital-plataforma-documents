@@ -1,15 +1,11 @@
-import ITranslatePartialLoaderProvider = angular.translate.ITranslatePartialLoaderProvider;
+import ITranslatePartialLoaderService = angular.translate.ITranslatePartialLoaderService;
 import IStateProvider = angular.ui.IStateProvider;
 import IModule = angular.IModule;
 import {TipoDocumentoService} from "./tipo-documento.service";
 import {ModeloService} from "./modelo.service";
 
 /** @ngInject **/
-function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider,
-                $stateProvider: IStateProvider,
-                properties: any) {
-
-    $translatePartialLoaderProvider.addPart(properties.apiUrl + '/documents/modelos');
+function config($stateProvider: IStateProvider, properties: any) {
 
     $stateProvider/*.state('app.novo-processo.modelos', {
     	url: '/modelos',
@@ -62,7 +58,13 @@ function config($translatePartialLoaderProvider: ITranslatePartialLoaderProvider
     });
 }
 
+/** @ngInject **/
+function run($translatePartialLoader: ITranslatePartialLoaderService,
+			 properties: any) {
+	$translatePartialLoader.addPart(properties.apiUrl + '/documents/modelos');
+}
+
 let documents: IModule = angular.module('app.novo-processo.modelos', ['app.novo-processo', 'app.constants', 'app.documentos']);
-documents.config(config);
+documents.config(config).run(run);
 
 export default documents;

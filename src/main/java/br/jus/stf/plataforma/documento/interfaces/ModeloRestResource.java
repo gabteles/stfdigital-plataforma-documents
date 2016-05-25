@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
+import br.jus.stf.core.shared.documento.TipoDocumentoId;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.Modelo;
@@ -54,6 +56,14 @@ public class ModeloRestResource {
 		return modelos.stream().map(modelo -> modeloDtoAssembler.toDto(modelo)).collect(Collectors.toList());
 	}
 
+	@ApiOperation("Recupera os modelos com os tipos de documentos especificados")
+	@RequestMapping(value = "/por-tipos-documento", method = RequestMethod.POST)
+	public List<ModeloDto> consultarPorTiposDocumento(@RequestBody List<Long> tiposDocumento) {
+		List<Modelo> modelos = modeloRepository.findByTiposDocumento(
+				tiposDocumento.stream().map(t -> new TipoDocumentoId(t)).collect(Collectors.toList()));
+		return modelos.stream().map(modelo -> modeloDtoAssembler.toDto(modelo)).collect(Collectors.toList());
+	}
+	
 	@ApiOperation("Recupera os dados de um modelo")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModeloDto consultar(@PathVariable("id") Long id) {
