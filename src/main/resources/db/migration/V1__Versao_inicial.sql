@@ -19,3 +19,8 @@ create table documento.modelo (seq_modelo bigint not null, nom_modelo varchar2(1
 alter table documento.modelo add constraint fk_documento_mode foreign key (seq_documento_template) references documento.documento(seq_documento);
 alter table documento.modelo add constraint fk_tipo_documento_mode foreign key (seq_tipo_documento) references documento.tipo_documento(seq_tipo_documento);
 alter table documento.modelo add constraint uk_mode_seq_tipo_documento  unique (seq_tipo_documento, nom_modelo);
+
+create sequence documento.seq_texto increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;
+create table documento.texto (seq_texto bigint not null, seq_documento bigint not null, seq_documento_final bigint, constraint pk_texto primary key (seq_texto));
+alter table documento.texto add constraint fk_documento_text foreign key (seq_documento) references documento.documento(seq_documento);
+alter table documento.texto add constraint fk_documento_text2 foreign key (seq_documento_final) references documento.documento(seq_documento);

@@ -6,7 +6,7 @@ import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 @ApiModel("Representa a substituição de uma tag em documento.")
-public class SubstituicaoTagDocumento {
+public class SubstituicaoTag {
 
 	@ApiModelProperty("Nome da tag")
 	private String nome;
@@ -14,11 +14,11 @@ public class SubstituicaoTagDocumento {
 	@ApiModelProperty("Valor da tag")
 	private String valor;
 
-	public SubstituicaoTagDocumento() {
+	public SubstituicaoTag() {
 
 	}
 
-	public SubstituicaoTagDocumento(final String nome, final String valor) {
+	public SubstituicaoTag(final String nome, final String valor) {
 		Validate.notBlank(nome);
 		Validate.notNull(nome);
 		

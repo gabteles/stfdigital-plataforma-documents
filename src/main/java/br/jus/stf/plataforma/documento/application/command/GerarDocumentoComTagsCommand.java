@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.elasticsearch.common.lang3.Validate;
 
+import com.sun.istack.internal.NotNull;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
@@ -11,16 +12,17 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 public class GerarDocumentoComTagsCommand {
 
 	@ApiModelProperty("Id do documento")
+	@NotNull
 	private Long documentoId;
 
 	@ApiModelProperty("Lista de substituições a serem realizadas")
-	private List<SubstituicaoTagDocumento> substituicoes;
+	private List<SubstituicaoTag> substituicoes;
 
 	public GerarDocumentoComTagsCommand() {
 
 	}
 
-	public GerarDocumentoComTagsCommand(final Long documentoId, final List<SubstituicaoTagDocumento> substituicoes) {
+	public GerarDocumentoComTagsCommand(final Long documentoId, final List<SubstituicaoTag> substituicoes) {
 		Validate.notNull(documentoId);
 		Validate.notNull(substituicoes);
 
@@ -36,11 +38,11 @@ public class GerarDocumentoComTagsCommand {
 		this.documentoId = documentoId;
 	}
 
-	public List<SubstituicaoTagDocumento> getSubstituicoes() {
+	public List<SubstituicaoTag> getSubstituicoes() {
 		return substituicoes;
 	}
 
-	public void setSubstituicoes(List<SubstituicaoTagDocumento> substituicoes) {
+	public void setSubstituicoes(List<SubstituicaoTag> substituicoes) {
 		this.substituicoes = substituicoes;
 	}
 
