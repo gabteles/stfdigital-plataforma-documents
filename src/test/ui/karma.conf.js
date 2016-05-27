@@ -14,41 +14,47 @@ var pathSrcJs = [
 	path.resolve(path.join(conf.paths.dist, '/**/!(*.spec).js'))
 ];
 
-function listFiles() {
-  var wiredepOptions = _.extend({}, conf.wiredep, {
-    dependencies: true,
-    devDependencies: true
-  });
+function listIncludeFiles() {
+	var wiredepOptions = _.extend({}, conf.wiredep, {
+	    dependencies: true,
+	    devDependencies: true
+	});
 
-  var patterns = wiredep(wiredepOptions).js
-      .concat(pathSrcJs)
-      .concat(pathSrcHtml);
+	var patterns = wiredep(wiredepOptions).js;
+		//.concat(pathSrcJs)
+		//.concat(pathSrcHtml);
 
-  var files = patterns.map(function(pattern) {
-    return {
-      pattern: pattern
-    };
-  });
-  files.push({
-    pattern: path.join(conf.paths.src, '/assets/**/*'),
-    included: false,
-    served: true,
-    watched: false
-  });
-  return files;
+	console.log(patterns); // TODO Recuperar os caminhos dinamicamente.
+	
+	 return ['../ui/bower_components/angular/angular.js',
+     '../ui/bower_components/angular-mocks/angular-mocks.js',
+     '../ui/bower_components/angular-ui-router/release/angular-ui-router.js',
+     '../ui/bower_components/angular-translate/angular-translate.js',
+     '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+     path.join(conf.paths.test, 'unit/mock/**/*.js')]
+	
+//	patterns.push(path.join(conf.paths.test, 'unit/mock/**/*.js'));
+//	
+//	return patterns;
 }
 
+function listFiles() {
+  var patterns = listIncludeFiles();
+  
+  patterns.push('src/main/resources/public/modelos.js');
+  
+  var files = patterns.map(function(pattern) {
+    return {
+      pattern: pattern,
+      included: false
+    };
+  });
+  files.push(path.join(conf.paths.test, 'unit/app/**/*.js'));
+  return files;
+}
 module.exports = function(config) {
-console.log(listFiles());
   var configuration = {
-    files: [{pattern: '../ui/bower_components/angular/angular.js', included: false},
-            {pattern: '../ui/bower_components/angular-mocks/angular-mocks.js', included: false},
-            {pattern: '../ui/bower_components/angular-ui-router/release/angular-ui-router.js', included: false},
-            {pattern: '../ui/bower_components/angular-translate/angular-translate.js', included: false},
-            {pattern: '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js', included: false},
-            {pattern: path.join(conf.paths.test, 'unit/mock/**/*.js'), included: false},
-            {pattern: 'src/main/resources/public/modelos.js', included: false},
-            path.join(conf.paths.test, 'unit/app/**/*.js')],
+    files: listFiles(),
 
     singleRun: true,
     
@@ -56,31 +62,20 @@ console.log(listFiles());
 
     autoWatch: false,
 
-    ngHtml2JsPreprocessor: {
-      stripPrefix: conf.paths.src + '/',
-      moduleName: 'generatorGulpAngular'
-    },
+    logLevel: 'info',
 
-    logLevel: 'WARN',
-
-    frameworks: ['systemjs', 'jasmine'/*, 'angular-filesort'*/],
-
-//    angularFilesort: {
-//      whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
-//    },
+    frameworks: ['systemjs', 'jasmine'],
 
     browsers : ['Chrome'],
 
     plugins : [
       'karma-systemjs',
       'karma-phantomjs-launcher',
-//      'karma-angular-filesort',
       'karma-chrome-launcher',
       //'karma-coverage',
       'karma-jasmine',
-      'karma-ng-html2js-preprocessor',
 	  'karma-html-reporter',
-	  'karma-mocha-reporter' 
+	  'karma-mocha-reporter'
     ],
 
     coverageReporter: {
@@ -88,21 +83,19 @@ console.log(listFiles());
       dir : 'coverage/'
     },
 
-    reporters: ['progress'],
+    reporters: ['mocha', 'html'],
+
+    htmlReporter : {
+		outputDir : path.join(conf.paths.unit, 'results/html')
+	},
     
     systemjs: {
     	configFile:  path.join(conf.paths.test, 'system.conf.js'),
     	serveFiles: ['src/main/resources/public/modelos.js', 'src/main/resources/public/maps/modelos.js.map'],
-    	includeFiles: ['../ui/bower_components/angular/angular.js',
-    	               '../ui/bower_components/angular-mocks/angular-mocks.js',
-    	               '../ui/bower_components/angular-ui-router/release/angular-ui-router.js',
-    	               '../ui/bower_components/angular-translate/angular-translate.js',
-    	               '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-    	               path.join(conf.paths.test, 'unit/mock/**/*.js')]
+    	includeFiles: listIncludeFiles()
     },
 
     proxies: {
-      '/assets/': path.join('/base/', conf.paths.src, '/assets/'),
       '/base/documents/modelos': '/base/src/main/resources/public/modelos.js',
       '/base/documents/maps/modelos.js.map': '/base/src/main/resources/public/maps/modelos.js.map'
     }
@@ -112,10 +105,10 @@ console.log(listFiles());
   // The coverage preprocessor is added in gulp/unit-test.js only for single tests
   // It was not possible to do it there because karma doesn't let us now if we are
   // running a single test or not
-  configuration.preprocessors = {};
-  pathSrcHtml.forEach(function(path) {
-    configuration.preprocessors[path] = ['ng-html2js'];
-  });
-
+//  configuration.preprocessors = {};
+//  pathSrcHtml.forEach(function(path) {
+//    configuration.preprocessors[path] = ['ng-html2js'];
+//  });
+//
   config.set(configuration);
 };

@@ -38,9 +38,9 @@ function runTests(singleRun, done)
     var localConfig = {
         configFile   : path.resolve(path.join(conf.paths.test, '/karma.conf.js')),
         singleRun    : singleRun,
-        autoWatch    : !singleRun,
-        reporters    : reporters,
-        preprocessors: preprocessors
+        autoWatch    : !singleRun/*,*/
+        //reporters    : reporters,
+//        preprocessors: preprocessors
     };
 
     var server = new karma.Server(localConfig, function (failCount)
@@ -50,12 +50,12 @@ function runTests(singleRun, done)
     server.start();
 }
 
-gulp.task('test', ['scripts'], function (done)
+gulp.task('test:unit', ['scripts', 'compile-ts:unit'], function (done)
 {
     runTests(true, done);
 });
 
-gulp.task('test:auto', ['watch'], function (done)
+gulp.task('tdd', ['watch'], function (done)
 {
     runTests(false, done);
 });

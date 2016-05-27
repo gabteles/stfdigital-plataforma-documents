@@ -29,7 +29,7 @@ exports.paths = {
  *  to inject css preprocessor deps and js files in karma
  */
 exports.wiredep = {
-    cwd: exports.paths.ui,
+    cwd: exports.paths.unit,
 };
 
 /**
