@@ -7,7 +7,11 @@ var _ = require('lodash');
 var wiredep = require('wiredep');
 
 var pathSrcHtml = [
-  path.join(conf.paths.src, '/**/*.html')
+	path.join(conf.paths.src, '/**/*.html')
+];
+
+var pathSrcJs = [
+	path.resolve(path.join(conf.paths.dist, '/**/!(*.spec).js'))
 ];
 
 function listFiles() {
@@ -17,12 +21,7 @@ function listFiles() {
   });
 
   var patterns = wiredep(wiredepOptions).js
-      .concat([
-        path.join(conf.paths.src, '/main/public/**/*.module.js'),
-        path.join(conf.paths.src, '/main/public/**/*.js'),
-        path.join(conf.paths.src, 'ui/test/e2e/**/*.spec.js'),
-        path.join(conf.paths.src, 'ui/test/e2e/**/*.mock.js'),
-      ])
+      .concat(pathSrcJs)
       .concat(pathSrcHtml);
 
   var files = patterns.map(function(pattern) {
@@ -40,11 +39,20 @@ function listFiles() {
 }
 
 module.exports = function(config) {
-
+console.log(listFiles());
   var configuration = {
-    files: listFiles(),
+    files: [{pattern: '../ui/bower_components/angular/angular.js', included: false},
+            {pattern: '../ui/bower_components/angular-mocks/angular-mocks.js', included: false},
+            {pattern: '../ui/bower_components/angular-ui-router/release/angular-ui-router.js', included: false},
+            {pattern: '../ui/bower_components/angular-translate/angular-translate.js', included: false},
+            {pattern: '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js', included: false},
+            {pattern: path.join(conf.paths.test, 'unit/mock/**/*.js'), included: false},
+            {pattern: 'src/main/resources/public/modelos.js', included: false},
+            path.join(conf.paths.test, 'unit/app/**/*.js')],
 
     singleRun: true,
+    
+    basePath: '../../..',
 
     autoWatch: false,
 
@@ -55,17 +63,19 @@ module.exports = function(config) {
 
     logLevel: 'WARN',
 
-    frameworks: ['jasmine', 'angular-filesort'],
+    frameworks: ['systemjs', 'jasmine'/*, 'angular-filesort'*/],
 
-    angularFilesort: {
-      whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
-    },
+//    angularFilesort: {
+//      whitelist: [path.join(conf.paths.src, '/**/!(*.html|*.spec|*.mock).js')]
+//    },
 
-    browsers : ['PhantomJS'],
+    browsers : ['Chrome'],
 
     plugins : [
+      'karma-systemjs',
       'karma-phantomjs-launcher',
-      'karma-angular-filesort',
+//      'karma-angular-filesort',
+      'karma-chrome-launcher',
       //'karma-coverage',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor',
@@ -79,9 +89,22 @@ module.exports = function(config) {
     },
 
     reporters: ['progress'],
+    
+    systemjs: {
+    	configFile:  path.join(conf.paths.test, 'system.conf.js'),
+    	serveFiles: ['src/main/resources/public/modelos.js', 'src/main/resources/public/maps/modelos.js.map'],
+    	includeFiles: ['../ui/bower_components/angular/angular.js',
+    	               '../ui/bower_components/angular-mocks/angular-mocks.js',
+    	               '../ui/bower_components/angular-ui-router/release/angular-ui-router.js',
+    	               '../ui/bower_components/angular-translate/angular-translate.js',
+    	               '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+    	               path.join(conf.paths.test, 'unit/mock/**/*.js')]
+    },
 
     proxies: {
-      '/assets/': path.join('/base/', conf.paths.src, '/assets/')
+      '/assets/': path.join('/base/', conf.paths.src, '/assets/'),
+      '/base/documents/modelos': '/base/src/main/resources/public/modelos.js',
+      '/base/documents/maps/modelos.js.map': '/base/src/main/resources/public/maps/modelos.js.map'
     }
   };
 
