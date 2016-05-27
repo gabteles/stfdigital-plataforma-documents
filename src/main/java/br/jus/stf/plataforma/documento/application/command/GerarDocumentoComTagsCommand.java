@@ -2,9 +2,10 @@ package br.jus.stf.plataforma.documento.application.command;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.elasticsearch.common.lang3.Validate;
 
-import com.sun.istack.internal.NotNull;
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
