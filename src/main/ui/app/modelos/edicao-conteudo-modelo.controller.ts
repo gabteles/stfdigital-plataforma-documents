@@ -29,12 +29,12 @@ export class EdicaoConteudoModeloController {
 		//$state.go('dashboard');
 		console.log('Modelo editado com sucesso.');
 		this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
-	};
+	}
 	
 	timeoutEdicao() {
 		//messages.error('Não foi possível concluir a edição do modelo.');
 		console.log('Não foi possível concluir a edição do modelo.');
-	};
+	}
 	
 	finalizarEdicao() {
 		this.editor.api.salvar();
