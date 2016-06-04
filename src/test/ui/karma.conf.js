@@ -6,36 +6,20 @@ var conf = require('./../../../gulp/conf');
 var _ = require('lodash');
 var wiredep = require('wiredep');
 
-var pathSrcHtml = [
-	path.join(conf.paths.src, '/**/*.html')
-];
-
-var pathSrcJs = [
-	path.resolve(path.join(conf.paths.dist, '/**/!(*.spec).js'))
-];
-
 function listIncludeFiles() {
+  console.log(path.resolve(conf.paths.unit));
 	var wiredepOptions = _.extend({}, conf.wiredep, {
 	    dependencies: true,
 	    devDependencies: true
 	});
 
-	var patterns = wiredep(wiredepOptions).js;
-		//.concat(pathSrcJs)
-		//.concat(pathSrcHtml);
-
-	console.log(patterns); // TODO Recuperar os caminhos dinamicamente.
+	var patterns = wiredep(wiredepOptions).js.map(function(pathz) {
+    return '.' + path.resolve(pathz).replace(path.resolve(conf.paths.root), '').replace(/\\/g,"/");
+  });
 	
-	 return ['../ui/bower_components/angular/angular.js',
-     '../ui/bower_components/angular-mocks/angular-mocks.js',
-     '../ui/bower_components/angular-ui-router/release/angular-ui-router.js',
-     '../ui/bower_components/angular-translate/angular-translate.js',
-     '../ui/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-     path.join(conf.paths.test, 'unit/mock/**/*.js')]
+	patterns.push(path.join(conf.paths.unit, 'mock/**/*.js'));
 	
-//	patterns.push(path.join(conf.paths.test, 'unit/mock/**/*.js'));
-//	
-//	return patterns;
+	return patterns;
 }
 
 function listFiles() {

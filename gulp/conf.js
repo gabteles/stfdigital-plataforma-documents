@@ -13,14 +13,14 @@ var path = require('path');
  *  The main paths of your project handle these with care
  */
 exports.paths = {
+    root : '.',
     src : './src/main/ui',
     app : './src/main/ui/app',
     dist: './src/main/resources/public',
     tmp : './build/tmp',
     e2e : './src/test/ui/e2e',
     test: './src/test/ui',
-    unit: './src/test/ui/unit',
-    ui: '../ui'
+    unit: './src/test/ui/unit'
 };
 
 /**

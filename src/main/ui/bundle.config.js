@@ -12,7 +12,7 @@ var libraryTypeScript = path.join(conf.paths.src, 'typings/main/**/*.d.ts');
 
 module.exports = {
   bundle: {
-    'modelos': {
+    'app': {
       scripts: [path.join(conf.paths.app, '**/*.ts'), libraryTypeScript],
       options: {
     	  rev: false,
