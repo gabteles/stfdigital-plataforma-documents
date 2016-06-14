@@ -9,9 +9,9 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.Range;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import br.jus.stf.core.framework.component.command.Command;
+import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.DocxMultipartFile;
@@ -42,7 +42,7 @@ import br.jus.stf.plataforma.documento.infra.persistence.DocumentoTempRepository
  * @since 1.0.0
  * @since 25.09.2015
  */
-@Service
+@ApplicationService
 @Transactional
 public class DocumentoApplicationService {
 
