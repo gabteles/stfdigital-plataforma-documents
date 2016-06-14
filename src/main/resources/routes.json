@@ -1,0 +1,22 @@
+[ 
+    {
+        "id": "criar-modelo",
+        "stateName": "app.novo-processo.modelos-criar",
+        "urlPrefix": "/modelos",
+        "src": "documents/modelos"
+    },
+    
+    {
+        "id": "editar-modelo",
+        "stateName": "app.novo-processo.modelos-editar",
+        "urlPrefix": "/modelos",
+        "src": "documents/modelos"
+    },
+    
+	{
+        "id": "gerar-texto",
+        "stateName": "app.novo-processo.modelos-conteudo-editar",
+        "urlPrefix": "/modelos",
+        "src": "documents/modelos"
+    }
+]

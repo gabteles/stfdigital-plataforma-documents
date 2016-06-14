@@ -11,6 +11,7 @@ import org.apache.commons.lang3.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.jus.stf.core.framework.component.command.Command;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.DocxMultipartFile;
@@ -71,6 +72,7 @@ public class DocumentoApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command
 	public Map<String, DocumentoId> handle(SalvarDocumentosCommand command) {
 		List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList());
 		return documentosTemporarios.stream()
@@ -81,6 +83,7 @@ public class DocumentoApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command
 	public String handle(UploadDocumentoCommand command) {
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
 		return salvarDocumentoTemporario(documentoTemporario);
@@ -99,16 +102,19 @@ public class DocumentoApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command
 	public String handle(UploadDocumentoAssinadoCommand command) {
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
 		return salvarDocumentoTemporario(documentoTemporario);
 	}
 	
+	@Command
 	public void handle(DeleteTemporarioCommand command) {
 		command.getFiles().stream()
 			.forEach(tempId -> documentoRepository.removeTemp(tempId));
 	}
 	
+	@Command
 	public List<DocumentoId> handle(DividirDocumentosCompletamenteCommand command) {
 		List<DocumentoId> documentosDivididos = new ArrayList<>();
 		List<Range<Integer>> intervalos = command.getIntervalos().stream().map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
@@ -116,6 +122,7 @@ public class DocumentoApplicationService {
 		return documentosDivididos;
 	}
 	
+	@Command
 	public List<DocumentoId> handle(DividirDocumentosCommand command) {
 		List<DocumentoId> documentosDivididos = new ArrayList<>();
 		List<Range<Integer>> intervalos = command.getIntervalos().stream().map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
@@ -143,6 +150,7 @@ public class DocumentoApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command
 	public DocumentoId handle(UnirDocumentosCommand command) {
 		List<DocumentoId> documentos = command.getIdsDocumentos().stream().map(id -> new DocumentoId(id)).collect(Collectors.toList());
 		List<ConteudoDocumento> conteudos = documentos.stream().map(d -> documentoRepository.download(d)).collect(Collectors.toList());
@@ -186,6 +194,7 @@ public class DocumentoApplicationService {
 		return documento.identity();
 	}
 
+	@Command
 	public void handle(ConcluirEdicaoDocumento command) {
         DocumentoId documentoId = new DocumentoId(command.getDocumentoId());
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(new DocxMultipartFile("documento.docx", command.getConteudo()));
@@ -198,6 +207,7 @@ public class DocumentoApplicationService {
 		controladorEdicaoDocumento.excluirEdicao(command.getNumeroEdicao());
 	}
 	
+	@Command
 	public DocumentoId handle(GerarDocumentoComTagsCommand command) {
 		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
 		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
@@ -208,6 +218,7 @@ public class DocumentoApplicationService {
 		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
 	}
 
+	@Command
 	public DocumentoId handle(GerarDocumentoFinalCommand command) {
 		DocumentoTemporario documentoTemporario = conversorDocumentoService.converterDocumentoFinal(new DocumentoId(command.getDocumento()));
 		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);

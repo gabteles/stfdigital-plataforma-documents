@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.jus.stf.core.framework.component.command.Command;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 import br.jus.stf.core.shared.documento.TipoDocumentoId;
@@ -41,6 +42,7 @@ public class ModeloApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command(description = "Modelos - Criação")
 	public Modelo handle(CriarModeloCommand command) {
 		TipoDocumento tipoDocumento = tipoDocumentoRepository.findOne(new TipoDocumentoId(command.getTipoDocumento()));
 		ModeloId modeloId = modeloRepository.nextId();
@@ -56,6 +58,7 @@ public class ModeloApplicationService {
 	 * @param command
 	 * @return
 	 */
+	@Command(description = "Modelos - Edição")
 	public Modelo handle(EditarModeloCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getId()));
 		TipoDocumento tipoDocumento = tipoDocumentoRepository.findOne(new TipoDocumentoId(command.getTipoDocumento()));

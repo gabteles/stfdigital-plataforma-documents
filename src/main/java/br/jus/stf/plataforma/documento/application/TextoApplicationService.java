@@ -5,6 +5,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import br.jus.stf.core.framework.component.command.Command;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 import br.jus.stf.core.shared.documento.TextoId;
@@ -28,6 +29,7 @@ public class TextoApplicationService {
 	@Autowired
 	private DocumentoApplicationService documentoApplicationService;
 	
+	@Command(description = "Modelos - Conteúdo - Edição")
 	public Texto handle(GerarTextoCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getModeloId()));
 		GerarDocumentoComTagsCommand gerarDocumentoCommand = new GerarDocumentoComTagsCommand(modelo.documento().toLong(), command.getSubstituicoes());
