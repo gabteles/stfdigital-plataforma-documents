@@ -1,6 +1,6 @@
 import "documents/modelos";
-import {CriacaoModeloController} from "../../../../../main/ui/app/modelos/criacao-modelo.controller";
-import {TipoDocumento} from "../../../../../main/ui/app/modelos/tipo-documento.service";
+import {CriacaoModeloController} from "documents/modelos/criacao-modelo.controller";
+import {TipoDocumento} from "documents/modelos/tipo-documento.service";
 
 describe('Criacao Modelo Controller', () => {
 	

@@ -3,9 +3,9 @@ package br.jus.stf.plataforma.documento.application;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import br.jus.stf.core.framework.component.command.Command;
+import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 import br.jus.stf.core.shared.documento.TipoDocumentoId;
@@ -23,7 +23,7 @@ import br.jus.stf.plataforma.documento.domain.model.TipoDocumentoRepository;
  * @author tomas.godoi
  *
  */
-@Component
+@ApplicationService
 @Transactional
 public class ModeloApplicationService {
 

@@ -12,6 +12,20 @@ namespace app.novoProcesso {
         .config(config);
 }
 
+namespace app.documentos {
+	'use strict';
+	
+    /** @ngInject * */
+    function config() {
+
+        
+    }
+
+    angular
+        .module('app.documentos', [])
+        .config(config);
+}
+
 namespace app.support {
 	'use strict';
 	
@@ -39,18 +53,4 @@ namespace app.support {
     angular
     	.module('app.support', ['app.support.command', 'app.support.messaging', 'app.support.constants'])
     	.config(config);
-}
-
-namespace app.documentos {
-	'use strict';
-	
-    /** @ngInject * */
-    function config() {
-
-        
-    }
-
-    angular
-        .module('app.documentos', [])
-        .config(config);
 }

@@ -47,7 +47,7 @@ public class OnlyofficeConfiguration {
 	@Value("${onlyoffice.documentserver.host:}")
 	private String documentServerHost;
 	
-	@Value("${onlyoffice.documentserver.protocol:http}")
+	@Value("${onlyoffice.documentserver.protocol:https}")
 	private String documentServerProtocol;
 	
 	@Value("${onlyoffice.documentserver.port:8765}")

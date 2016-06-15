@@ -5,9 +5,9 @@ import java.security.cert.X509Certificate;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.PDFMultipartFile;
@@ -31,7 +31,7 @@ import br.jus.stf.plataforma.documento.domain.model.signature.SigningException;
 import br.jus.stf.plataforma.documento.domain.model.signature.SigningSpecification;
 import br.jus.stf.plataforma.documento.domain.model.validation.CertificateValidation;
 
-@Component
+@ApplicationService
 public class SignatureApplicationService {
 
 	@Autowired

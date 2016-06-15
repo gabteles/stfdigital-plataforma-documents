@@ -7,7 +7,6 @@ var _ = require('lodash');
 var wiredep = require('wiredep');
 
 function listIncludeFiles() {
-  console.log(path.resolve(conf.paths.unit));
 	var wiredepOptions = _.extend({}, conf.wiredep, {
 	    dependencies: true,
 	    devDependencies: true
@@ -17,15 +16,11 @@ function listIncludeFiles() {
     return '.' + path.resolve(pathz).replace(path.resolve(conf.paths.root), '').replace(/\\/g,"/");
   });
 	
-	patterns.push(path.join(conf.paths.unit, 'mock/**/*.js'));
-	
 	return patterns;
 }
 
 function listFiles() {
   var patterns = listIncludeFiles();
-  
-  patterns.push('src/main/resources/public/modelos.js');
   
   var files = patterns.map(function(pattern) {
     return {
@@ -33,7 +28,19 @@ function listFiles() {
       included: false
     };
   });
-  files.push(path.join(conf.paths.test, 'unit/app/**/*.js'));
+  
+  files.push({
+    pattern: 'src/main/resources/public/**/*.js',
+    included: false,
+    watched: true
+  });
+  
+  files.push({
+    pattern: path.join(conf.paths.unit, 'build/**/*.js'),
+    included: true,
+    watched: true
+  });
+  
   return files;
 }
 module.exports = function(config) {
@@ -45,12 +52,14 @@ module.exports = function(config) {
     basePath: '../../..',
 
     autoWatch: false,
+    
+    autoWatchBatchDelay: 2000,
 
     logLevel: 'info',
 
     frameworks: ['systemjs', 'jasmine'],
 
-    browsers : ['Chrome'],
+    browsers : ['PhantomJS'],
 
     plugins : [
       'karma-systemjs',
@@ -70,18 +79,18 @@ module.exports = function(config) {
     reporters: ['mocha', 'html'],
 
     htmlReporter : {
-		outputDir : path.join(conf.paths.unit, 'results/html')
-	},
+		  outputDir : path.join(conf.paths.unit, 'results/html')
+	  },
     
     systemjs: {
     	configFile:  path.join(conf.paths.test, 'system.conf.js'),
-    	serveFiles: ['src/main/resources/public/modelos.js', 'src/main/resources/public/maps/modelos.js.map'],
+    	serveFiles: ['src/main/resources/public/**/*.js', 'src/main/resources/public/maps/**/*.js.map',
+                  path.join(conf.paths.unit, 'build/**/*.js.map'), 'node_modules/systemjs/**/*.js', 'node_modules/systemjs/**/*.js.map'],
     	includeFiles: listIncludeFiles()
     },
 
     proxies: {
-      '/base/documents/modelos': '/base/src/main/resources/public/modelos.js',
-      '/base/documents/maps/modelos.js.map': '/base/src/main/resources/public/maps/modelos.js.map'
+      '/base/documents/': '/base/src/main/resources/public/'
     }
   };
 

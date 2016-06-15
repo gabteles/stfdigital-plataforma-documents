@@ -1,8 +1,8 @@
 package br.jus.stf.plataforma.documento.application;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.plataforma.documento.domain.DocumentValidatorFactory;
 import br.jus.stf.plataforma.documento.domain.model.Document;
 import br.jus.stf.plataforma.documento.domain.model.pki.Pki;
@@ -11,7 +11,7 @@ import br.jus.stf.plataforma.documento.domain.model.pki.PkiRepository;
 import br.jus.stf.plataforma.documento.domain.model.validation.DocumentValidation;
 import br.jus.stf.plataforma.documento.domain.model.validation.DocumentValidator;
 
-@Component
+@ApplicationService
 public class DocumentValidatorApplicationService {
 
 	@Autowired

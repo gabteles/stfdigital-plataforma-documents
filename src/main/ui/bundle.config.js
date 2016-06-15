@@ -7,18 +7,21 @@ var moduleNameInjector = require('gulp-systemjs-module-name-injector');
 
 var conf = require('../../../gulp/conf');
 
-var tsProject = typescript.createProject(path.join(conf.paths.src, 'tsconfig.json'));
+var createTsProject = function() {
+	return typescript.createProject(path.join(conf.paths.src, 'tsconfig.json'));
+};
 var libraryTypeScript = path.join(conf.paths.src, 'typings/main/**/*.d.ts');
 
 module.exports = {
   bundle: {
-    'app': {
-      scripts: [path.join(conf.paths.app, '**/*.ts'), libraryTypeScript],
+    'modelos': {
+      scripts: [path.join(conf.paths.app, 'modelos.ts'),
+                path.join(conf.paths.app, 'modelos/**/*.ts'), libraryTypeScript],
       options: {
     	  rev: false,
     	  transforms: {
               scripts: lazypipe()
-              	.pipe(typescript, tsProject)
+              	.pipe(typescript, createTsProject())
               	.pipe(moduleNameInjector, {rootDir: 'src/main/ui/app/', prefix: 'documents/'})
               	.pipe(ngAnnotate)
               	.pipe(embedTemplates, {
