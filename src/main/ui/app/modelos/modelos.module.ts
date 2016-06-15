@@ -64,7 +64,7 @@ function run($translatePartialLoader: ITranslatePartialLoaderService,
 	$translatePartialLoader.addPart(properties.apiUrl + '/documents/modelos');
 }
 
-let documents: IModule = angular.module('app.novo-processo.modelos', ['app.novo-processo', 'app.constants', 'app.documentos']);
+let documents: IModule = angular.module('app.novo-processo.modelos', ['app.novo-processo', 'app.support', 'app.documentos']);
 documents.config(config).run(run);
 
 export default documents;
