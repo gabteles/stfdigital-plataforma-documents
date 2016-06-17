@@ -19,6 +19,9 @@ services:
     image: gateway
     ports:
      - "8765:8765"
+     - "47965:47965"
+    environment:
+     - JAVA_OPTS=-Xdebug, -Xrunjdwp:server=y,transport=dt_socket,address=47965,suspend=n
   services:
     container_name: services
     image: services
