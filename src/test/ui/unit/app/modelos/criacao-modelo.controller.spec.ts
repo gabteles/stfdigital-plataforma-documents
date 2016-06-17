@@ -1,4 +1,6 @@
-import "documents/modelos";
+import "documents/modelos/modelos.module";
+import "documents/modelos/criacao-modelo.controller";
+
 import {CriacaoModeloController} from "documents/modelos/criacao-modelo.controller";
 import {TipoDocumento} from "documents/modelos/tipo-documento.service";
 

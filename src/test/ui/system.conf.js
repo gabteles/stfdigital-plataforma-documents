@@ -6,7 +6,6 @@ System.config({
 		'system-polyfills': './node_modules/systemjs/dist/system-polyfills.src.js'
 	},
 	bundles: {
-		'documents/modelos': ['documents/modelos/*']
-	},
-	strictImportSequence: true
+		'documents/bundle': ['documents/modelos/*']
+	}
 });
