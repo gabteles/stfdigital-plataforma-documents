@@ -47,6 +47,10 @@ public class Texto implements Entity<Texto, TextoId> {
 		return documento;
 	}
 
+	public DocumentoId documentoFinal() {
+		return documentoFinal;
+	}
+	
 	/**
 	 * Associa o documento final do texto.
 	 * 

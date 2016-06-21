@@ -53,7 +53,7 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(onlyofficeAddress + "/ConvertService.ashx")
 			.queryParam("key", UUID.randomUUID().toString())
-			.queryParam("url", doocumentServerBaseUrl + "/api/onlyoffice/documentos/" + documentoId.toLong() + "/conteudo.docx")
+			.queryParam("url", doocumentServerBaseUrl + "/documents/api/onlyoffice/documentos/" + documentoId.toLong() + "/conteudo.docx")
 			.queryParam("filetype", "docx")
 			.queryParam("outputtype", "pdf")
 			.queryParam("embeddedfonts", "true");

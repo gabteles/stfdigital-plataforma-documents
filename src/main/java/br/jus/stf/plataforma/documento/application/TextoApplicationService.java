@@ -9,7 +9,9 @@ import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 import br.jus.stf.core.shared.documento.TextoId;
+import br.jus.stf.plataforma.documento.application.command.ConcluirTextoCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarDocumentoComTagsCommand;
+import br.jus.stf.plataforma.documento.application.command.GerarDocumentoFinalCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarTextoCommand;
 import br.jus.stf.plataforma.documento.domain.model.Modelo;
 import br.jus.stf.plataforma.documento.domain.model.ModeloRepository;
@@ -41,6 +43,14 @@ public class TextoApplicationService {
 		texto = textoRepository.save(texto);
 		
 		return texto;
+	}
+	
+	@Command(description = "Texto - Concluir")
+	public void handle(ConcluirTextoCommand command) {
+		Texto texto = textoRepository.findOne(new TextoId(command.getTextoId()));
+		GerarDocumentoFinalCommand gdfc = new GerarDocumentoFinalCommand(texto.documento().toLong());
+		DocumentoId documentoFinal = documentoApplicationService.handle(gdfc);
+		texto.associarDocumentoFinal(documentoFinal);
 	}
 
 }
