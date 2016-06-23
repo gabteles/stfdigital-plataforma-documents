@@ -2,6 +2,8 @@ package br.jus.stf.plataforma.documento.interfaces.dto;
 
 import org.springframework.stereotype.Component;
 
+import br.jus.stf.plataforma.documento.domain.model.Documento;
+
 /**
  * Monta um objeto DocumentoDto
  * 
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DocumentoDtoAssembler {
-	public DocumentoDto toDo(Long documentoId, Long tamanho, Integer quantidadePaginas){
-		return new DocumentoDto(documentoId, tamanho, quantidadePaginas);
+	public DocumentoDto toDo(Documento documento){
+		return new DocumentoDto(documento.identity().toLong(), documento.tamanho(), documento.quantidadePaginas());
 	}
 }

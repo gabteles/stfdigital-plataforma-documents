@@ -95,7 +95,7 @@ public class DocumentoRestResource {
 	@RequestMapping(value = "/{documentoId}", method = RequestMethod.GET)
 	public DocumentoDto consultar(@PathVariable("documentoId") Long documentoId) throws IOException {
 		Documento documento = documentoRepository.findOne(new DocumentoId(documentoId));
-		return documentoDtoAssembler.toDo(documento.identity().toLong(), documento.tamanho(), documento.quantidadePaginas());
+		return documentoDtoAssembler.toDo(documento);
 	}
 	
 	@ApiOperation("Envia um documento para armazenamento temporário e retorna o indentificador")

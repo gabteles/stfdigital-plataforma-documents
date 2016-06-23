@@ -1,5 +1,7 @@
 package br.jus.stf.plataforma.documento.infra.session;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
@@ -15,16 +17,18 @@ import br.jus.stf.plataforma.documento.domain.model.signature.DocumentSignerRepo
 @Component
 public class SessionDocumentSignerRepository implements DocumentSignerRepository {
 
+	private Map<String, DocumentSigner> signers = new HashMap<>();
+	
 	@Override
 	public DocumentSigner save(DocumentSigner signer) {
 		DocumentSignerId signerId = signer.id();
-		session().setAttribute(signerId.id(), signer);
+		signers.put(signerId.id(), signer);
 		return signer;
 	}
 
 	@Override
 	public DocumentSigner findOne(DocumentSignerId signerId) {
-		DocumentSigner signer = (DocumentSigner) session().getAttribute(signerId.id());
+		DocumentSigner signer = signers.get(signerId.id());
 		if (signer != null) {
 			return signer;
 		} else {

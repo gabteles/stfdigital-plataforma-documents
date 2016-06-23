@@ -22,9 +22,12 @@ import br.jus.stf.core.shared.documento.TextoId;
 import br.jus.stf.plataforma.documento.application.TextoApplicationService;
 import br.jus.stf.plataforma.documento.application.command.ConcluirTextoCommand;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
+import br.jus.stf.plataforma.documento.domain.model.Documento;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.Texto;
 import br.jus.stf.plataforma.documento.domain.model.TextoRepository;
+import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDto;
+import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDtoAssembler;
 
 @RestController
 @RequestMapping("/api/textos")
@@ -39,6 +42,9 @@ public class TextoRestResource {
 	@Autowired
 	private TextoApplicationService textoApplicationService;
 	
+	@Autowired
+	private DocumentoDtoAssembler documentoDtoAssembler;
+	
 	@ApiOperation("Recupera o conteúdo pdf associado a um texto.")
 	@RequestMapping(value = "/{textoId}/conteudo.pdf", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperarConteudoPdf(@PathVariable("textoId") Long textoId) throws IOException {
@@ -47,6 +53,14 @@ public class TextoRestResource {
 		InputStreamResource is = new InputStreamResource(documento.stream());
 		HttpHeaders headers = createResponseHeaders(documento.tamanho());
 		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
+	}
+	
+	@ApiOperation("Recupera o documento final associado a um texto")
+	@RequestMapping(value = "/{textoId}/documento-final", method = RequestMethod.GET)
+	public DocumentoDto recuperarDocumentoFinal(@PathVariable("textoId") Long textoId) {
+		Texto texto = textoRepository.findOne(new TextoId(textoId));
+		Documento documentoFinal = documentoRepository.findOne(texto.documentoFinal());
+		return documentoDtoAssembler.toDo(documentoFinal);
 	}
 	
 	@ApiOperation("Conclui um texto, gerando seu documento final associado")
