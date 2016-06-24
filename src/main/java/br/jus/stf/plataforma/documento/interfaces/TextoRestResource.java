@@ -20,6 +20,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 
 import br.jus.stf.core.shared.documento.TextoId;
 import br.jus.stf.plataforma.documento.application.TextoApplicationService;
+import br.jus.stf.plataforma.documento.application.command.AssinarTextoCommand;
 import br.jus.stf.plataforma.documento.application.command.ConcluirTextoCommand;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
@@ -66,6 +67,12 @@ public class TextoRestResource {
 	@ApiOperation("Conclui um texto, gerando seu documento final associado")
 	@RequestMapping(value = "/concluir", method = RequestMethod.POST)
 	public void concluir(@RequestBody @Valid ConcluirTextoCommand command) {
+		textoApplicationService.handle(command);
+	}
+	
+	@ApiOperation("Realiza a assinatura do texto")
+	@RequestMapping(value = "/assinar", method = RequestMethod.POST)
+	public void assinar(@RequestBody @Valid AssinarTextoCommand command) {
 		textoApplicationService.handle(command);
 	}
 	
