@@ -1,6 +1,7 @@
 import ITranslatePartialLoaderService = angular.translate.ITranslatePartialLoaderService;
 import IStateProvider = angular.ui.IStateProvider;
 import IModule = angular.IModule;
+import Properties = app.support.constants.Properties;
 import {TipoDocumentoService} from "./tipo-documento.service";
 import {ModeloService} from "./modelo.service";
 
@@ -60,7 +61,7 @@ function config($stateProvider: IStateProvider, properties: any) {
 
 /** @ngInject **/
 function run($translatePartialLoader: ITranslatePartialLoaderService,
-			 properties: any) {
+			 properties: Properties) {
 	$translatePartialLoader.addPart(properties.apiUrl + '/documents/modelos');
 }
 

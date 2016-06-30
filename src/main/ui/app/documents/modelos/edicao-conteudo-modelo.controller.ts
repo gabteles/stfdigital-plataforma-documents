@@ -1,5 +1,5 @@
-import IStateService = angular.ui.IStateService;
-import IPromise = angular.IPromise;
+import IStateService = ng.ui.IStateService;
+import IPromise = ng.IPromise;
 import documents from "./modelos.module";
 import {TipoDocumento} from "./tipo-documento.service";
 import {ModeloService, Modelo} from "./modelo.service";
