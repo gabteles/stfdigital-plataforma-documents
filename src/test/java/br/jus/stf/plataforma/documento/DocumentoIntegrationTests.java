@@ -78,8 +78,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 			.andExpect(status().is2xxSuccessful())
 			.andReturn().getResponse().getContentAsString();
 		
-		JavaType type = TypeFactory.defaultInstance()
-				.constructParametricType(ArrayList.class, DocumentoTemporarioDto.class);
+		JavaType type = TypeFactory.defaultInstance().constructParametrizedType(ArrayList.class, ArrayList.class, DocumentoTemporarioDto.class);
 		List<DocumentoTemporarioDto> dtos = new ObjectMapper().readValue(json, type); 
 	 
 		mockMvc.perform(get("/api/documentos/" + dtos.get(0).getDocumentoId() + "/conteudo"))

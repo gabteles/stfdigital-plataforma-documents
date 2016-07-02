@@ -49,7 +49,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver extends SpringJd
 
         // resolve the migration and populate it with the migration info
         for (SpringJdbcMigration springJdbcMigrationBean : springJdbcMigrationBeans.values()) {
-            ResolvedMigrationImpl resolvedMigration = extractMigrationInfo(springJdbcMigrationBean);
+            ResolvedMigrationImpl resolvedMigration = doExtractMigrationInfo(springJdbcMigrationBean);
             resolvedMigration.setPhysicalLocation(ClassUtils.getLocationOnDisk(springJdbcMigrationBean.getClass()));
             resolvedMigration.setExecutor(new SpringJdbcMigrationExecutor(springJdbcMigrationBean));
 
@@ -60,7 +60,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver extends SpringJd
         return resolvedMigrations;
     }
 
-    ResolvedMigrationImpl extractMigrationInfo(SpringJdbcMigration springJdbcMigration) {
+    ResolvedMigrationImpl doExtractMigrationInfo(SpringJdbcMigration springJdbcMigration) {
         Integer checksum = null;
         if (springJdbcMigration instanceof MigrationChecksumProvider) {
             MigrationChecksumProvider version = (MigrationChecksumProvider) springJdbcMigration;
@@ -84,7 +84,7 @@ public class ApplicationContextAwareSpringJdbcMigrationResolver extends SpringJd
             }
 
             String prefix = resolvedMigration1.substring(0, 1);
-            Pair info = MigrationInfoHelper.extractVersionAndDescription(resolvedMigration1, prefix, "__", "");
+            Pair<?, ?> info = MigrationInfoHelper.extractVersionAndDescription(resolvedMigration1, prefix, "__", "");
             version1 = (MigrationVersion) info.getLeft();
             description = (String) info.getRight();
         }
