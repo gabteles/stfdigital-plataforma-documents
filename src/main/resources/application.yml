@@ -36,7 +36,3 @@ http:
     ssl:
       trust-store: truststores/truststore.jks
       trust-store-password: changeit
-
-onlyoffice:
-  server:
-    address: https://eti078082:443
