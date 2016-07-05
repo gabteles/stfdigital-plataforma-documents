@@ -15,6 +15,7 @@ services:
      - spring.profiles.active=${JAVA_SERVICE_SPRING_PROFILES}
      - JAVA_OPTS=${JAVA_SERVICE_OPTS}
   documents:
+    image: stfdigital-plataforma-documents
     environment:
      - JAVA_OPTS=${JAVA_SERVICE_OPTS}
      - spring.profiles.active=${JAVA_SERVICE_SPRING_PROFILES}

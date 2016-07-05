@@ -20,7 +20,7 @@ services:
     environment:
      - JAVA_OPTS=${JAVA_DEBUG_OPTS} ${JAVA_SERVICE_OPTS}     
   services:
-    image: services
+    image: stfdigital-plataforma-services
     ports:
      - "8081:8081"
      - "8181:8181"
@@ -45,7 +45,7 @@ services:
     links:
      - onlyoffice:docker
   ui:
-    image: plataforma-ui
+    image: stfdigital-plataforma-ui
     ports:
      - "8443:8443"
   userauthentication:
