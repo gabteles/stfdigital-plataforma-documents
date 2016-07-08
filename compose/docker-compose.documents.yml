@@ -1,0 +1,10 @@
+# Define a configuração para rodar o recebimento
+version: '2'
+services:
+  documents:
+    extends:
+      file: compose/shared/common.yml
+      service: documents
+    depends_on:
+     - mongo
+     - discovery
