@@ -5,6 +5,7 @@ services:
     extends:
       file: compose/shared/common.yml
       service: documents
+    image: stfdigital-plataforma-documents
     depends_on:
      - mongo
      - discovery

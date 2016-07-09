@@ -22,17 +22,22 @@ before_install:
 - "./scripts/upgrade-docker.sh"
 - mkdir -p $HOME/docker_cache
 install: docker load -i $HOME/docker_cache/docker.tar || true
-script: gradle docker && gradle gulpTestUnit
+script: gradle docker && gradle gulpTestUnit && ./scripts/test-e2e.sh
 after_success:
 - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 - export REPO=supremotribunalfederal/stfdigital-plataforma-documents
 - docker tag stfdigital-plataforma-documents $REPO:latest
 - docker push $REPO:latest
+after_failure:
+- docker-compose -f docker-compose.yml -f compose/docker-compose.e2e.yml logs
 notifications:
   slack:
     secure: eanhz7T3m8day+GTTIKkMlmw7yl+5jFH/3YVVS7A5l6fFDVnA40WRliERz6xuNxq/5pRXm5Md6lWLegAR47aSUoLbTyCpkYzlcEWnaDmT7XKTS8JVCsZ9pgOWk78pMAfNNvZNVFW+jmGA4I59bJd0e0KwmK5KpK1GLUWzdKq1d67J5FUoT1zKRHJAjslyGtNvUl+zR/qa4ciDQKpT7I5i2dAFuw6pYGY3puxK386n0m2x640aZWNhwnWFXYCvR11YqJOB5bE4VVaVxWta3LIfYae621//+5t07zrPjOZk3NhnUH/wZu7BFTNoBGBzNkD3hDt11YRPh+943zG0zwPTyk64+4zOv4//cuALI1133IQ5rvKeRMALoOZAq9YpR7qXaTndzDSGcN95G9qiZpYv3G434iOIwqklIAeBDFIs+NLTXZDQrxPZQe4UWT4M9uI8uBO4l/V9akVycaS5VsRRW18LrhnWWty+shT8WCE9W//LitW3is7HCgiQbkKH70j6wfmMbHQ/OEIYHI3Rus/OPGK5LC4KKT/FP0YQPbhQnzdsg0J50bu4Wyl34BIhMG2i3SZoYCmTjfzBg+zQ14ct3DHKKxDig/FTLqlnheg1GoRf3MqSXKNQ6UnzwyoO+nuxyx0yoV2Z1woDRqBghUay5mY0vrtE606s6DqjCUE7zw=
 env:
   global:
+  - EUREKA_PREFER_IP_ADDRESS=false
+  - RABBIT_OUT_NODE_PORT=5673
+  - RABBIT_OUT_DIST_PORT=15673
   # DOCKER_EMAIL
   - secure: JGlbUJfAVOIsw/lAuYm058wnIV7gDtSvxSnaQMXGpv8DB5PxMzFHozHmPfSyh1JkHncUik4uXTMrghPBi8p3RIw4vaWb8AVMNi1BXwNVEgkkJH3T4MpNcJ5y2vI/79/xTBHzmnRvjyTI1shhC1gQYs8olrMc/66PGFz2AHJ7SjKPRjoKTq3yWOokYzdvGOKK5pXEH0nKHwBjxOmOkGG+q7mVoxTw0XClomKjMoe1EtV2lRa7y0FqpIe7bt3bTsdzEpKgESVYjPLoFjE2mcajr+66OPK14p0YZO76OJId1gWupuc55yX5x9+0n6e3S9LKPraIL/OAVobrWSwVa6CDvfX//Y7EP4O6RJ0eVwk4dDm2rYi2rdFtCvToyacCz4BDp3R4yvAU+68NsH0WGTpjmNZJ9RScTXH3JirO6pTN2ZkhzeONyUB/HqGNNga0VLTCBUJKx1RMdDlphCRq2O6Hlz25alnJoe59L8FYDhUy622aEtubZ3w35xhGf2wCm8iduQSj5Fc2IGBvlFJfPzlETz2Awdw3as+YU/q/DiNkK63TYG7DPn++StJ/BpsRqTFCNPRqaS04JDjIognUzHufGfreJR0wcTELC/3zdBsz2MeaBDvNHnmdRHYLU27CjDZjEMIhXyEcF4LUR2fiDw+MD6Dfn/Ps+vKVhEw8JbY2X3I=
   # DOCKER_USER
