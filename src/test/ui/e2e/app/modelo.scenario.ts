@@ -13,26 +13,26 @@ describe('Modelos', () => {
 	                
 	    it ('Deveria logar na tela', () => {
 	        loginPage.open();
-	        loginPage.login('aaa', '123');
+	        loginPage.login('gestor-modelo', '123');
 	    });
 	    
-	    it ('Deveria acessar a pagina de criação de novo modelo', () => {
+	    xit ('Deveria acessar a pagina de criação de novo modelo', () => {
 	        principalPage.iniciarProcesso();
 	        principalPage.iniciarCriacaoModelo();
 	    });
 	    
-	    it('Deveria preencher as informações do novo modelo', () => {
+	    xit('Deveria preencher as informações do novo modelo', () => {
 	    	criacaoModeloPage.selecionarTipoDocumento();
 	    	criacaoModeloPage.preencherNomeModelo('Alvará 001');
 	    	criacaoModeloPage.criarModelo();
 	    });
 	    
-	    it ('Deveria fazer logout', () => {
+	    xit ('Deveria fazer logout', () => {
 	        principalPage.logout();
 	    });
 	    
 	});
-	describe('Edição de modelo', () => {	
+	xdescribe('Edição de modelo', () => {	
 	    var loginPage: LoginPage = new LoginPage();
 	    var principalPage: PrincipalPage = new PrincipalPage();
 		var edicaoModeloPage : EdicaoModeloPage = new EdicaoModeloPage();
@@ -59,7 +59,7 @@ describe('Modelos', () => {
 	    
 	});
 	
-	describe('Edição do conteúdo de modelo', () => {	
+	xdescribe('Edição do conteúdo de modelo', () => {	
 	    var loginPage: LoginPage = new LoginPage();
 	    var principalPage: PrincipalPage = new PrincipalPage();
 		var edicaoConteudoModeloPage : EdicaoConteudoModeloPage = new EdicaoConteudoModeloPage();
