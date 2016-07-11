@@ -16,6 +16,9 @@ services:
       file: shared/compose/common.yml
       service: documents
     image: stfdigital-plataforma-documents
+    links:
+     - onlyoffice:docker # documents precisa acessar o onlyoffice pelo host docker para não dar erro de certificado
     depends_on:
-     - rabbit
+     - mongo
      - discovery
+     - onlyoffice
