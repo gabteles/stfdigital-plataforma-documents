@@ -3,9 +3,9 @@ version: '2'
 services:
   documents:
     extends:
-      file: compose/shared/common.yml
+      file: shared/compose/common.yml
       service: documents
     image: stfdigital-plataforma-documents
     depends_on:
-     - mongo
+     - rabbit
      - discovery
