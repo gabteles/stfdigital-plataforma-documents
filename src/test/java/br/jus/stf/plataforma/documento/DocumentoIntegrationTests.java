@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.jayway.jsonpath.JsonPath;
 
+import br.jus.stf.core.framework.testing.oauth2.WithMockOauth2User;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDto;
 
 public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests {
@@ -39,6 +40,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	}
 	
 	@Test
+	@WithMockOauth2User("peticionador")
 	public void enviarArquivoSemAssinatura() throws Exception {
 		String nomeArquivo = "teste_arq_temp.pdf";
 		String mime = "application/pdf";
@@ -56,6 +58,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	}
 	
 	@Test
+	@WithMockOauth2User("peticionador")
 	public void enviarArquivoAssinado() throws Exception {
 		String nomeArquivo = "teste_arq_temp.pdf";
 		String mime = "application/pdf";
@@ -87,6 +90,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	}
 	
 	@Test
+	@WithMockOauth2User("organizador-pecas")
 	public void dividirEUnirDocumentos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		
@@ -106,6 +110,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	}
 	
 	@Test
+	@WithMockOauth2User("organizador-pecas")
 	public void dividirDocumentoIntervalosInvalidos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		
@@ -118,6 +123,7 @@ public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests
 	}
 	
 	@Test
+	@WithMockOauth2User("peticionador")
 	public void consultarDocumentoPorId() throws Exception {
 		mockMvc.perform(get("/api/documentos/1")).andExpect(status().isOk())
 		.andExpect(jsonPath("$.documentoId", is(1)));
