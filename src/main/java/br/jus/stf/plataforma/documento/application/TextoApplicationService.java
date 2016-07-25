@@ -41,7 +41,7 @@ public class TextoApplicationService {
 	@Autowired
 	private DocumentoApplicationService documentoApplicationService;
 	
-	@Command(description = "Modelos - Conteúdo - Edição")
+	@Command(description = "Editar Conteúdo do Modelo")
 	public Texto handle(GerarTextoCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getModeloId()));
 		GerarDocumentoComTagsCommand gerarDocumentoCommand = new GerarDocumentoComTagsCommand(modelo.documento().toLong(), command.getSubstituicoes());
@@ -55,7 +55,7 @@ public class TextoApplicationService {
 		return texto;
 	}
 	
-	@Command(description = "Texto - Concluir")
+	@Command(description = "Concluir Texto")
 	public void handle(ConcluirTextoCommand command) {
 		Texto texto = textoRepository.findOne(new TextoId(command.getTextoId()));
 		GerarDocumentoFinalCommand gdfc = new GerarDocumentoFinalCommand(texto.documento().toLong());

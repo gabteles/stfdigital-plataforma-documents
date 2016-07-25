@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.Source;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
+import org.springframework.security.oauth2.provider.authentication.TokenExtractor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
@@ -43,9 +48,13 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 	@Autowired
 	@Qualifier("onlyofficeMarshaller")
 	private Jaxb2Marshaller onlyofficeMashaller;
+	
+	private TokenExtractor tokenExtractor = new BearerTokenExtractor();
 
 	@Override
 	public DocumentoTemporario converterDocumentoFinal(DocumentoId documentoId) {
+		String token = recuperarToken();
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Accept", MediaType.APPLICATION_XML_VALUE);
 		
@@ -53,7 +62,7 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 		
 		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(onlyofficeAddress + "/ConvertService.ashx")
 			.queryParam("key", UUID.randomUUID().toString())
-			.queryParam("url", doocumentServerBaseUrl + "/documents/api/onlyoffice/documentos/" + documentoId.toLong() + "/conteudo.docx")
+			.queryParam("url", doocumentServerBaseUrl + "/documents/api/onlyoffice/documentos/" + documentoId.toLong() + "/conteudo.docx?access_token=" + token + "&_csrf=" + token)
 			.queryParam("filetype", "docx")
 			.queryParam("outputtype", "pdf")
 			.queryParam("embeddedfonts", "true");
@@ -69,6 +78,11 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 		} else {
 			throw new RuntimeException("Erro ao converter documento.");
 		}
+	}
+
+	private String recuperarToken() {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		return tokenExtractor.extract(request).getPrincipal().toString();
 	}
 
 	private DocumentoTemporario recuperarArquivoConvertido(String fileUrl) throws RestClientException, URISyntaxException {

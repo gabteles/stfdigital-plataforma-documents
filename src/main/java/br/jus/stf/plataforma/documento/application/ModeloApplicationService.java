@@ -42,7 +42,7 @@ public class ModeloApplicationService {
 	 * @param command
 	 * @return
 	 */
-	@Command(description = "Modelos - Criação")
+	@Command(description = "Criar Modelo", startProcess = true)
 	public Modelo handle(CriarModeloCommand command) {
 		TipoDocumento tipoDocumento = tipoDocumentoRepository.findOne(new TipoDocumentoId(command.getTipoDocumento()));
 		ModeloId modeloId = modeloRepository.nextId();
@@ -58,7 +58,7 @@ public class ModeloApplicationService {
 	 * @param command
 	 * @return
 	 */
-	@Command(description = "Modelos - Edição")
+	@Command(description = "Editar Modelo")
 	public Modelo handle(EditarModeloCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getId()));
 		TipoDocumento tipoDocumento = tipoDocumentoRepository.findOne(new TipoDocumentoId(command.getTipoDocumento()));
