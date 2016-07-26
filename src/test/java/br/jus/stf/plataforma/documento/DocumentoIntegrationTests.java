@@ -26,9 +26,10 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.jayway.jsonpath.JsonPath;
 
 import br.jus.stf.core.framework.testing.oauth2.WithMockOauth2User;
+import br.jus.stf.plataforma.AbstractIntegrationTests;
 import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoTemporarioDto;
 
-public class DocumentoIntegrationTests extends AbstractDocumentoIntegrationTests {
+public class DocumentoIntegrationTests extends AbstractIntegrationTests {
 	
 	private String dividirDocumentoCommand;
 	private String intervaloJson;

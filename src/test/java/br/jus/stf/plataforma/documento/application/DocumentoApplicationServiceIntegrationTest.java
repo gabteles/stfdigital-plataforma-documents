@@ -17,7 +17,7 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import br.jus.stf.core.shared.documento.DocumentoId;
-import br.jus.stf.plataforma.documento.AbstractDocumentoIntegrationTests;
+import br.jus.stf.plataforma.AbstractIntegrationTests;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCompletamenteCommand;
 import br.jus.stf.plataforma.documento.application.command.Intervalo;
@@ -34,7 +34,7 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
  * @author Tomas.Godoi
  *
  */
-public class DocumentoApplicationServiceIntegrationTest extends AbstractDocumentoIntegrationTests {
+public class DocumentoApplicationServiceIntegrationTest extends AbstractIntegrationTests {
 
 	@Autowired
 	private DocumentoApplicationService documentoApplicationService;
