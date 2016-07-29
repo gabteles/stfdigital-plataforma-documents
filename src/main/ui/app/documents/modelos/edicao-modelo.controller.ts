@@ -1,17 +1,20 @@
 import IStateService = angular.ui.IStateService;
 import IPromise = angular.IPromise;
 import documents from "./modelos.module";
-import {TipoDocumento} from "./tipo-documento.service";
-import {ModeloService, Modelo, EditarModeloCommand} from "./modelo.service";
+import {TipoDocumento} from "../model/documento";
+import {Modelo} from "../model/modelo";
+import {ModeloService, EditarModeloCommand} from "./modelo.service";
 
 export class EdicaoModeloController {
 	
-	static $inject = ['tiposDocumento', 'modelo', '$state', 'app.novo-processo.modelos.ModeloService'];
+	static $inject = ['tiposDocumento', 'modelo', '$state', 'app.documents.modelos.ModeloService', 'messagesService'];
 	
 	public tipoDocumento: number;
 	public nomeModelo: string;
+	
+	public path = {id: 'novo-processo.documents-edicao-modelo', translation:'Edição de Modelo', uisref: 'app.novo-processo.documents-edicao-modelo', parent: 'novo-processo'};
 
-	constructor(private _tiposDocumento, private _modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService) {
+	constructor(private _tiposDocumento, private _modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService, private messagesService: app.support.messaging.MessagesService) {
 		this.tipoDocumento = _modelo.tipoDocumento.id;
 		this.nomeModelo = _modelo.nome;
 	}
@@ -24,16 +27,17 @@ export class EdicaoModeloController {
 		return this._modelo;
 	}
 	
-	editarModelo() {
+	editarModelo(): ng.IPromise<any> {
 		let command: EditarModeloCommand = new EditarModeloCommand(this._modelo.id, this.tipoDocumento, this.nomeModelo);
-		this._modeloService.editar(command).then(() => {
-			this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
+		return this._modeloService.editar(command).then(() => {
+			this.messagesService.success('Modelo editado com sucesso.');
+			return this.$state.go('app.tarefas.minhas-tarefas');
 		}, () => {
-			
+			this.messagesService.error('Erro ao editar o modelo.');
 		});
 	}
 }
 
-documents.controller('app.novo-processo.modelos.EdicaoModeloController', EdicaoModeloController);
+documents.controller('app.documents.modelos.EdicaoModeloController', EdicaoModeloController);
 
 export default documents;

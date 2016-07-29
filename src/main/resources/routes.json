@@ -1,21 +1,21 @@
 [ 
     {
         "id": "criar-modelo",
-        "stateName": "app.novo-processo.modelos-criar",
+        "stateName": "app.novo-processo.documents-modelos-criar",
         "urlPrefix": "/novo-processo/modelos/criar",
         "src": "documents/modelos"
     },
     
     {
         "id": "editar-modelo",
-        "stateName": "app.novo-processo.modelos-editar",
+        "stateName": "app.novo-processo.documents-modelos-editar",
         "urlPrefix": "/novo-processo/modelos/editar",
         "src": "documents/modelos"
     },
     
 	{
         "id": "gerar-texto",
-        "stateName": "app.novo-processo.modelos-conteudo-editar",
+        "stateName": "app.novo-processo.documents-modelos-conteudo-editar",
         "urlPrefix": "/novo-processo/modelos/conteudo/editar",
         "src": "documents/modelos"
     }

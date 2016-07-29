@@ -2,30 +2,7 @@ import IHttpService = angular.IHttpService;
 import IPromise = angular.IPromise;
 import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 import documents from "./modelos.module";
-
-export class TipoDocumento {
-
-	constructor(private _id: number, private _descricao: string) {
-		
-	}
-	
-	get id(): number {
-		return this._id;
-	}
-	
-	set id(id: number) {
-		this._id = id;
-	}
-	
-	get descricao(): string {
-		return this._descricao;
-	}
-	
-	set descricao(descricao: string) {
-		this._descricao = descricao;
-	}
-	
-}
+import {TipoDocumento} from "../model/documento";
 
 export class TipoDocumentoService {
 
@@ -42,6 +19,6 @@ export class TipoDocumentoService {
 	
 }
 
-documents.service('app.novo-processo.modelos.TipoDocumentoService', TipoDocumentoService);
+documents.service('app.documents.modelos.TipoDocumentoService', TipoDocumentoService);
 
 export default documents;

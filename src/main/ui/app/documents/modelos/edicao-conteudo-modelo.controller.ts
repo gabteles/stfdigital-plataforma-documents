@@ -1,19 +1,22 @@
 import IStateService = ng.ui.IStateService;
 import IPromise = ng.IPromise;
 import documents from "./modelos.module";
-import {TipoDocumento} from "./tipo-documento.service";
-import {ModeloService, Modelo} from "./modelo.service";
-import {Documento} from "./documento";
+import {TipoDocumento} from "../model/documento";
+import {Modelo} from "../model/modelo";
+import {ModeloService} from "./modelo.service";
+import {Documento} from "../model/documento";
 
 export class EdicaoConteudoModeloController {
 	
-	static $inject = ['modelo', '$state', 'app.novo-processo.modelos.ModeloService'];
+	static $inject = ['modelo', '$state', 'app.documents.modelos.ModeloService', '$q', 'messagesService'];
 	
 	private _documento: Documento;
 	
 	public editor: any = {};
+	
+	private salvarDocumentoDeferred: ng.IDeferred<any>;
 
-	constructor(_modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService) {
+	constructor(_modelo: Modelo, private $state: IStateService, private _modeloService: ModeloService, private $q: ng.IQService, private messagesService: app.support.messaging.MessagesService) {
 		this._documento = {
 			id: _modelo.documento,
 			nome: 'Modelo ' + _modelo.tipoDocumento.descricao + ' - ' + _modelo.nome
@@ -25,22 +28,25 @@ export class EdicaoConteudoModeloController {
 	}
 	
 	concluiuEdicao() {
-		//messages.success('Modelo editado com sucesso.');
-		//$state.go('dashboard');
-		console.log('Modelo editado com sucesso.');
-		this.$state.go('app.tarefas.minhas-tarefas', {}, { reload: true });
+		this.salvarDocumentoDeferred.resolve();
 	}
 	
 	timeoutEdicao() {
-		//messages.error('Não foi possível concluir a edição do modelo.');
-		console.log('Não foi possível concluir a edição do modelo.');
+		this.salvarDocumentoDeferred.reject();
 	}
 	
-	finalizarEdicao() {
+	finalizarEdicao(): ng.IPromise<any> {
+		this.salvarDocumentoDeferred = this.$q.defer();
 		this.editor.api.salvar();
+		return this.salvarDocumentoDeferred.promise.then(() => {
+			this.messagesService.success('Conteúdo do modelo editado com sucesso.');
+		    return this.$state.go('app.tarefas.minhas-tarefas');
+		}, () => {
+			this.messagesService.error('Não foi possível concluir a edição do modelo.');
+		});
 	}
 }
 
-documents.controller('app.novo-processo.modelos.EdicaoConteudoModeloController', EdicaoConteudoModeloController);
+documents.controller('app.documents.modelos.EdicaoConteudoModeloController', EdicaoConteudoModeloController);
 
 export default documents;

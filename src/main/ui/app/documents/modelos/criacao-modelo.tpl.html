@@ -1,4 +1,7 @@
 <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
+
+	<stf-header path="vm.path"> </stf-header>
+
     <!-- CONTENT -->
     <div class="content" layout="column">
         <div class="md-title mt-10"><span translate="DOCUMENTS.MODELOS.NOVO">Novo Modelo</span></div>
@@ -6,7 +9,7 @@
         <div layout="row">
             <!-- BASIC FORM -->
             <div class="form-wrapper md-whiteframe-1dp" flex="100">
-                <form name="formularioModelo" ng-submit="vm.criarModelo()" class="md-inline-form">
+                <form name="formularioModelo" ng-submit="vm.criarModelo()" class="md-inline-form" stf-processing>
                     <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
                         <md-input-container flex>
                             <label for="tipoDocumento">Tipo do documento</label>

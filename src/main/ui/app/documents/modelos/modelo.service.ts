@@ -1,14 +1,8 @@
 import IHttpService = angular.IHttpService;
 import IPromise = angular.IPromise;
 import documents from "./modelos.module";
-import {TipoDocumento} from "./tipo-documento.service";
-
-export interface Modelo {
-	id: number;
-	tipoDocumento: TipoDocumento;
-	nome: string;
-	documento: number;
-}
+import {TipoDocumento} from "../model/documento";
+import {Modelo} from "../model/modelo";
 
 export class CriarModeloCommand {
 	
@@ -48,6 +42,6 @@ export class ModeloService {
 	}
 }
 
-documents.service('app.novo-processo.modelos.ModeloService', ModeloService);
+documents.service('app.documents.modelos.ModeloService', ModeloService);
 
 export default documents;
