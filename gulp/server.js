@@ -11,17 +11,24 @@ var through = require('through2');
 var browserSync = require('browser-sync');
 var browserSyncSpa = require('browser-sync-spa');
 
+var argv = require('yargs').argv;
+
 var watchedFiles = [path.join(conf.paths.bin, '**/*.js')];
 
 browserSync.use(browserSyncSpa({
     selector: '[ng-app]'// Only needed for angular apps
 }));
 
+var proxyTarget = "https://docker:8443";
+if (argv['proxy-ui']) {
+	proxyTarget = "https://localhost:3000";
+}
+
 gulp.task('serve:dev', ['watch-ui:bin'], function() {
 	// spin up browser sync
 	browserSync.init({
 		proxy: {
-			target: "https://docker:8443",
+			target: proxyTarget,
 			ws: true,
 			https: true
 		}
