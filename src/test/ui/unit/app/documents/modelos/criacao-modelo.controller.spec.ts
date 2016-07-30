@@ -13,8 +13,7 @@ describe('Criacao Modelo Controller', () => {
 	beforeEach(inject(($rootScope, $httpBackend: angular.IHttpBackendService, $controller: angular.IControllerService) => {
 		var scope = $rootScope.$new();
 		controller = <CriacaoModeloController>$controller('app.documents.modelos.CriacaoModeloController', {
-			$scope : scope,
-			tiposDocumento: [<TipoDocumento>{id: 1, descricao: "Petição Inicial"}]
+			tiposDocumento: [{id: 1, descricao: "Petição Inicial"}]
 		});
 	}));
 	
