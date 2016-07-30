@@ -46,18 +46,24 @@ public class OnlyofficeCallbackService {
 		} else if (json.get("status").equals(4)) {
 			return callbackDocumentClosedNoChanges(json);
 		} else {
-			return new HashMap<>();
+			return successResponse();
 		}
+	}
+
+	private Map<String, Object> successResponse() {
+		Map<String, Object> response = new HashMap<>();
+		response.put("error", 0);
+		return response;
 	}
 
 	private Map<String, Object> callbackDocumentClosedNoChanges(Map<String, Object> json) {
 		String numeroEdicao = (String) json.get("key");
 		controladorEdicaoDocumento.excluirEdicao(numeroEdicao);
-		return new HashMap<>();
+		return successResponse();
 	}
 
 	private Map<String, Object> callbackDocumentSavingError(Map<String, Object> json) {
-		return new HashMap<>();
+		return successResponse();
 	}
 
 	private Map<String, Object> callbackDocumentReadyForSaving(Long documentoId, Map<String, Object> json)
@@ -75,17 +81,17 @@ public class OnlyofficeCallbackService {
 		
 		documentoApplicationService.handle(command);
 
-		return new HashMap<>();
+		return successResponse();
 	}
 
 	private Map<String, Object> callbackDocumentBeingEdited(Long documentoId, Map<String, Object> json) {
 		String numeroEdicao = (String) json.get("key");
 		controladorEdicaoDocumento.ativarEdicao(numeroEdicao);
-		return new HashMap<>();
+		return successResponse();
 	}
 
 	private Map<String, Object> callbackNoDocumentWithKeyFound(Map<String, Object> json) {
-		return new HashMap<>();
+		return successResponse();
 	}
 
 }

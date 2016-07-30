@@ -1,20 +1,27 @@
 <div id="forms" class="page-layout simple fullwidth doc-page" layout="column">
     <!-- CONTENT -->
-    <div class="content" layout="column">
+    <div class="content" layout="column" flex>
+    
         <div class="md-title mt-10">Editar Conteúdo do Modelo</div>
         <div class="pb-16">Edite o conteúdo do modelo</div>
-        <div layout="row">
+        
+        <div layout="row" flex>
             <!-- BASIC FORM -->
             <div class="form-wrapper md-whiteframe-1dp" flex="100">
-                <form name="formularioConteudo" ng-submit="vm.finalizarEdicao()" class="md-inline-form" stf-processing>
-                    <div layout="column" layout-gt-xs="row" class="layout-gt-xs-row">
-                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" edicao-timeout="vm.timeoutEdicao()" aguardar-conclusao="true" style="width: 100%;"></div>
-                    </div>
-                    <md-button type="submit" class="md-raised md-accent" id="btnEditarConteudoModelo" aria-label="Salvar" ng-disabled="formularioConteudo.$invalid">
-                        Salvar
-                    </md-button>
-                      
+            
+                <form name="formularioConteudo" ng-submit="vm.finalizarEdicao()" layout-fill class="md-inline-form" stf-processing>
+	                <div layout="column" layout-fill>
+	                    <div layout="row" flex>
+	                        <div ng-if="vm.documento" onlyoffice-editor="vm.documento" api="vm.editor.api" edicao-concluida="vm.concluiuEdicao()" edicao-timeout="vm.timeoutEdicao()" aguardar-conclusao="true" flex></div>
+	                    </div>
+	                    <div layout="row">
+	                        <md-button type="submit" class="md-raised md-accent" id="btnEditarConteudoModelo" aria-label="Salvar" ng-disabled="formularioConteudo.$invalid">
+		                        Salvar
+		                    </md-button>
+	                    </div>
+	                </div>
                 </form>
+                
             </div>
             <!-- / BASIC FORM -->
         </div>
