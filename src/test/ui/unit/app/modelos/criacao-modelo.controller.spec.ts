@@ -2,17 +2,17 @@ import "documents/modelos/modelos.module";
 import "documents/modelos/criacao-modelo.controller";
 
 import {CriacaoModeloController} from "documents/modelos/criacao-modelo.controller";
-import {TipoDocumento} from "documents/modelos/tipo-documento.service";
+import {TipoDocumento} from "documents/model/documento";
 
 describe('Criacao Modelo Controller', () => {
 	
-	beforeEach(angular.mock.module('app.novo-processo.modelos'));
+	beforeEach(angular.mock.module('app.core', 'app.support', 'app.documents.modelos'));
 	
 	let controller: CriacaoModeloController;
 	
 	beforeEach(inject(($rootScope, $httpBackend: angular.IHttpBackendService, $controller: angular.IControllerService) => {
 		var scope = $rootScope.$new();
-		controller = <CriacaoModeloController>$controller('app.novo-processo.modelos.CriacaoModeloController', {
+		controller = <CriacaoModeloController>$controller('app.documents.modelos.CriacaoModeloController', {
 			$scope : scope,
 			tiposDocumento: [<TipoDocumento>{id: 1, descricao: "Petição Inicial"}]
 		});
