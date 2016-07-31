@@ -1,7 +1,7 @@
 import IStateService = angular.ui.IStateService;
 import IPromise = angular.IPromise;
 import documents from "./modelos.module";
-import {TipoDocumento} from "../model/documento";
+import {TipoDocumento} from "../common/documento";
 import {ModeloService, CriarModeloCommand} from "./modelo.service";
 
 export class CriacaoModeloController {

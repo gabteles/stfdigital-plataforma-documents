@@ -1,10 +1,10 @@
 import IStateService = ng.ui.IStateService;
 import IPromise = ng.IPromise;
 import documents from "./modelos.module";
-import {TipoDocumento} from "../model/documento";
-import {Modelo} from "../model/modelo";
+import {TipoDocumento} from "../common/documento";
+import {Modelo} from "../common/modelo";
 import {ModeloService} from "./modelo.service";
-import {Documento} from "../model/documento";
+import {Documento} from "../common/documento";
 
 export class EdicaoConteudoModeloController {
 	

@@ -2,7 +2,7 @@ import IHttpService = angular.IHttpService;
 import IPromise = angular.IPromise;
 import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 import documents from "./modelos.module";
-import {TipoDocumento} from "../model/documento";
+import {TipoDocumento} from "../common/documento";
 
 export class TipoDocumentoService {
 

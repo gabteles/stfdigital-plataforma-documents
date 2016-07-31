@@ -1,5 +1,5 @@
 import dashlets from "../dashlets.module";
-import {Modelo} from "../../model/modelo";
+import {Modelo} from "../../common/modelo";
 
 import IStateService = ng.ui.IStateService
 

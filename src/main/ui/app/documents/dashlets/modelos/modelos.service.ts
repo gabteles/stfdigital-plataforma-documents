@@ -1,4 +1,4 @@
-import {Modelo} from "../../model/modelo";
+import {Modelo} from "../../common/modelo";
 
 import dashlets from "../dashlets.module";
 
