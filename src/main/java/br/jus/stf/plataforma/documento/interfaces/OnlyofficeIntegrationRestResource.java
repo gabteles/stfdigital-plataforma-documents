@@ -50,7 +50,7 @@ public class OnlyofficeIntegrationRestResource {
 	@Qualifier("doocumentServerBaseUrl")
 	private String doocumentServerBaseUrl;
 	
-	@Value("${onlyoffice.server.address}")
+	@Value("${onlyoffice.server.address:onlyoffice}")
 	private String onlyofficeAddress;
 
 	@ApiOperation("Recupera o conteúdo de um documento")

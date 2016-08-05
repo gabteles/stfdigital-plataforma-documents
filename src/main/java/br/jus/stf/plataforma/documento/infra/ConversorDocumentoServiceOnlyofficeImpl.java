@@ -38,7 +38,7 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 	@Qualifier("onlyofficeRestTemplate")
 	private RestTemplate restTemplate;
 
-	@Value("${onlyoffice.server.address}")
+	@Value("${onlyoffice.server.address:onlyoffice}")
 	private String onlyofficeAddress;
 	
 	@Autowired
