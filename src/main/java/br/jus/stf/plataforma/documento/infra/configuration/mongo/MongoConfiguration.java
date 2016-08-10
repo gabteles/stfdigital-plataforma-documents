@@ -22,6 +22,8 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 	private String hostMongo;
 	@Value("${mongo.databaseName}")
 	private String databaseName;
+	@Value("${mongo.port:27017")
+	private Integer portMongo;
 
 	@Bean
 	public GridFsTemplate gridFsTemplate() {
@@ -45,7 +47,7 @@ public class MongoConfiguration extends AbstractMongoConfiguration {
 	@Override
 	@Bean
 	public Mongo mongo() throws Exception {
-		return new MongoClient(hostMongo);
+		return new MongoClient(hostMongo, portMongo);
 	}
 
 }
