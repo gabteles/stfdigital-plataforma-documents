@@ -41,7 +41,7 @@ public class DocumentoIntegrationTests extends AbstractIntegrationTests {
 	}
 	
 	@Test
-	@WithMockOauth2User("peticionador")
+	@WithMockOauth2User(value = "peticionador", components = "upload-documento-assinado")
 	public void enviarArquivoSemAssinatura() throws Exception {
 		String nomeArquivo = "teste_arq_temp.pdf";
 		String mime = "application/pdf";
@@ -59,7 +59,7 @@ public class DocumentoIntegrationTests extends AbstractIntegrationTests {
 	}
 	
 	@Test
-	@WithMockOauth2User("peticionador")
+	@WithMockOauth2User(value = "peticionador", components = {"upload-documento-assinado", "salvar-documentos"})
 	public void enviarArquivoAssinado() throws Exception {
 		String nomeArquivo = "teste_arq_temp.pdf";
 		String mime = "application/pdf";
@@ -91,7 +91,7 @@ public class DocumentoIntegrationTests extends AbstractIntegrationTests {
 	}
 	
 	@Test
-	@WithMockOauth2User("organizador-pecas")
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente", "unir-documentos"})
 	public void dividirEUnirDocumentos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		
@@ -111,7 +111,7 @@ public class DocumentoIntegrationTests extends AbstractIntegrationTests {
 	}
 	
 	@Test
-	@WithMockOauth2User("organizador-pecas")
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void dividirDocumentoIntervalosInvalidos() throws Exception {
 		Integer documentoId = fazerUploadDocumento();
 		

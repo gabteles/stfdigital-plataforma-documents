@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
+import br.jus.stf.core.framework.testing.oauth2.WithMockOauth2User;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.plataforma.AbstractIntegrationTests;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCommand;
@@ -45,6 +46,7 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractIntegrat
 	private MockMultipartFile mockMultiFile;
 
 	@Test
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos"})
 	public void testDividirDocumentoUmIntervalo() throws Exception {
 		List<DocumentoId> documentos = dividirDocumentoComIntervalos(Arrays.asList(Range.between(1, 7)));
 		
@@ -64,6 +66,7 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractIntegrat
 	}
 
 	@Test
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos"})
 	public void testDividirDocumentoTresIntervalos() throws Exception {
 		List<DocumentoId> documentos = dividirDocumentoComIntervalos(Arrays.asList(Range.between(3, 7), Range.between(8, 11), Range.between(12, 14)));
 		
@@ -95,28 +98,33 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractIntegrat
 	}
 
 	@Test(expected = IllegalArgumentException.class)
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void testDividirDocumentoCompletamenteIntervaloErrado() throws IOException {
 		dividirDocumentoComIntervalosCompletos(Arrays.asList(Range.between(1, 3), Range.between(5, 8), Range.between(8, 14)));
 	}
 
 	@Test
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void testDividirDocumentosCompletamenteIntervalosCorretos() throws IOException {
 		List<DocumentoId> documentos = dividirDocumentoComIntervalosCompletos(Arrays.asList(Range.between(1, 3), Range.between(4, 8), Range.between(8, 14)));
 		Assert.assertEquals("Deveria ter dividido o documento em 3.", 3, documentos.size());
 	}
 
 	@Test
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void testDividirDocumentosCompletamenteIntervalosSobrepostos() throws IOException {
 		List<DocumentoId> documentos = dividirDocumentoComIntervalosCompletos(Arrays.asList(Range.between(1, 3), Range.between(3, 7), Range.between(5, 14)));
 		Assert.assertEquals("Deveria ter dividido o documento em 3.", 3, documentos.size());
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void testDividirDocumentosCompletamenteIntervalosExtrapolantesNoInicio() throws IOException {
 		dividirDocumentoComIntervalosCompletos(Arrays.asList(Range.between(-3, 3), Range.between(3, 7), Range.between(5, 14)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "dividir-documentos-completamente"})
 	public void testDividirDocumentosCompletamenteIntervalosExtrapolantesNoFim() throws IOException {
 		dividirDocumentoComIntervalosCompletos(Arrays.asList(Range.between(1, 3), Range.between(3, 7), Range.between(5, 15)));
 	}
@@ -186,6 +194,7 @@ public class DocumentoApplicationServiceIntegrationTest extends AbstractIntegrat
 	}
 	
 	@Test
+	@WithMockOauth2User(value = "organizador-pecas", components = {"upload-documento", "salvar-documentos", "unir-documentos"})
 	public void testUnirTresDocumentos() throws IOException {
 		String idDocumentoTemporario1 = salvarDocumentoTemporarioParaTeste("pdf-14-pgs.pdf");
 		String idDocumentoTemporario2 = salvarDocumentoTemporarioParaTeste("pdf-A-5-pgs.pdf");
