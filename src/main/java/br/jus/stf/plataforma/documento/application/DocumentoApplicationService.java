@@ -209,18 +209,22 @@ public class DocumentoApplicationService {
 	
 	@Command
 	public DocumentoId handle(GerarDocumentoComTagsCommand command) {
-		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
-		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
-		ConteudoDocumento conteudo = documentoRepository.download(new DocumentoId(command.getDocumentoId()));
-		DocumentoTemporario documentoTemporario = documentoService.preencherTags(substituicoesTag, conteudo);
-
-		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
-		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
+		return this.gerarDocumentosComTags(command);
 	}
 
 	@Command
 	public DocumentoId handle(GerarDocumentoFinalCommand command) {
 		DocumentoTemporario documentoTemporario = conversorDocumentoService.converterDocumentoFinal(new DocumentoId(command.getDocumento()));
+		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
+		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
+	}
+	
+	protected DocumentoId gerarDocumentosComTags(GerarDocumentoComTagsCommand command) {
+		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
+		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
+		ConteudoDocumento conteudo = documentoRepository.download(new DocumentoId(command.getDocumentoId()));
+		DocumentoTemporario documentoTemporario = documentoService.preencherTags(substituicoesTag, conteudo);
+
 		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
 		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
 	}

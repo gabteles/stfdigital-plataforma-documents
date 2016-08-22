@@ -45,7 +45,7 @@ public class TextoApplicationService {
 	public Texto handle(GerarTextoCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getModeloId()));
 		GerarDocumentoComTagsCommand gerarDocumentoCommand = new GerarDocumentoComTagsCommand(modelo.documento().toLong(), command.getSubstituicoes());
-		DocumentoId documentoId = documentoApplicationService.handle(gerarDocumentoCommand);
+		DocumentoId documentoId = documentoApplicationService.gerarDocumentosComTags(gerarDocumentoCommand);
 		
 		TextoId textoId = textoRepository.nextId();
 		Texto texto = new Texto(textoId, documentoId);
