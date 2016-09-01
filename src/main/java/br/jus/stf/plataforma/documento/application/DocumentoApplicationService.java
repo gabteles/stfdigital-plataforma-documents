@@ -34,7 +34,6 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 import br.jus.stf.plataforma.documento.domain.model.SubstituicaoTag;
 import br.jus.stf.plataforma.documento.infra.persistence.ConteudoDocumentoRepository;
-import br.jus.stf.plataforma.documento.infra.persistence.DocumentoTempRepository;
 
 /**
  * @author Rodrigo Barreiros
@@ -45,17 +44,12 @@ import br.jus.stf.plataforma.documento.infra.persistence.DocumentoTempRepository
 @ApplicationService
 @Transactional
 public class DocumentoApplicationService {
-
-	private final Long TAMANHO_MAXIMO = 10485760L;
 	
 	@Autowired
 	private DocumentoRepository documentoRepository;
 	
 	@Autowired
 	private DocumentoService documentoService;
-	
-	@Autowired
-	private DocumentoTempRepository documentoTempRepository;
 	
 	@Autowired
 	private ConteudoDocumentoRepository conteudoDocumentoRepository;
@@ -76,7 +70,7 @@ public class DocumentoApplicationService {
 	public Map<String, DocumentoId> handle(SalvarDocumentosCommand command) {
 		List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList());
 		return documentosTemporarios.stream()
-				.collect(Collectors.toMap(docTemp -> docTemp.toString(), docTemp -> salvar(docTemp)));
+				.collect(Collectors.toMap(docTemp -> docTemp.toString(), docTemp -> documentoService.salvar(docTemp)));
 	}
 
 	/**
@@ -86,15 +80,7 @@ public class DocumentoApplicationService {
 	@Command
 	public String handle(UploadDocumentoCommand command) {
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return salvarDocumentoTemporario(documentoTemporario);
-	}
-
-	private String salvarDocumentoTemporario(DocumentoTemporario documentoTemporario) {
-		if (documentoTemporario.tamanho() > TAMANHO_MAXIMO) {
-			throw new IllegalArgumentException("O tamanho do arquivo excede o limite máximo de 10MB.");
-		}
-		
-		return documentoRepository.storeTemp(documentoTemporario);
+		return documentoService.salvarDocumentoTemporario(documentoTemporario);
 	}
 	
 	/**
@@ -105,7 +91,7 @@ public class DocumentoApplicationService {
 	@Command
 	public String handle(UploadDocumentoAssinadoCommand command) {
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return salvarDocumentoTemporario(documentoTemporario);
+		return documentoService.salvarDocumentoTemporario(documentoTemporario);
 	}
 	
 	@Command
@@ -160,38 +146,23 @@ public class DocumentoApplicationService {
 			tamanhoNovoDocumento += conteudo.tamanho();
 		}
 		
-		if (tamanhoNovoDocumento > TAMANHO_MAXIMO) {
+		if (tamanhoNovoDocumento > DocumentoTemporario.TAMANHO_MAXIMO) {
 			throw new IllegalArgumentException("O tamanho do arquivo excede o limite máximo de 10MB.");
 		}
 		
 		DocumentoTemporario temp = documentoService.unirConteudos(conteudos);
 		DocumentoTemporarioId tempId = new DocumentoTemporarioId(documentoRepository.storeTemp(temp));
-		DocumentoId novoDocumento = salvar(tempId);
+		DocumentoId novoDocumento = documentoService.salvar(tempId);
 		return novoDocumento;
 	}
 
 	private List<DocumentoId> salvar(List<DocumentoTemporarioId> documentosTemporarios) {
 		List<DocumentoId> documentosSalvos = new ArrayList<>();
 		for (DocumentoTemporarioId docTempId : documentosTemporarios) {
-			DocumentoId novoDocumento = salvar(docTempId);
+			DocumentoId novoDocumento = documentoService.salvar(docTempId);
 			documentosSalvos.add(novoDocumento);
 		}
 		return documentosSalvos;
-	}
-	
-	private DocumentoId salvar(DocumentoTemporarioId docTempId) {
-		DocumentoTemporario docTemp = documentoTempRepository.recoverTemp(docTempId);
-		
-		DocumentoId id = documentoRepository.nextId();
-		
-		String numeroConteudo = conteudoDocumentoRepository.save(id, docTemp);
-		
-		Documento documento = new Documento(id, numeroConteudo, documentoService.contarPaginas(docTemp), docTemp.tamanho());
-		documento = documentoRepository.save(documento);
-		
-		documentoTempRepository.removeTemp(docTempId.toString());
-		docTemp.delete();
-		return documento.identity();
 	}
 
 	@Command
@@ -209,24 +180,16 @@ public class DocumentoApplicationService {
 	
 	@Command
 	public DocumentoId handle(GerarDocumentoComTagsCommand command) {
-		return this.gerarDocumentosComTags(command);
+		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
+		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
+		return documentoService.gerarDocumentoTemporarioComTags(new DocumentoId(command.getDocumentoId()), substituicoesTag);
 	}
 
 	@Command
 	public DocumentoId handle(GerarDocumentoFinalCommand command) {
 		DocumentoTemporario documentoTemporario = conversorDocumentoService.converterDocumentoFinal(new DocumentoId(command.getDocumento()));
-		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
-		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
-	}
-	
-	protected DocumentoId gerarDocumentosComTags(GerarDocumentoComTagsCommand command) {
-		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
-		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
-		ConteudoDocumento conteudo = documentoRepository.download(new DocumentoId(command.getDocumentoId()));
-		DocumentoTemporario documentoTemporario = documentoService.preencherTags(substituicoesTag, conteudo);
-
-		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
-		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
+		String documentoTemporarioId = documentoService.salvarDocumentoTemporario(documentoTemporario);
+		return documentoService.salvar(new DocumentoTemporarioId(documentoTemporarioId));
 	}
 	
 }

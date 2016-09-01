@@ -26,6 +26,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.PDFMultipartFile;
 import br.jus.stf.plataforma.documento.domain.ConversorDocumentoService;
@@ -52,6 +54,7 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 	private TokenExtractor tokenExtractor = new BearerTokenExtractor();
 
 	@Override
+	@HystrixCommand
 	public DocumentoTemporario converterDocumentoFinal(DocumentoId documentoId) {
 		String token = recuperarToken();
 		

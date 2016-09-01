@@ -21,6 +21,8 @@ import br.jus.stf.core.framework.domaindrivendesign.ValueObjectSupport;
  */
 public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario> {
 
+	public static final Long TAMANHO_MAXIMO = 10485760L;
+	
 	private static String FILE_NAME_PREFFIX = "_DocTemp_";
 	
 	private Long tamanho;

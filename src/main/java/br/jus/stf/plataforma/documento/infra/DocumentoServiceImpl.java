@@ -33,6 +33,8 @@ import br.jus.stf.plataforma.documento.domain.model.DocumentoRepository;
 import br.jus.stf.plataforma.documento.domain.model.DocumentoTemporario;
 import br.jus.stf.plataforma.documento.domain.model.SubstituicaoTag;
 import br.jus.stf.plataforma.documento.domain.model.Tag;
+import br.jus.stf.plataforma.documento.infra.persistence.ConteudoDocumentoRepository;
+import br.jus.stf.plataforma.documento.infra.persistence.DocumentoTempRepository;
 
 /**
  * Service para manipulação de documentos do tipo Pdf.
@@ -48,6 +50,12 @@ public class DocumentoServiceImpl implements DocumentoService {
 
 	@Autowired
 	private ContadorPaginas contadorPaginas;
+	
+	@Autowired
+	private DocumentoTempRepository documentoTempRepository;
+	
+	@Autowired
+	private ConteudoDocumentoRepository conteudoDocumentoRepository;
 
 	private final Pattern pattern = Pattern.compile("@@(.*)@@");
 
@@ -236,4 +244,34 @@ public class DocumentoServiceImpl implements DocumentoService {
 		}
 	}
 
+	public String salvarDocumentoTemporario(DocumentoTemporario documentoTemporario) {
+		if (documentoTemporario.tamanho() > DocumentoTemporario.TAMANHO_MAXIMO) {
+			throw new IllegalArgumentException("O tamanho do arquivo excede o limite máximo de 10MB.");
+		}
+		
+		return documentoRepository.storeTemp(documentoTemporario);
+	}
+	
+	public DocumentoId salvar(DocumentoTemporarioId docTempId) {
+		DocumentoTemporario docTemp = documentoTempRepository.recoverTemp(docTempId);
+		
+		DocumentoId id = documentoRepository.nextId();
+		
+		String numeroConteudo = conteudoDocumentoRepository.save(id, docTemp);
+		
+		Documento documento = new Documento(id, numeroConteudo, contarPaginas(docTemp), docTemp.tamanho());
+		documento = documentoRepository.save(documento);
+		
+		documentoTempRepository.removeTemp(docTempId.toString());
+		docTemp.delete();
+		return documento.identity();
+	}
+	
+	public DocumentoId gerarDocumentoTemporarioComTags(DocumentoId documento, List<SubstituicaoTag> substituicoesTag) {
+		ConteudoDocumento conteudo = documentoRepository.download(documento);
+		DocumentoTemporario documentoTemporario = preencherTags(substituicoesTag, conteudo);
+		String documentoTemporarioId = salvarDocumentoTemporario(documentoTemporario);
+		return salvar(new DocumentoTemporarioId(documentoTemporarioId));
+	}
+	
 }

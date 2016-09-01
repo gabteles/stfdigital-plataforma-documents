@@ -61,4 +61,9 @@ public interface DocumentoService {
 	
 	DocumentoTemporario preencherTags(List<SubstituicaoTag> substituicoes, ConteudoDocumento conteudo);
 	
+	String salvarDocumentoTemporario(DocumentoTemporario documentoTemporario);
+	
+	DocumentoId salvar(DocumentoTemporarioId docTempId);
+	
+	DocumentoId gerarDocumentoTemporarioComTags(DocumentoId documento, List<SubstituicaoTag> substituicoesTag);
 }
