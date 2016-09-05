@@ -68,9 +68,11 @@ public class DocumentoApplicationService {
 	 */
 	@Command
 	public Map<String, DocumentoId> handle(SalvarDocumentosCommand command) {
-		List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream().map(id -> new DocumentoTemporarioId(id)).collect(Collectors.toList());
+		List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream()
+				.map(DocumentoTemporarioId::new).collect(Collectors.toList());
+		
 		return documentosTemporarios.stream()
-				.collect(Collectors.toMap(docTemp -> docTemp.toString(), docTemp -> documentoService.salvar(docTemp)));
+				.collect(Collectors.toMap(docTemp -> docTemp.toString(), documentoService::salvar));
 	}
 
 	/**
@@ -94,12 +96,19 @@ public class DocumentoApplicationService {
 		return documentoService.salvarDocumentoTemporario(documentoTemporario);
 	}
 	
+	/**
+	 * @param command
+	 */
 	@Command
 	public void handle(DeleteTemporarioCommand command) {
 		command.getFiles().stream()
-			.forEach(tempId -> documentoRepository.removeTemp(tempId));
+			.forEach(documentoRepository::removeTemp);
 	}
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@Command
 	public List<DocumentoId> handle(DividirDocumentosCompletamenteCommand command) {
 		List<DocumentoId> documentosDivididos = new ArrayList<>();
@@ -108,6 +117,10 @@ public class DocumentoApplicationService {
 		return documentosDivididos;
 	}
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@Command
 	public List<DocumentoId> handle(DividirDocumentosCommand command) {
 		List<DocumentoId> documentosDivididos = new ArrayList<>();
@@ -138,8 +151,8 @@ public class DocumentoApplicationService {
 	 */
 	@Command
 	public DocumentoId handle(UnirDocumentosCommand command) {
-		List<DocumentoId> documentos = command.getIdsDocumentos().stream().map(id -> new DocumentoId(id)).collect(Collectors.toList());
-		List<ConteudoDocumento> conteudos = documentos.stream().map(d -> documentoRepository.download(d)).collect(Collectors.toList());
+		List<DocumentoId> documentos = command.getIdsDocumentos().stream().map(DocumentoId::new).collect(Collectors.toList());
+		List<ConteudoDocumento> conteudos = documentos.stream().map(documentoRepository::download).collect(Collectors.toList());
 		Long tamanhoNovoDocumento = 1L;
 		
 		for (ConteudoDocumento conteudo : conteudos) {
@@ -152,8 +165,8 @@ public class DocumentoApplicationService {
 		
 		DocumentoTemporario temp = documentoService.unirConteudos(conteudos);
 		DocumentoTemporarioId tempId = new DocumentoTemporarioId(documentoRepository.storeTemp(temp));
-		DocumentoId novoDocumento = documentoService.salvar(tempId);
-		return novoDocumento;
+		
+		return documentoService.salvar(tempId);
 	}
 
 	private List<DocumentoId> salvar(List<DocumentoTemporarioId> documentosTemporarios) {
@@ -165,6 +178,9 @@ public class DocumentoApplicationService {
 		return documentosSalvos;
 	}
 
+	/**
+	 * @param command
+	 */
 	@Command
 	public void handle(ConcluirEdicaoDocumento command) {
         DocumentoId documentoId = new DocumentoId(command.getDocumentoId());
@@ -178,6 +194,10 @@ public class DocumentoApplicationService {
 		controladorEdicaoDocumento.excluirEdicao(command.getNumeroEdicao());
 	}
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@Command
 	public DocumentoId handle(GerarDocumentoComTagsCommand command) {
 		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
@@ -185,6 +205,10 @@ public class DocumentoApplicationService {
 		return documentoService.gerarDocumentoTemporarioComTags(new DocumentoId(command.getDocumentoId()), substituicoesTag);
 	}
 
+	/**
+	 * @param command
+	 * @return
+	 */
 	@Command
 	public DocumentoId handle(GerarDocumentoFinalCommand command) {
 		DocumentoTemporario documentoTemporario = conversorDocumentoService.converterDocumentoFinal(new DocumentoId(command.getDocumento()));

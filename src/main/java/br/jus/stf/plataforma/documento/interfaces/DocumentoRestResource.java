@@ -70,6 +70,11 @@ public class DocumentoRestResource {
 	@Autowired
 	private DocumentoService documentoService;
 
+	/**
+	 * @param command
+	 * @param result
+	 * @return
+	 */
 	@ApiOperation("Salva os documentos temporários")
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
@@ -82,15 +87,26 @@ public class DocumentoRestResource {
 				.collect(Collectors.toList());
 	}	
 	
+	/**
+	 * @param documentoId
+	 * @return
+	 * @throws IOException
+	 */
 	@ApiOperation("Recupera o conteúdo de um documento do repositório")
 	@RequestMapping(value = "/{documentoId}/conteudo", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperar(@PathVariable("documentoId") Long documentoId) throws IOException {
 		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(documentoId));
 		InputStreamResource is = new InputStreamResource(documento.stream());
 		HttpHeaders headers = createResponseHeaders(documento.tamanho());
-		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
+		
+		return new ResponseEntity<>(is, headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * @param documentoId
+	 * @return
+	 * @throws IOException
+	 */
 	@ApiOperation("Retorna os dados de um documento")
 	@RequestMapping(value = "/{documentoId}", method = RequestMethod.GET)
 	public DocumentoDto consultar(@PathVariable("documentoId") Long documentoId) throws IOException {
@@ -98,6 +114,10 @@ public class DocumentoRestResource {
 		return documentoDtoAssembler.toDo(documento);
 	}
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@ApiOperation("Envia um documento para armazenamento temporário e retorna o indentificador")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
@@ -105,6 +125,11 @@ public class DocumentoRestResource {
 		return documentoApplicationService.handle(command);
 	}
 	
+	/**
+	 * @param command
+	 * @param result
+	 * @return
+	 */
 	@ApiOperation("Envia um documento assinado para armazenamento temporário e retorna o indentificador")
 	@RequestMapping(value = "/upload/assinado", method = RequestMethod.POST)
 	@ApiResponses(value = {@ApiResponse(code = 400, message = "O arquivo enviado não foi assinado digitalmente.")})
@@ -117,6 +142,10 @@ public class DocumentoRestResource {
 		return documentoApplicationService.handle(command);
 	}
 	
+	/**
+	 * @param command
+	 * @param result
+	 */
 	@ApiOperation("Exclui um documento temporário")
 	@RequestMapping(value = "/temporarios/delete", method = RequestMethod.POST)
 	public void deleteTemp(@Valid @RequestBody DeleteTemporarioCommand command, BindingResult result) {
@@ -126,6 +155,11 @@ public class DocumentoRestResource {
 		documentoApplicationService.handle(command);
 	}
 
+	/**
+	 * @param command
+	 * @param result
+	 * @return
+	 */
 	@ApiOperation("Divide um documento")
 	@RequestMapping(value = "/dividir", method = RequestMethod.POST)
 	public List<Long> dividirDocumento(@Valid @RequestBody DividirDocumentosCompletamenteCommand command, BindingResult result) {
@@ -135,6 +169,11 @@ public class DocumentoRestResource {
 		return documentoApplicationService.handle(command).stream().map(d -> d.toLong()).collect(Collectors.toList());
 	}
 	
+	/**
+	 * @param command
+	 * @param result
+	 * @return
+	 */
 	@ApiOperation("Une documentos")
 	@RequestMapping(value = "/unir", method = RequestMethod.POST)
 	public Long unirDocumentos(@Valid @RequestBody UnirDocumentosCommand command, BindingResult result) {
@@ -147,8 +186,8 @@ public class DocumentoRestResource {
 	/**
 	 * Define os headers para o pdf 
 	 * 
-	 * @param documentoId
-	 * @param response
+	 * @param tamanho
+	 * @return
 	 */
 	private HttpHeaders createResponseHeaders(Long tamanho) {
 		HttpHeaders headers = new HttpHeaders();
@@ -158,6 +197,10 @@ public class DocumentoRestResource {
 		return headers;
 	}
 	
+	/**
+	 * @param documentoId
+	 * @return
+	 */
 	@ApiOperation("Extrai as tags de um documento")
 	@RequestMapping(value = "/{documentoId}/tags", method = RequestMethod.GET)
 	public List<TagDto> extrairTags(@PathVariable("documentoId") Long documentoId) {
@@ -166,13 +209,21 @@ public class DocumentoRestResource {
 		return tags.stream().map(t -> new TagDto(t.nome())).collect(Collectors.toList());
 	}
 	
-	@ApiOperation("Gera um documento subsitituindo as tags")
+	/**
+	 * @param command
+	 * @return
+	 */
+	@ApiOperation("Gera um documento substituindo as tags")
 	@RequestMapping(value = "/gerar-com-tags")
 	public Long gerarDocumentoComTags(GerarDocumentoComTagsCommand command) {
 		DocumentoId documentoGeradoId = documentoApplicationService.handle(command);
 		return documentoGeradoId.toLong();
 	}
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@ApiOperation("Gera um documento final a partir do editável")
 	@RequestMapping(value = "/gerar-final")
 	public Long gerarDocumentoFinal(GerarDocumentoFinalCommand command) {

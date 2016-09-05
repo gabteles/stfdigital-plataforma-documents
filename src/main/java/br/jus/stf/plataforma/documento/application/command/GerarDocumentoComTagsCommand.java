@@ -20,9 +20,13 @@ public class GerarDocumentoComTagsCommand {
 	private List<SubstituicaoTag> substituicoes;
 
 	public GerarDocumentoComTagsCommand() {
-
+		// Construtor default
 	}
 
+	/**
+	 * @param documentoId
+	 * @param substituicoes
+	 */
 	public GerarDocumentoComTagsCommand(final Long documentoId, final List<SubstituicaoTag> substituicoes) {
 		Validate.notNull(documentoId);
 		Validate.notNull(substituicoes);
