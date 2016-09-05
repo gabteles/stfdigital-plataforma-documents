@@ -46,13 +46,17 @@ public class TextoApplicationService {
 	@Autowired
 	private ConversorDocumentoService conversorDocumentoService;
 	
+	/**
+	 * @param command
+	 * @return
+	 */
 	@Command(description = "Editar Conteúdo do Modelo")
 	public Texto handle(GerarTextoCommand command) {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(command.getModeloId()));
 		
 		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
 		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
-		DocumentoId documentoId = documentoService.gerarDocumentoTemporarioComTags(modelo.documento(), substituicoesTag);
+		DocumentoId documentoId = documentoService.gerarDocumentoTemporarioComTags(modelo.template(), substituicoesTag);
 		
 		TextoId textoId = textoRepository.nextId();
 		Texto texto = new Texto(textoId, documentoId);
@@ -62,6 +66,9 @@ public class TextoApplicationService {
 		return texto;
 	}
 	
+	/**
+	 * @param command
+	 */
 	@Command(description = "Concluir Texto")
 	public void handle(ConcluirTextoCommand command) {
 		Texto texto = textoRepository.findOne(new TextoId(command.getTextoId()));
@@ -75,6 +82,9 @@ public class TextoApplicationService {
 		return documentoService.salvar(new DocumentoTemporarioId(documentoTemporarioId));
 	}
 
+	/**
+	 * @param command
+	 */
 	public void handle(AssinarTextoCommand command) {
 		Texto texto = textoRepository.findOne(new TextoId(command.getTextoId()));
 		DocumentoId documentoSalvo = documentoService.salvar(new DocumentoTemporarioId(command.getDocumentoTemporarioId()));

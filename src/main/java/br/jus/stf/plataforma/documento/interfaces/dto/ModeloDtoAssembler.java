@@ -18,11 +18,15 @@ public class ModeloDtoAssembler {
 	@Autowired
 	private TipoDocumentoDtoAssembler tipoDocumentoDtoAssembler;
 
+	/**
+	 * @param modelo
+	 * @return
+	 */
 	public ModeloDto toDto(Modelo modelo) {
 		Validate.notNull(modelo);
 
 		return new ModeloDto(modelo.identity().toLong(), tipoDocumentoDtoAssembler.toDto(modelo.tipoDocumento()), modelo.nome(),
-		        modelo.documento().toLong());
+		        modelo.template().toLong());
 	}
 
 }

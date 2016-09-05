@@ -37,22 +37,28 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 
 	@Embedded
 	@AttributeOverride(name = "id", column = @Column(name = "SEQ_DOCUMENTO_TEMPLATE"))
-	private DocumentoId documento;
+	private DocumentoId template;
 
 	Modelo() {
-
+		// Construtor default.
 	}
 
-	public Modelo(final ModeloId id, final TipoDocumento tipoDocumento, final String nome, final DocumentoId documento) {
+	/**
+	 * @param id
+	 * @param tipoDocumento
+	 * @param nome
+	 * @param template
+	 */
+	public Modelo(final ModeloId id, final TipoDocumento tipoDocumento, final String nome, final DocumentoId template) {
 		Validate.notNull(id, "modelo.id.required");
 		Validate.notNull(tipoDocumento, "modelo.tipoDocumento.required");
 		Validate.notBlank(nome, "modelo.nome.required");
-		Validate.notNull(documento, "modelo.documento.required");
+		Validate.notNull(template, "modelo.template.required");
 
 		this.id = id;
 		this.nome = nome;
 		this.tipoDocumento = tipoDocumento;
-		this.documento = documento;
+		this.template = template;
 	}
 
 	@Override
@@ -60,18 +66,31 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 		return id;
 	}
 
+	/**
+	 * @return
+	 */
 	public String nome() {
 		return nome;
 	}
 
+	/**
+	 * @return
+	 */
 	public TipoDocumento tipoDocumento() {
 		return tipoDocumento;
 	}
 
-	public DocumentoId documento() {
-		return documento;
+	/**
+	 * @return
+	 */
+	public DocumentoId template() {
+		return template;
 	}
 
+	/**
+	 * @param tipoDocumento
+	 * @param nome
+	 */
 	public void editar(final TipoDocumento tipoDocumento, final String nome) {
 		Validate.notNull(tipoDocumento, "modelo.tipoDocumento.required");
 		Validate.notBlank(nome, "modelo.nome.required");

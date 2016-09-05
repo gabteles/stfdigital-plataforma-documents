@@ -49,21 +49,36 @@ public class ModeloRestResource {
 	@Autowired
 	private DocumentoRepository documentoRepository;
 
+	/**
+	 * @return
+	 */
 	@ApiOperation("Recupera os modelos existentes")
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public List<ModeloDto> listar() {
 		List<Modelo> modelos = modeloRepository.findAll();
-		return modelos.stream().map(modelo -> modeloDtoAssembler.toDto(modelo)).collect(Collectors.toList());
+		return modelos.stream().map(modeloDtoAssembler::toDto).collect(Collectors.toList());
 	}
 
+	/**
+	 * @param tiposDocumento
+	 * @return
+	 */
+	/**
+	 * @param tiposDocumento
+	 * @return
+	 */
 	@ApiOperation("Recupera os modelos com os tipos de documentos especificados")
 	@RequestMapping(value = "/por-tipos-documento", method = RequestMethod.POST)
 	public List<ModeloDto> consultarPorTiposDocumento(@RequestBody List<Long> tiposDocumento) {
 		List<Modelo> modelos = modeloRepository.findByTiposDocumento(
-				tiposDocumento.stream().map(t -> new TipoDocumentoId(t)).collect(Collectors.toList()));
-		return modelos.stream().map(modelo -> modeloDtoAssembler.toDto(modelo)).collect(Collectors.toList());
+				tiposDocumento.stream().map(TipoDocumentoId::new).collect(Collectors.toList()));
+		return modelos.stream().map(modeloDtoAssembler::toDto).collect(Collectors.toList());
 	}
 	
+	/**
+	 * @param id
+	 * @return
+	 */
 	@ApiOperation("Recupera os dados de um modelo")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ModeloDto consultar(@PathVariable("id") Long id) {
@@ -71,16 +86,21 @@ public class ModeloRestResource {
 		return modeloDtoAssembler.toDto(modelo);
 	}
 
+	/**
+	 * @param modeloId
+	 * @return
+	 * @throws IOException
+	 */
 	@ApiOperation("Recupera o conteúdo de um documento de modelo")
 	@RequestMapping(value = "/{modeloId}/documento/conteudo.docx", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperarConteudo(@PathVariable("modeloId") Long modeloId)
 	        throws IOException {
 		Modelo modelo = modeloRepository.findOne(new ModeloId(modeloId));
-		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(modelo.documento().toLong()));
+		ConteudoDocumento documento = documentoRepository.download(new DocumentoId(modelo.template().toLong()));
 		byte[] bytes = IOUtils.toByteArray(documento.stream());
 		InputStreamResource isr = new InputStreamResource(new ByteArrayInputStream(bytes));
 		HttpHeaders headers = createResponseHeaders(new Long(bytes.length));
-		return new ResponseEntity<InputStreamResource>(isr, headers, HttpStatus.OK);
+		return new ResponseEntity<>(isr, headers, HttpStatus.OK);
 
 	}
 

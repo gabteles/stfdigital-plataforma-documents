@@ -46,6 +46,11 @@ public class TextoRestResource {
 	@Autowired
 	private DocumentoDtoAssembler documentoDtoAssembler;
 	
+	/**
+	 * @param textoId
+	 * @return
+	 * @throws IOException
+	 */
 	@ApiOperation("Recupera o conteúdo pdf associado a um texto.")
 	@RequestMapping(value = "/{textoId}/conteudo.pdf", method = RequestMethod.GET)
 	public ResponseEntity<InputStreamResource> recuperarConteudoPdf(@PathVariable("textoId") Long textoId) throws IOException {
@@ -53,9 +58,13 @@ public class TextoRestResource {
 		ConteudoDocumento documento = documentoRepository.download(texto.documentoFinal());
 		InputStreamResource is = new InputStreamResource(documento.stream());
 		HttpHeaders headers = createResponseHeaders(documento.tamanho());
-		return new ResponseEntity<InputStreamResource>(is, headers, HttpStatus.OK);
+		return new ResponseEntity<>(is, headers, HttpStatus.OK);
 	}
 	
+	/**
+	 * @param textoId
+	 * @return
+	 */
 	@ApiOperation("Recupera o documento final associado a um texto")
 	@RequestMapping(value = "/{textoId}/documento-final", method = RequestMethod.GET)
 	public DocumentoDto recuperarDocumentoFinal(@PathVariable("textoId") Long textoId) {
@@ -64,12 +73,18 @@ public class TextoRestResource {
 		return documentoDtoAssembler.toDo(documentoFinal);
 	}
 	
+	/**
+	 * @param command
+	 */
 	@ApiOperation("Conclui um texto, gerando seu documento final associado")
 	@RequestMapping(value = "/concluir", method = RequestMethod.POST)
 	public void concluir(@RequestBody @Valid ConcluirTextoCommand command) {
 		textoApplicationService.handle(command);
 	}
 	
+	/**
+	 * @param command
+	 */
 	@ApiOperation("Realiza a assinatura do texto")
 	@RequestMapping(value = "/assinar", method = RequestMethod.POST)
 	public void assinar(@RequestBody @Valid AssinarTextoCommand command) {
