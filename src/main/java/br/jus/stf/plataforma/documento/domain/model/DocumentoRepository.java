@@ -17,6 +17,7 @@ public interface DocumentoRepository extends Repository<Documento, DocumentoId> 
 	 * Pesquisa um documento
 	 * 
 	 * @param documentoId
+	 * @return
 	 */
 	public Documento findOne(DocumentoId documentoId);
 	
@@ -32,6 +33,7 @@ public interface DocumentoRepository extends Repository<Documento, DocumentoId> 
 	 * Salva um documento
 	 * 
 	 * @param documento
+	 * @return
 	 */
 	public Documento save(Documento documento);
 	

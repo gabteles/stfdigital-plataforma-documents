@@ -14,8 +14,15 @@ import br.jus.stf.core.shared.documento.TipoDocumentoId;
  */
 public interface TipoDocumentoRepository extends Repository<TipoDocumento, TipoDocumentoId> {
 
+	/**
+	 * @return
+	 */
 	List<TipoDocumento> findAll();
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	TipoDocumento findOne(TipoDocumentoId id);
 
 }

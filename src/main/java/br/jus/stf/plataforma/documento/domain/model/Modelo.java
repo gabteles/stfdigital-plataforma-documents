@@ -9,9 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.jus.stf.core.framework.domaindrivendesign.Entity;
+import br.jus.stf.core.framework.domaindrivendesign.EntitySupport;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.ModeloId;
 
@@ -22,8 +21,8 @@ import br.jus.stf.core.shared.documento.ModeloId;
  *
  */
 @javax.persistence.Entity
-@Table(name = "MODELO", schema = "DOCUMENTO")
-public class Modelo implements Entity<Modelo, ModeloId> {
+@Table(name = "MODELO", schema = "DOCUMENTS")
+public class Modelo extends EntitySupport<Modelo, ModeloId> {
 
 	@EmbeddedId
 	private ModeloId id;
@@ -61,11 +60,6 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 		this.template = template;
 	}
 
-	@Override
-	public ModeloId identity() {
-		return id;
-	}
-
 	/**
 	 * @return
 	 */
@@ -100,27 +94,8 @@ public class Modelo implements Entity<Modelo, ModeloId> {
 	}
 	
 	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(id).toHashCode();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-
-		Modelo other = (Modelo) obj;
-		return sameIdentityAs(other);
-	}
-
-	@Override
-	public boolean sameIdentityAs(Modelo other) {
-		return other != null && this.id.sameValueAs(other.id);
+	public ModeloId identity() {
+		return id;
 	}
 
 }

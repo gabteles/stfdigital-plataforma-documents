@@ -33,7 +33,7 @@ public class TextoRepositoryImpl extends SimpleJpaRepository<Texto, TextoId> imp
 
 	@Override
 	public TextoId nextId() {
-		Query query = entityManager.createNativeQuery("SELECT documento.seq_texto.NEXTVAL FROM DUAL");
+		Query query = entityManager.createNativeQuery("SELECT documents.seq_texto.NEXTVAL FROM DUAL");
 		Long sequencial = ((BigInteger) query.getSingleResult()).longValue();
 		return new TextoId(sequencial);
 	}

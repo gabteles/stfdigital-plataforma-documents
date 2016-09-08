@@ -35,7 +35,7 @@ public class ModeloRepositoryImpl extends SimpleJpaRepository<Modelo, ModeloId> 
 
 	@Override
 	public ModeloId nextId() {
-		Query query = entityManager.createNativeQuery("SELECT documento.seq_modelo.NEXTVAL FROM DUAL");
+		Query query = entityManager.createNativeQuery("SELECT documents.seq_modelo.NEXTVAL FROM DUAL");
 		Long sequencial = ((BigInteger) query.getSingleResult()).longValue();
 		return new ModeloId(sequencial);
 	}

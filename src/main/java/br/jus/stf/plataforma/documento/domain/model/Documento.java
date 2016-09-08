@@ -5,9 +5,8 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import br.jus.stf.core.framework.domaindrivendesign.Entity;
+import br.jus.stf.core.framework.domaindrivendesign.EntitySupport;
 import br.jus.stf.core.shared.documento.DocumentoId;
 
 /**
@@ -16,8 +15,8 @@ import br.jus.stf.core.shared.documento.DocumentoId;
  * @created 14-ago-2015 18:34:02
  */
 @javax.persistence.Entity
-@Table(name = "DOCUMENTO", schema = "DOCUMENTO")
-public class Documento implements Entity<Documento, DocumentoId> {
+@Table(name = "DOCUMENTO", schema = "DOCUMENTS")
+public class Documento extends EntitySupport<Documento, DocumentoId> {
 
 	@EmbeddedId
 	private DocumentoId id;
@@ -32,9 +31,15 @@ public class Documento implements Entity<Documento, DocumentoId> {
 	private Integer quantidadePaginas;
 	
 	Documento() {
-
+		// Construtor default.
 	}
 
+	/**
+	 * @param id
+	 * @param numeroConteudo
+	 * @param quantidadePaginas
+	 * @param tamanho
+	 */
 	public Documento(final DocumentoId id, final String numeroConteudo, Integer quantidadePaginas, Long tamanho) {
 		Validate.notNull(id, "documento.id.required");
 		Validate.notBlank(numeroConteudo, "documento.numeroConteudo.required");
@@ -46,6 +51,10 @@ public class Documento implements Entity<Documento, DocumentoId> {
 		this.tamanho = tamanho;
 	}
 
+	/**
+	 * @param numeroConteudo
+	 * @param quantidadePaginas
+	 */
 	public void alterarConteudo(String numeroConteudo, Integer quantidadePaginas) {
 		Validate.notBlank(numeroConteudo, "documento.numeroConteudo.required");
 		
@@ -53,45 +62,30 @@ public class Documento implements Entity<Documento, DocumentoId> {
 		this.quantidadePaginas = quantidadePaginas;
 	}
 	
-	@Override
-	public DocumentoId identity() {
-		return id;
-	}
-
+	/**
+	 * @return
+	 */
 	public String numeroConteudo(){
 		return numeroConteudo;
 	}
 	
+	/**
+	 * @return
+	 */
 	public Long tamanho() {
 		return tamanho;
 	}
 
+	/**
+	 * @return
+	 */
 	public Integer quantidadePaginas() {
 		return quantidadePaginas;
 	}
 	
 	@Override
-	public int hashCode(){
-		return new HashCodeBuilder().append(id).toHashCode();
-	}
-	
-	@Override
-	public boolean equals(final Object o){
-		if (this == o) {
-			return true;
-		}
-		
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-	
-		Documento other = (Documento) o;
-		return sameIdentityAs(other);
-	}
-	
-	@Override
-	public boolean sameIdentityAs(final Documento other) {
-		return other != null && this.id.sameValueAs(other.id);
+	public DocumentoId identity() {
+		return id;
 	}
 	
 }
