@@ -16,6 +16,10 @@ public class ConteudoDocumento extends ValueObjectSupport<ConteudoDocumento> {
 	private byte[] bytes;
 	private Long tamanho;
 	
+	/**
+	 * @param bytes
+	 * @param tamanho
+	 */
 	public ConteudoDocumento(final byte[] bytes, final Long tamanho) {
 		Validate.notNull(bytes, "documentodownload.bytes.required");
 		Validate.notNull(tamanho, "documentodownload.tamanho.required");
@@ -24,10 +28,16 @@ public class ConteudoDocumento extends ValueObjectSupport<ConteudoDocumento> {
 		this.tamanho = tamanho;
 	}
 	
+	/**
+	 * @return
+	 */
 	public InputStream stream() {
 		return new ByteArrayInputStream(bytes);
 	}
 	
+	/**
+	 * @return
+	 */
 	public Long tamanho() {
 		return tamanho;
 	}

@@ -8,13 +8,17 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.Validate;
 
-import br.jus.stf.core.framework.domaindrivendesign.Entity;
+import br.jus.stf.core.framework.domaindrivendesign.EntitySupport;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.TextoId;
 
+/**
+ * @author Tomas.Godoi
+ *
+ */
 @javax.persistence.Entity
-@Table(name = "TEXTO", schema = "DOCUMENTO")
-public class Texto implements Entity<Texto, TextoId> {
+@Table(name = "TEXTO", schema = "DOCUMENTS")
+public class Texto extends EntitySupport<Texto, TextoId> {
 
 	@EmbeddedId
 	private TextoId id;
@@ -27,26 +31,31 @@ public class Texto implements Entity<Texto, TextoId> {
 	private DocumentoId documentoFinal;
 
 	Texto() {
-
+		// Construtor default.
 	}
 
+	/**
+	 * @param id
+	 * @param documento
+	 */
 	public Texto(final TextoId id, final DocumentoId documento) {
-		Validate.notNull(id, "texto.id.required");
-		Validate.notNull(documento, "texto.documento.required");
+		Validate.notNull(id, "Identificador requerido.");
+		Validate.notNull(documento, "Documento requerido.");
 
 		this.id = id;
 		this.documento = documento;
 	}
 
-	@Override
-	public TextoId identity() {
-		return id;
-	}
-
+	/**
+	 * @return
+	 */
 	public DocumentoId documento() {
 		return documento;
 	}
 
+	/**
+	 * @return
+	 */
 	public DocumentoId documentoFinal() {
 		return documentoFinal;
 	}
@@ -57,14 +66,14 @@ public class Texto implements Entity<Texto, TextoId> {
 	 * @param documentoFinal
 	 */
 	public void associarDocumentoFinal(DocumentoId documentoFinal) {
-		Validate.notNull(documentoFinal, "texto.documentoFinal.required");
+		Validate.notNull(documentoFinal, "Documento final requerido.");
 		
 		this.documentoFinal = documentoFinal;
 	}
 	
 	@Override
-	public boolean sameIdentityAs(Texto other) {
-		return other != null && this.id.sameValueAs(other.id);
+	public TextoId identity() {
+		return id;
 	}
 
 }

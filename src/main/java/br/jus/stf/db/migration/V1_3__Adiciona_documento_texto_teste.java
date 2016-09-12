@@ -41,19 +41,19 @@ public class V1_3__Adiciona_documento_texto_teste implements SpringJdbcMigration
 			        "classpath:documentos/pdftestes/pdf-B-3-pgs.pdf", "application/pdf", 3);
 			
 			jdbcTemplate.update(
-					"INSERT INTO documento.texto (seq_texto, seq_documento, seq_documento_final) VALUES (?, ?, ?)",
+					"INSERT INTO documents.texto (seq_texto, seq_documento, seq_documento_final) VALUES (?, ?, ?)",
 					i, modeloId, documentoId);
 		}
 	}
 
 	private Long inserirDocumento(JdbcTemplate jdbcTemplate, String path, String mimeType, int quantidadePaginas) throws IOException {
-		Long documentoId = jdbcTemplate.queryForObject("SELECT documento.seq_documento.NEXTVAL FROM DUAL",
+		Long documentoId = jdbcTemplate.queryForObject("SELECT documents.seq_documento.NEXTVAL FROM DUAL",
 		        Long.class);
 		Resource resource = resourceLoader.getResource(path);
 		String conteudoId = storeOnMongo(documentoId, path, mimeType, resource);
 		
 		jdbcTemplate.update(
-				"INSERT INTO documento.documento (seq_documento, num_conteudo, qtd_paginas, tamanho) VALUES (?, ?, ?, ?)",
+				"INSERT INTO documents.documento (seq_documento, num_conteudo, qtd_paginas, tamanho) VALUES (?, ?, ?, ?)",
 				documentoId, conteudoId, quantidadePaginas, resource.contentLength());
 		
 		return documentoId;

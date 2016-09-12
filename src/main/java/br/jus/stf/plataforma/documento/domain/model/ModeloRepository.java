@@ -13,13 +13,31 @@ import br.jus.stf.core.shared.documento.TipoDocumentoId;
  */
 public interface ModeloRepository {
 
+	/**
+	 * @return
+	 */
 	ModeloId nextId();
 
+	/**
+	 * @param modelo
+	 * @return
+	 */
 	<T extends Modelo> T save(T modelo);
 
+	/**
+	 * @param id
+	 * @return
+	 */
 	Modelo findOne(ModeloId id);
 	
+	/**
+	 * @return
+	 */
 	List<Modelo> findAll();
 
+	/**
+	 * @param tiposDocumento
+	 * @return
+	 */
 	List<Modelo> findByTiposDocumento(List<TipoDocumentoId> tiposDocumento);
 }

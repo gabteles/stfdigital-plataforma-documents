@@ -28,6 +28,9 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 	private Long tamanho;
 	private File arquivo;
 	
+	/**
+	 * @param file
+	 */
 	public DocumentoTemporario(MultipartFile file) {
 		Validate.notNull(file);
 		
@@ -35,25 +38,23 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 		tamanho = arquivo.length();
 	}
 	
-	private File createTempFile(MultipartFile file) {
-		File tempFile = null;
-		try {
-			tempFile = new File(FileUtils.getTempDirectory(), FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_" + RandomStringUtils.randomNumeric(20) + extractExtension(file.getOriginalFilename()));
-			file.transferTo(tempFile);
-		} catch (IllegalStateException | IOException e) {
-			throw new DocumentoTempRuntimeException(e);
-		}
-		return tempFile;
-	}
-	
+	/**
+	 * @return
+	 */
 	public String tempId() {
 		return arquivo.getName();
 	}
 	
+	/**
+	 * @return
+	 */
 	public Long tamanho() {
 		return tamanho;
 	}
 	
+	/**
+	 * @return
+	 */
 	public String contentType() {
 		try {
 			return new Tika().detect(arquivo.toPath());
@@ -62,6 +63,9 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 		}
 	}
 	
+	/**
+	 * @return
+	 */
 	public FileInputStream stream() {
 		try {
 			return new FileInputStream(arquivo);
@@ -83,12 +87,26 @@ public class DocumentoTemporario extends ValueObjectSupport<DocumentoTemporario>
 		}
 	}
 	
+	/**
+	 * Exclui o arquivo temporário.
+	 */
 	public void delete() {
 		arquivo.delete();
 	}
 	
+	private File createTempFile(MultipartFile file) {
+		File tempFile = null;
+		try {
+			tempFile = new File(FileUtils.getTempDirectory(), FILE_NAME_PREFFIX + Long.toString(System.currentTimeMillis()) + "_" + RandomStringUtils.randomNumeric(20) + extractExtension(file.getOriginalFilename()));
+			file.transferTo(tempFile);
+		} catch (IllegalStateException | IOException e) {
+			throw new DocumentoTempRuntimeException(e);
+		}
+		return tempFile;
+	}
+	
 	private String extractExtension(String name) {
-		return name.substring(name.lastIndexOf("."));
+		return name.substring(name.lastIndexOf('.'));
 	}
 
 }

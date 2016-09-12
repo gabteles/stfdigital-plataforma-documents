@@ -17,17 +17,27 @@ public class SubstituicaoTag extends ValueObjectSupport<SubstituicaoTag> {
 
 	private String valor;
 
+	/**
+	 * @param nome
+	 * @param valor
+	 */
 	public SubstituicaoTag(final String nome, final String valor) {
-		Validate.notBlank(nome, "substituicaoTag.nome.required");
+		Validate.notBlank(nome, "Nome requerido.");
 
 		this.nome = nome;
 		this.valor = Optional.ofNullable(valor).orElse("");
 	}
 
+	/**
+	 * @return
+	 */
 	public String nome() {
 		return nome;
 	}
 
+	/**
+	 * @return
+	 */
 	public String valor() {
 		return valor;
 	}

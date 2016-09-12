@@ -10,10 +10,16 @@ public class DocumentoTempRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public DocumentoTempRuntimeException(){
+	/**
+	 * Construtor default.
+	 */
+	DocumentoTempRuntimeException(){
 		super();
 	}
 	
+	/**
+	 * @param mensagem
+	 */
 	public DocumentoTempRuntimeException(Throwable mensagem){
 		super(mensagem);
 	}

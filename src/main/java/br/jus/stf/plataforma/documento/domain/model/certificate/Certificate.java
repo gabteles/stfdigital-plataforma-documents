@@ -18,7 +18,7 @@ import br.jus.stf.core.framework.domaindrivendesign.ValueObjectSupport;
 import br.jus.stf.plataforma.documento.domain.model.pki.PkiType;
 
 @Entity
-@Table(name = "CERTIFICADO_DIGITAL", schema = "DOCUMENTO")
+@Table(name = "CERTIFICADO_DIGITAL", schema = "DOCUMENTS")
 public class Certificate extends ValueObjectSupport<Certificate> {
 
 	@Id
