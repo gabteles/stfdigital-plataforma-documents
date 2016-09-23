@@ -19,6 +19,6 @@ services:
     links:
      - onlyoffice:docker # documents precisa acessar o onlyoffice pelo host docker para não dar erro de certificado
     depends_on:
-     - mongo
+     - cassandra
      - discovery
      - onlyoffice
