@@ -2,22 +2,22 @@ package br.jus.stf.db.migration;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.flywaydb.core.api.migration.spring.SpringJdbcMigration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
+import com.datastax.driver.core.querybuilder.Insert;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 /**
- * Adiciona modelos e seus conteúdos no mongo.
+ * Adiciona modelos e seus conteúdos no cassandra.
  * 
  * @author Tomas.Godoi
  *
@@ -26,7 +26,7 @@ import com.mongodb.DBObject;
 public class V1_2__Adic_documentos implements SpringJdbcMigration {
 
 	@Autowired
-	private GridFsOperations gridOperations;
+	private CassandraOperations cassandraOperations;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -44,27 +44,25 @@ public class V1_2__Adic_documentos implements SpringJdbcMigration {
 		Long documentoId = jdbcTemplate.queryForObject("SELECT DOCUMENTS.SEQ_DOCUMENTO.NEXTVAL FROM DUAL",
 		        Long.class);
 		Resource resource = resourceLoader.getResource(path);
-		String conteudoId = storeOnMongo(documentoId, path, resource);
+		String conteudoId = storeOnCassandra(documentoId, path, resource);
 		jdbcTemplate.update(
 		        "INSERT INTO DOCUMENTS.DOCUMENTO (SEQ_DOCUMENTO, NUM_CONTEUDO, QTD_PAGINAS, TAMANHO) VALUES (?, ?, ?, ?)",
 		        documentoId, conteudoId, quantidadePaginas, resource.contentLength());
 		return documentoId;
 	}
-
-	public String storeOnMongo(Long documentoId, String path, Resource resource) throws IOException {
+	
+	public String storeOnCassandra(Long documentoId, String path, Resource resource) throws IOException {
 		InputStream stream = null;
 		try {
 			stream = resource.getInputStream();
-			DBObject metaData = new BasicDBObject();
 
-			metaData.put("seq_documento", documentoId);
-			metaData.put("nom_arquivo", FilenameUtils.getName(path));
-			metaData.put("num_tamanho_bytes", resource.contentLength());
-
-			return gridOperations
-			        .store(stream, FilenameUtils.getName(path),
-			                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", metaData)
-			        .getId().toString();
+			ByteBuffer buffer = ByteBuffer.wrap(IOUtils.toByteArray(stream));
+			Insert insert = QueryBuilder.insertInto("documents", "documento")
+					.value("seq_documento", documentoId).value("bin_conteudo", buffer);
+			
+			cassandraOperations.execute(insert);
+			
+			return documentoId.toString();
 		} finally {
 			IOUtils.closeQuietly(stream);
 		}

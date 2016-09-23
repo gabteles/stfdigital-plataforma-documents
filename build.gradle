@@ -20,13 +20,13 @@ buildscript {
         jnaVersion = '4.1.0'
         jsonjVersion = '2.29'
         itextpdfVersion = '5.5.7'
-        embedMongoVersion = '1.50.0'
         bouncycastleVersion = '1.53'
-        springDataMongodbVersion = '1.9.2.RELEASE'
         apachePoiVersion = '3.13'
         apacheTikaVersion = '1.12'
         stfdigitalCoreVersion = '0.0.1-SNAPSHOT'
         stfdigitalTestVersion = '0.0.1-SNAPSHOT'
+        springDataCassandraVersion = '1.4.2.RELEASE'
+        embedCassandraVersion = '2.1.9.2'
     }
     repositories {
         mavenLocal()
@@ -113,10 +113,6 @@ dependencies {
     
     compile("org.springframework:spring-oxm")
     
-    compile("org.springframework.data:spring-data-mongodb:$springDataMongodbVersion")
-
-    compile("org.mongodb:mongo-java-driver")
-    
     compile("org.springframework.cloud:spring-cloud-starter-eureka")
         
     compile("com.google.guava:guava:${guavaVersion}")
@@ -151,6 +147,8 @@ dependencies {
     
     compile("org.flywaydb:flyway-core:$flywayVersion")
     
+    compile("org.springframework.data:spring-data-cassandra:$springDataCassandraVersion")
+    
     testCompile("com.jayway.jsonpath:json-path")
     
     testCompile("com.jillesvangurp:jsonj:${jsonjVersion}")
@@ -161,7 +159,7 @@ dependencies {
     
     testCompile("br.jus.stf.digital:test:${stfdigitalTestVersion}")
 
-    testCompile("de.flapdoodle.embed:de.flapdoodle.embed.mongo:$embedMongoVersion")
+    testCompile("org.cassandraunit:cassandra-unit-spring:$embedCassandraVersion")
 }
 
 // Cobertura de testes

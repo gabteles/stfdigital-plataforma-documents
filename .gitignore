@@ -52,3 +52,6 @@ logs
 
 # WebStorm
 .idea
+
+# Embedded Cassandra
+target

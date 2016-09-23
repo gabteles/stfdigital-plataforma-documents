@@ -1,0 +1,2 @@
+CREATE KEYSPACE IF NOT EXISTS documents WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};
+CREATE TABLE IF NOT EXISTS documents.documento (seq_documento bigint PRIMARY KEY, bin_conteudo blob);

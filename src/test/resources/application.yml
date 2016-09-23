@@ -16,3 +16,8 @@ flyway:
 mongo:
   host: mongo
   databaseName: documento
+  
+cassandra:
+  keyspace: documents
+  contactpoints: cassandra
+  port: 9042
