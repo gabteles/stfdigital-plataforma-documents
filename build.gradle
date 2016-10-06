@@ -145,7 +145,7 @@ dependencies {
         exclude module: 'activiti-spring-boot-starter-basic'
     }
     
-    compile("com.oracle:ojdbc6:11.2.0.1.0")
+    compile("oracle:ojdbc6:11.2.0.3")
     
     compile("com.h2database:h2")
     
