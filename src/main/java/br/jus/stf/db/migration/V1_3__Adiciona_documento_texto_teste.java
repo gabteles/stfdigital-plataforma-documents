@@ -59,7 +59,7 @@ public class V1_3__Adiciona_documento_texto_teste implements SpringJdbcMigration
 		return documentoId;
 	}
 	
-	public String storeOnCassandra(Long documentoId, String path, String mimeType, Resource resource) throws IOException {
+	private String storeOnCassandra(Long documentoId, String path, String mimeType, Resource resource) throws IOException {
 		InputStream stream = null;
 		try {
 			stream = resource.getInputStream();

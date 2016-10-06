@@ -1,7 +1,5 @@
 package br.jus.stf.plataforma.documento.infra.persistence;
 
-import java.math.BigInteger;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -34,8 +32,7 @@ public class TextoRepositoryImpl extends SimpleJpaRepository<Texto, TextoId> imp
 	@Override
 	public TextoId nextId() {
 		Query query = entityManager.createNativeQuery("SELECT documents.seq_texto.NEXTVAL FROM DUAL");
-		Long sequencial = ((BigInteger) query.getSingleResult()).longValue();
-		return new TextoId(sequencial);
+		return new TextoId(((Number) query.getSingleResult()).longValue());
 	}
 
 }

@@ -1,6 +1,5 @@
 package br.jus.stf.plataforma.documento.infra.persistence;
 
-import java.math.BigInteger;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -78,9 +77,8 @@ public class DocumentoRepositoryImpl extends SimpleJpaRepository<Documento, Docu
 
 	@Override
 	public DocumentoId nextId() {
-		javax.persistence.Query query = entityManager.createNativeQuery("SELECT DOCUMENTS.SEQ_DOCUMENTO.NEXTVAL FROM DUAL");
-		Long sequencial = ((BigInteger) query.getSingleResult()).longValue();
-		return new DocumentoId(sequencial);
+		javax.persistence.Query query = entityManager.createNativeQuery("SELECT documents.seq_documento.NEXTVAL FROM DUAL");
+		return new DocumentoId(((Number) query.getSingleResult()).longValue());
 	}
 	
 	@Override

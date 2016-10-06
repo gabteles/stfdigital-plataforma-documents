@@ -51,7 +51,7 @@ public class V1_2__Adic_documentos implements SpringJdbcMigration {
 		return documentoId;
 	}
 	
-	public String storeOnCassandra(Long documentoId, String path, Resource resource) throws IOException {
+	private String storeOnCassandra(Long documentoId, String path, Resource resource) throws IOException {
 		InputStream stream = null;
 		try {
 			stream = resource.getInputStream();

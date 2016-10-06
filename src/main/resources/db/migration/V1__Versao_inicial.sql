@@ -1,6 +1,4 @@
-create schema documents;
-
-create sequence documents.SEQ_DOCUMENTO increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;
+create sequence documents.seq_documento increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;
 create table documents.documento (seq_documento number not null, num_conteudo varchar2(24) not null, qtd_paginas number(5, 0), tamanho number(10,0) not null, constraint pk_documento primary key (seq_documento));
 
 create sequence documents.seq_certificado_digital increment by 1 start with 1 nomaxvalue minvalue 1 nocycle nocache;

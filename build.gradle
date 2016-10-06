@@ -141,7 +141,11 @@ dependencies {
 	
     compile("org.apache.tika:tika-core:$apacheTikaVersion")
 
-    compile("br.jus.stf.digital:core:${stfdigitalCoreVersion}")
+    compile("br.jus.stf.digital:core:${stfdigitalCoreVersion}") {
+        exclude module: 'activiti-spring-boot-starter-basic'
+    }
+    
+    compile("com.oracle:ojdbc6:11.2.0.1.0")
     
     compile("com.h2database:h2")
     
@@ -160,6 +164,8 @@ dependencies {
     testCompile("br.jus.stf.digital:test:${stfdigitalTestVersion}")
 
     testCompile("org.cassandraunit:cassandra-unit-spring:$embedCassandraVersion")
+    
+    testCompile("com.h2database:h2")
 }
 
 // Cobertura de testes

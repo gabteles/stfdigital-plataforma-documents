@@ -25,7 +25,7 @@ import org.springframework.data.cassandra.config.java.AbstractCassandraConfigura
  *
  */
 @Configuration
-@Profile({"development", "!test"})
+@Profile({"production", "development", "!test"})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
 	@Value("${cassandra.keyspace}")
