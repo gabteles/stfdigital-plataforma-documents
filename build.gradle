@@ -27,6 +27,7 @@ buildscript {
         stfdigitalTestVersion = '0.0.1-SNAPSHOT'
         springDataCassandraVersion = '1.4.2.RELEASE'
         embedCassandraVersion = '2.1.9.2'
+        ojdbcVersion = '11.2.0.1.0'
     }
     repositories {
         mavenLocal()
@@ -70,6 +71,7 @@ repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     maven { url "https://repo.spring.io/libs-milestone" }
+    maven { url "https://repository.jboss.org/nexus/content/groups/public-jboss" }
 }
 
 dependencyManagement {
@@ -145,7 +147,7 @@ dependencies {
         exclude module: 'activiti-spring-boot-starter-basic'
     }
     
-    compile("oracle:ojdbc6:11.2.0.3")
+    compile("oracle:ojdbc6:$ojdbcVersion")
     
     compile("com.h2database:h2")
     
