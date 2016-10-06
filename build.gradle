@@ -166,8 +166,6 @@ dependencies {
     testCompile("br.jus.stf.digital:test:${stfdigitalTestVersion}")
 
     testCompile("org.cassandraunit:cassandra-unit-spring:$embedCassandraVersion")
-    
-    testCompile("com.h2database:h2")
 }
 
 // Cobertura de testes

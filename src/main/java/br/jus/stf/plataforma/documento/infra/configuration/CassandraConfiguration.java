@@ -28,11 +28,11 @@ import org.springframework.data.cassandra.config.java.AbstractCassandraConfigura
 @Profile({"production", "development", "!test"})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
-	@Value("${cassandra.keyspace}")
+	@Value("${spring.data.cassandra.keyspace-name}")
 	private String keySpace;
-	@Value("${cassandra.contactpoints}")
+	@Value("${spring.data.cassandra.contact-points}")
 	private String contactPoints;
-	@Value("${cassandra.port}")
+	@Value("${spring.data.cassandra.port}")
 	private String port;
 	
 	@Autowired

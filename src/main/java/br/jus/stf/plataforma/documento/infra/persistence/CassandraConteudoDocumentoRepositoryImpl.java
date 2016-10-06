@@ -33,7 +33,7 @@ public class CassandraConteudoDocumentoRepositoryImpl implements ConteudoDocumen
 	@Autowired
 	private CassandraOperations cassandraOperations;
 	
-	@Value("${cassandra.keyspace}")
+	@Value("${spring.data.cassandra.keyspace-name}")
 	private String keySpace;
 	
 	@Override

@@ -10,12 +10,11 @@ spring:
     hibernate:
       ddl-auto: none
       use-new-id-generator-mappings: true
-
+  data:
+    cassandra:
+      port: 9043
+      keyspace-name: documents
+      contact-points: localhost
 flyway:
   validate-on-migrate: false
   table: SCHEMA_VERSION
-
-cassandra:
-  keyspace: documents
-  contactpoints: cassandra
-  port: 9042

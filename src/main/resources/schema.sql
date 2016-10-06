@@ -1,1 +1,1 @@
-create schema documents;
+create schema if not exists documents;
