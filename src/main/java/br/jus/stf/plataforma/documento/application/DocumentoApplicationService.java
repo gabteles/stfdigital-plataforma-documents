@@ -15,7 +15,7 @@ import br.jus.stf.core.framework.domaindrivendesign.ApplicationService;
 import br.jus.stf.core.shared.documento.DocumentoId;
 import br.jus.stf.core.shared.documento.DocumentoTemporarioId;
 import br.jus.stf.core.shared.documento.DocxMultipartFile;
-import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumento;
+import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumentoCommand;
 import br.jus.stf.plataforma.documento.application.command.DeleteTemporarioCommand;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCompletamenteCommand;
@@ -182,7 +182,7 @@ public class DocumentoApplicationService {
 	 * @param command
 	 */
 	@Command
-	public void handle(ConcluirEdicaoDocumento command) {
+	public void handle(ConcluirEdicaoDocumentoCommand command) {
         DocumentoId documentoId = new DocumentoId(command.getDocumentoId());
 		DocumentoTemporario documentoTemporario = new DocumentoTemporario(new DocxMultipartFile("documento.docx", command.getConteudo()));
         

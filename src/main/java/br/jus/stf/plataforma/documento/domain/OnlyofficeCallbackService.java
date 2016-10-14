@@ -18,80 +18,87 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import br.jus.stf.plataforma.documento.application.DocumentoApplicationService;
-import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumento;
+import br.jus.stf.plataforma.documento.application.command.ConcluirEdicaoDocumentoCommand;
 
+/**
+ * @author Tomas.Godoi
+ * @since 27.04.2016
+ */
 @Component
 public class OnlyofficeCallbackService {
 
-	@Autowired
-	@Qualifier("onlyofficeRestTemplate")
-	private RestTemplate restTemplate;
+    @Autowired
+    @Qualifier("onlyofficeRestTemplate")
+    private RestTemplate restTemplate;
 
-	@Autowired
-	private DocumentoApplicationService documentoApplicationService;
-	
-	@Autowired
-	private ControladorEdicaoDocumento controladorEdicaoDocumento;
+    @Autowired
+    private DocumentoApplicationService documentoApplicationService;
 
-	public Map<String, Object> callback(Long documentoId, Map<String, Object> json)
-	        throws RestClientException, URISyntaxException {
-		if (json.get("status").equals(0)) {
-			return callbackNoDocumentWithKeyFound(json);
-		} else if (json.get("status").equals(1)) {
-			return callbackDocumentBeingEdited(documentoId, json);
-		} else if (json.get("status").equals(2)) {
-			return callbackDocumentReadyForSaving(documentoId, json);
-		} else if (json.get("status").equals(3)) {
-			return callbackDocumentSavingError(json);
-		} else if (json.get("status").equals(4)) {
-			return callbackDocumentClosedNoChanges(json);
-		} else {
-			return successResponse();
-		}
-	}
+    @Autowired
+    private ControladorEdicaoDocumento controladorEdicaoDocumento;
 
-	private Map<String, Object> successResponse() {
-		Map<String, Object> response = new HashMap<>();
-		response.put("error", 0);
-		return response;
-	}
+    public Map<String, Object> callback(Long documentoId, Map<String, Object> json)
+            throws RestClientException, URISyntaxException {
+        Object status = json.get("status");
 
-	private Map<String, Object> callbackDocumentClosedNoChanges(Map<String, Object> json) {
-		String numeroEdicao = (String) json.get("key");
-		controladorEdicaoDocumento.excluirEdicao(numeroEdicao);
-		return successResponse();
-	}
+        if (status.equals(0)) {
+            return callbackNoDocumentWithKeyFound(json);
+        } else if (status.equals(1)) {
+            return callbackDocumentBeingEdited(documentoId, json);
+        } else if (status.equals(2)) {
+            return callbackDocumentReadyForSaving(documentoId, json);
+        } else if (status.equals(3)) {
+            return callbackDocumentSavingError(json);
+        } else if (status.equals(4)) {
+            return callbackDocumentClosedNoChanges(json);
+        } else {
+            return successResponse();
+        }
+    }
 
-	private Map<String, Object> callbackDocumentSavingError(Map<String, Object> json) {
-		return successResponse();
-	}
+    private Map<String, Object> successResponse() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("error", 0);
+        return response;
+    }
 
-	private Map<String, Object> callbackDocumentReadyForSaving(Long documentoId, Map<String, Object> json)
-	        throws RestClientException, URISyntaxException {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
+    private Map<String, Object> callbackDocumentClosedNoChanges(Map<String, Object> json) {
+        String numeroEdicao = (String) json.get("key");
+        controladorEdicaoDocumento.excluirEdicao(numeroEdicao);
+        return successResponse();
+    }
 
-		ResponseEntity<byte[]> response = restTemplate.exchange(new URI((String) json.get("url")), HttpMethod.GET,
-		        entity, byte[].class);
+    private Map<String, Object> callbackDocumentSavingError(Map<String, Object> json) {
+        return successResponse();
+    }
 
-		String numeroEdicao = (String) json.get("key");
+    private Map<String, Object> callbackDocumentReadyForSaving(Long documentoId, Map<String, Object> json)
+            throws RestClientException, URISyntaxException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
-		ConcluirEdicaoDocumento command = new ConcluirEdicaoDocumento(numeroEdicao, documentoId, response.getBody());
-		
-		documentoApplicationService.handle(command);
+        ResponseEntity<byte[]> response = restTemplate.exchange(new URI((String) json.get("url")), HttpMethod.GET,
+                entity, byte[].class);
 
-		return successResponse();
-	}
+        String numeroEdicao = (String) json.get("key");
 
-	private Map<String, Object> callbackDocumentBeingEdited(Long documentoId, Map<String, Object> json) {
-		String numeroEdicao = (String) json.get("key");
-		controladorEdicaoDocumento.ativarEdicao(numeroEdicao);
-		return successResponse();
-	}
+        ConcluirEdicaoDocumentoCommand command =
+                new ConcluirEdicaoDocumentoCommand(numeroEdicao, documentoId, response.getBody());
 
-	private Map<String, Object> callbackNoDocumentWithKeyFound(Map<String, Object> json) {
-		return successResponse();
-	}
+        documentoApplicationService.handle(command);
+
+        return successResponse();
+    }
+
+    private Map<String, Object> callbackDocumentBeingEdited(Long documentoId, Map<String, Object> json) {
+        String numeroEdicao = (String) json.get("key");
+        controladorEdicaoDocumento.ativarEdicao(numeroEdicao);
+        return successResponse();
+    }
+
+    private Map<String, Object> callbackNoDocumentWithKeyFound(Map<String, Object> json) {
+        return successResponse();
+    }
 
 }
