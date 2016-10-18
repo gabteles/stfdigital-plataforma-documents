@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/supremotribunalfederal/stfdigital-shared
+	remote = https://github.com/supremotribunalfederal/stfdigital-shared.git
 	branch = master
-	commit = 4755f10661e42777392280fb0c039e431d331d22
-	parent = 78a7bc6a6d9bca8bd97cac2645d30b5e448ec5ee
+	commit = d0c4f39b02be68c1685b46e900088e0d66032425
+	parent = b2d3fc4766872687e17117b0aa36709f057e3e0a
 	cmdver = 0.3.0
