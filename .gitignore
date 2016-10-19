@@ -55,3 +55,6 @@ logs
 
 # Embedded Cassandra
 target
+
+# Certificado do registro
+stfca.pem
