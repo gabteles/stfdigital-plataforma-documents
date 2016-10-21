@@ -25,6 +25,7 @@ services:
     extends:
       file: shared/compose/common.yml
       service: processos
+    image: registry.stf.jus.br/stfdigital/plataforma-processos
     depends_on:
      - rabbit
      - discovery
@@ -47,6 +48,7 @@ services:
     extends:
       file: shared/compose/common.yml
       service: cassandra
+    image: registry.stf.jus.br/cassandra:2.1
   onlyoffice:
     extends:
       file: shared/compose/common.yml
