@@ -44,7 +44,7 @@ public class Certificate extends ValueObjectSupport<Certificate> {
 	@Lob
 	@Basic(fetch = FetchType.LAZY)
 	@Column(name = "TXT_CERTIFICADO_DIGITAL")
-	private byte[] content;
+	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SEQ_CERTIFICADO_EMISSOR", nullable = true)
@@ -83,7 +83,7 @@ public class Certificate extends ValueObjectSupport<Certificate> {
 	}
 
 	public byte[] content() {
-		return content;
+		return content.getBytes();
 	}
 
 	public Certificate issuer() {
