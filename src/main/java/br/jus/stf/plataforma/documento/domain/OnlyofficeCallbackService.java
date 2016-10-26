@@ -32,6 +32,10 @@ public class OnlyofficeCallbackService {
     private RestTemplate restTemplate;
 
     @Autowired
+    @Qualifier("onlyofficeIntegrationBaseUrl")
+    private String onlyofficeIntegrationBaseUrl;
+    
+    @Autowired
     private DocumentoApplicationService documentoApplicationService;
 
     @Autowired
@@ -78,7 +82,7 @@ public class OnlyofficeCallbackService {
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<byte[]> response = restTemplate.exchange(new URI((String) json.get("url")), HttpMethod.GET,
+        ResponseEntity<byte[]> response = restTemplate.exchange(buildUrl((String) json.get("url")), HttpMethod.GET,
                 entity, byte[].class);
 
         String numeroEdicao = (String) json.get("key");
@@ -89,6 +93,11 @@ public class OnlyofficeCallbackService {
         documentoApplicationService.handle(command);
 
         return successResponse();
+    }
+
+    private URI buildUrl(String urlString) throws URISyntaxException {
+        URI url = new URI(urlString);
+        return new URI(onlyofficeIntegrationBaseUrl + url.getPath());
     }
 
     private Map<String, Object> callbackDocumentBeingEdited(Long documentoId, Map<String, Object> json) {

@@ -10,7 +10,6 @@ import javax.xml.transform.Source;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,13 +38,14 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 	@Autowired
 	@Qualifier("onlyofficeRestTemplate")
 	private RestTemplate restTemplate;
-
-	@Value("${onlyoffice.server.address:onlyoffice}")
-	private String onlyofficeAddress;
 	
 	@Autowired
 	@Qualifier("doocumentServerBaseUrl")
 	private String doocumentServerBaseUrl;
+	
+    @Autowired
+    @Qualifier("onlyofficeIntegrationBaseUrl")
+    private String onlyofficeIntegrationBaseUrl;
 	
 	@Autowired
 	@Qualifier("onlyofficeMarshaller")
@@ -63,7 +63,7 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 		
 		HttpEntity<?> entity = new HttpEntity<>(headers);
 		
-		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(onlyofficeAddress + "/ConvertService.ashx")
+		UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(onlyofficeIntegrationBaseUrl + "/ConvertService.ashx")
 			.queryParam("key", UUID.randomUUID().toString())
 			.queryParam("url", doocumentServerBaseUrl + "/documents/api/onlyoffice/documentos/" + documentoId.toLong() + "/conteudo.docx?access_token=" + token + "&_csrf=" + token)
 			.queryParam("filetype", "docx")
@@ -93,10 +93,15 @@ public class ConversorDocumentoServiceOnlyofficeImpl implements ConversorDocumen
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 
-		ResponseEntity<byte[]> response = restTemplate.exchange(new URI(fileUrl), HttpMethod.GET,
+		ResponseEntity<byte[]> response = restTemplate.exchange(buildUrl(fileUrl), HttpMethod.GET,
 		        entity, byte[].class);
 		
 		return new DocumentoTemporario(new PDFMultipartFile("documento.pdf", response.getBody()));
 	}
 
+    private URI buildUrl(String urlString) throws URISyntaxException {
+        URI url = new URI(urlString);
+        return new URI(onlyofficeIntegrationBaseUrl + url.getPath());
+    }
+	
 }

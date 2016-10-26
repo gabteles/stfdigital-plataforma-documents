@@ -36,6 +36,15 @@ public class OnlyofficeConfiguration {
 	@Value("${onlyoffice.documentserver.port:8765}")
 	private Integer port;
 
+	@Value("${onlyoffice.integration.protocol:https}")
+    private String onlyofficeIntegrationProtocol;
+	
+    @Value("${onlyoffice.integration.address:docker}")
+    private String onlyofficeIntegrationAddress;
+    
+    @Value("${onlyoffice.integration.port:443}")
+    private String onlyofficeIntegrationPort;
+	
 	@Bean(name = "onlyofficeRestTemplate")
 	public RestTemplate onlyofficeRestTemplate() throws Exception {
 		List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -64,4 +73,9 @@ public class OnlyofficeConfiguration {
 		}
 	}
 
+	@Bean(name = "onlyofficeIntegrationBaseUrl")
+    public String onlyofficeIntegrationBaseUrl() {
+	    return onlyofficeIntegrationProtocol + "://" + onlyofficeIntegrationAddress + ":" + onlyofficeIntegrationPort;
+    }
+	
 }
