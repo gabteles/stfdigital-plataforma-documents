@@ -18,15 +18,17 @@ import br.jus.stf.plataforma.documento.interfaces.dto.TipoDocumentoDtoAssembler;
 @RequestMapping("/api/tipos-documento")
 public class TipoDocumentoRestResource {
 
-	@Autowired
-	private TipoDocumentoRepository tipoDocumentoRepository;
+    @Autowired
+    private TipoDocumentoRepository tipoDocumentoRepository;
 
-	@Autowired
-	private TipoDocumentoDtoAssembler tipoDocumentoDtoAssembler;
+    @Autowired
+    private TipoDocumentoDtoAssembler tipoDocumentoDtoAssembler;
 
-	@ApiOperation("Recupera os tipos de modelo cadastrados")
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public List<TipoDocumentoDto> listar() {
-		return tipoDocumentoRepository.findAll().stream().map(tm -> tipoDocumentoDtoAssembler.toDto(tm)).collect(Collectors.toList());
-	}
+    @ApiOperation("Recupera os tipos de modelo cadastrados")
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<TipoDocumentoDto> listar() {
+        return tipoDocumentoRepository.findAll().stream()
+                .map(tipoDocumentoDtoAssembler::toDto)
+                .collect(Collectors.toList());
+    }
 }
