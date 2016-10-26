@@ -49,7 +49,7 @@ public class CassandraConteudoDocumentoRepositoryImpl implements ConteudoDocumen
 	        
 	        buffer.get(bytes);
 	        
-			conteudo = new ConteudoDocumento(bytes, new Long(buffer.remaining()));
+			conteudo = new ConteudoDocumento(bytes, new Long(bytes.length));
 	    }
 		
 		return conteudo;
