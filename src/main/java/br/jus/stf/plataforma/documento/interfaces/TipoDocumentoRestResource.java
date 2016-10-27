@@ -24,7 +24,7 @@ public class TipoDocumentoRestResource {
     @Autowired
     private TipoDocumentoDtoAssembler tipoDocumentoDtoAssembler;
 
-    @ApiOperation("Recupera os tipos de modelo cadastrados")
+    @ApiOperation("Recupera os tipos de modelo cadastrados.")
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<TipoDocumentoDto> listar() {
         return tipoDocumentoRepository.findAll().stream()
