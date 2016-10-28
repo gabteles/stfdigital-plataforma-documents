@@ -71,9 +71,11 @@ public class TextoRestResource {
 
     private HttpHeaders createResponseHeaders(Long tamanho) {
         HttpHeaders headers = new HttpHeaders();
+
         headers.setContentLength(tamanho);
         headers.setContentType(MediaType.parseMediaType("application/pdf"));
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
         return headers;
     }
 
