@@ -20,13 +20,11 @@ import br.jus.stf.plataforma.documento.application.command.DeleteTemporarioComma
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.DividirDocumentosCompletamenteCommand;
 import br.jus.stf.plataforma.documento.application.command.GerarDocumentoComTagsCommand;
-import br.jus.stf.plataforma.documento.application.command.GerarDocumentoFinalCommand;
 import br.jus.stf.plataforma.documento.application.command.SalvarDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.UnirDocumentosCommand;
 import br.jus.stf.plataforma.documento.application.command.UploadDocumentoAssinadoCommand;
 import br.jus.stf.plataforma.documento.application.command.UploadDocumentoCommand;
 import br.jus.stf.plataforma.documento.domain.ControladorEdicaoDocumento;
-import br.jus.stf.plataforma.documento.domain.ConversorDocumentoService;
 import br.jus.stf.plataforma.documento.domain.DocumentoService;
 import br.jus.stf.plataforma.documento.domain.model.ConteudoDocumento;
 import br.jus.stf.plataforma.documento.domain.model.Documento;
@@ -44,176 +42,171 @@ import br.jus.stf.plataforma.documento.infra.persistence.ConteudoDocumentoReposi
 @ApplicationService
 @Transactional
 public class DocumentoApplicationService {
-	
-	@Autowired
-	private DocumentoRepository documentoRepository;
-	
-	@Autowired
-	private DocumentoService documentoService;
-	
-	@Autowired
-	private ConteudoDocumentoRepository conteudoDocumentoRepository;
-	
-	@Autowired
-	private ControladorEdicaoDocumento controladorEdicaoDocumento;
-	
-	@Autowired
-	private ConversorDocumentoService conversorDocumentoService;
 
-	/**
-	 * Salva os documentos temporários no repositório
-	 * 
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public Map<String, DocumentoId> handle(SalvarDocumentosCommand command) {
-		List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream()
-				.map(DocumentoTemporarioId::new).collect(Collectors.toList());
-		
-		return documentosTemporarios.stream()
-				.collect(Collectors.toMap(docTemp -> docTemp.toString(), documentoService::salvar));
-	}
+    @Autowired
+    private DocumentoRepository documentoRepository;
 
-	/**
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public String handle(UploadDocumentoCommand command) {
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return documentoService.salvarDocumentoTemporario(documentoTemporario);
-	}
-	
-	/**
-	 * 
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public String handle(UploadDocumentoAssinadoCommand command) {
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
-		return documentoService.salvarDocumentoTemporario(documentoTemporario);
-	}
-	
-	/**
-	 * @param command
-	 */
-	@Command
-	public void handle(DeleteTemporarioCommand command) {
-		command.getFiles().stream()
-			.forEach(documentoRepository::removeTemp);
-	}
-	
-	/**
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public List<DocumentoId> handle(DividirDocumentosCompletamenteCommand command) {
-		List<DocumentoId> documentosDivididos = new ArrayList<>();
-		List<Range<Integer>> intervalos = command.getIntervalos().stream().map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
-		documentosDivididos.addAll(dividirDocumentoCompletamente(new DocumentoId(command.getDocumentoId()), intervalos));
-		return documentosDivididos;
-	}
-	
-	/**
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public List<DocumentoId> handle(DividirDocumentosCommand command) {
-		List<DocumentoId> documentosDivididos = new ArrayList<>();
-		List<Range<Integer>> intervalos = command.getIntervalos().stream().map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
-		List<DocumentoTemporarioId> documentosTemporarios = documentoService.dividirDocumento(new DocumentoId(command.getDocumentoId()), intervalos);
-		List<DocumentoId> documentosSalvos = salvar(documentosTemporarios);
-		documentosDivididos.addAll(documentosSalvos);
-		return documentosDivididos;
-	}
-	
-	/**
-	 * Divide um documento completamente.
-	 * 
-	 * @param id
-	 * @param intervalos
-	 * @return
-	 */
-	private List<DocumentoId> dividirDocumentoCompletamente(DocumentoId id, List<Range<Integer>> intervalos) {
-		List<DocumentoTemporarioId> documentosTemporarios = documentoService.dividirDocumentoCompletamente(id, intervalos);
-		return salvar(documentosTemporarios);
-	}
+    @Autowired
+    private DocumentoService documentoService;
 
-	/**
-	 * Une os documentos especificados em um só.
-	 * 
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public DocumentoId handle(UnirDocumentosCommand command) {
-		List<DocumentoId> documentos = command.getIdsDocumentos().stream().map(DocumentoId::new).collect(Collectors.toList());
-		List<ConteudoDocumento> conteudos = documentos.stream().map(documentoRepository::download).collect(Collectors.toList());
-		Long tamanhoNovoDocumento = 1L;
-		
-		for (ConteudoDocumento conteudo : conteudos) {
-			tamanhoNovoDocumento += conteudo.tamanho();
-		}
-		
-		if (tamanhoNovoDocumento > DocumentoTemporario.TAMANHO_MAXIMO) {
-			throw new IllegalArgumentException("O tamanho do arquivo excede o limite máximo de 10MB.");
-		}
-		
-		DocumentoTemporario temp = documentoService.unirConteudos(conteudos);
-		DocumentoTemporarioId tempId = new DocumentoTemporarioId(documentoRepository.storeTemp(temp));
-		
-		return documentoService.salvar(tempId);
-	}
+    @Autowired
+    private ConteudoDocumentoRepository conteudoDocumentoRepository;
 
-	private List<DocumentoId> salvar(List<DocumentoTemporarioId> documentosTemporarios) {
-		List<DocumentoId> documentosSalvos = new ArrayList<>();
-		for (DocumentoTemporarioId docTempId : documentosTemporarios) {
-			DocumentoId novoDocumento = documentoService.salvar(docTempId);
-			documentosSalvos.add(novoDocumento);
-		}
-		return documentosSalvos;
-	}
+    @Autowired
+    private ControladorEdicaoDocumento controladorEdicaoDocumento;
 
-	/**
-	 * @param command
-	 */
-	@Command
-	public void handle(ConcluirEdicaoDocumentoCommand command) {
+    /**
+     * Salva os documentos temporários no repositório
+     * 
+     * @param command
+     * @return
+     */
+    @Command
+    public Map<String, DocumentoId> handle(SalvarDocumentosCommand command) {
+        List<DocumentoTemporarioId> documentosTemporarios = command.getIdsDocumentosTemporarios().stream()
+                .map(DocumentoTemporarioId::new).collect(Collectors.toList());
+
+        return documentosTemporarios.stream()
+                .collect(Collectors.toMap(docTemp -> docTemp.toString(), documentoService::salvar));
+    }
+
+    /**
+     * @param command
+     * @return
+     */
+    @Command
+    public String handle(UploadDocumentoCommand command) {
+        DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
+        return documentoService.salvarDocumentoTemporario(documentoTemporario);
+    }
+
+    /**
+     * 
+     * @param command
+     * @return
+     */
+    @Command
+    public String handle(UploadDocumentoAssinadoCommand command) {
+        DocumentoTemporario documentoTemporario = new DocumentoTemporario(command.getFile());
+        return documentoService.salvarDocumentoTemporario(documentoTemporario);
+    }
+
+    /**
+     * @param command
+     */
+    @Command
+    public void handle(DeleteTemporarioCommand command) {
+        command.getFiles().stream()
+                .forEach(documentoRepository::removeTemp);
+    }
+
+    /**
+     * @param command
+     * @return
+     */
+    @Command
+    public List<DocumentoId> handle(DividirDocumentosCompletamenteCommand command) {
+        List<DocumentoId> documentosDivididos = new ArrayList<>();
+        List<Range<Integer>> intervalos = command.getIntervalos().stream()
+                .map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
+        documentosDivididos
+                .addAll(dividirDocumentoCompletamente(new DocumentoId(command.getDocumentoId()), intervalos));
+        return documentosDivididos;
+    }
+
+    /**
+     * @param command
+     * @return
+     */
+    @Command
+    public List<DocumentoId> handle(DividirDocumentosCommand command) {
+        List<DocumentoId> documentosDivididos = new ArrayList<>();
+        List<Range<Integer>> intervalos = command.getIntervalos().stream()
+                .map(i -> Range.between(i.getPaginaInicial(), i.getPaginaFinal())).collect(Collectors.toList());
+        List<DocumentoTemporarioId> documentosTemporarios =
+                documentoService.dividirDocumento(new DocumentoId(command.getDocumentoId()), intervalos);
+        List<DocumentoId> documentosSalvos = salvar(documentosTemporarios);
+        documentosDivididos.addAll(documentosSalvos);
+        return documentosDivididos;
+    }
+
+    /**
+     * Divide um documento completamente.
+     * 
+     * @param id
+     * @param intervalos
+     * @return
+     */
+    private List<DocumentoId> dividirDocumentoCompletamente(DocumentoId id, List<Range<Integer>> intervalos) {
+        List<DocumentoTemporarioId> documentosTemporarios =
+                documentoService.dividirDocumentoCompletamente(id, intervalos);
+        return salvar(documentosTemporarios);
+    }
+
+    /**
+     * Une os documentos especificados em um só.
+     * 
+     * @param command
+     * @return
+     */
+    @Command
+    public DocumentoId handle(UnirDocumentosCommand command) {
+        List<DocumentoId> documentos =
+                command.getIdsDocumentos().stream().map(DocumentoId::new).collect(Collectors.toList());
+        List<ConteudoDocumento> conteudos =
+                documentos.stream().map(documentoRepository::download).collect(Collectors.toList());
+        Long tamanhoNovoDocumento = 1L;
+
+        for (ConteudoDocumento conteudo : conteudos) {
+            tamanhoNovoDocumento += conteudo.tamanho();
+        }
+
+        if (tamanhoNovoDocumento > DocumentoTemporario.TAMANHO_MAXIMO) {
+            throw new IllegalArgumentException("O tamanho do arquivo excede o limite máximo de 10MB.");
+        }
+
+        DocumentoTemporario temp = documentoService.unirConteudos(conteudos);
+        DocumentoTemporarioId tempId = new DocumentoTemporarioId(documentoRepository.storeTemp(temp));
+
+        return documentoService.salvar(tempId);
+    }
+
+    private List<DocumentoId> salvar(List<DocumentoTemporarioId> documentosTemporarios) {
+        List<DocumentoId> documentosSalvos = new ArrayList<>();
+        for (DocumentoTemporarioId docTempId : documentosTemporarios) {
+            DocumentoId novoDocumento = documentoService.salvar(docTempId);
+            documentosSalvos.add(novoDocumento);
+        }
+        return documentosSalvos;
+    }
+
+    /**
+     * @param command
+     */
+    @Command
+    public void handle(ConcluirEdicaoDocumentoCommand command) {
         DocumentoId documentoId = new DocumentoId(command.getDocumentoId());
-		DocumentoTemporario documentoTemporario = new DocumentoTemporario(new DocxMultipartFile("documento.docx", command.getConteudo()));
-        
-		Documento documento = documentoRepository.findOne(documentoId);
-		conteudoDocumentoRepository.deleteConteudo(documento.numeroConteudo());
-		String numeroConteudo = conteudoDocumentoRepository.save(documentoId, documentoTemporario);
-		documento.alterarConteudo(numeroConteudo, documentoService.contarPaginas(documentoTemporario));
-		documentoRepository.save(documento);
-		controladorEdicaoDocumento.excluirEdicao(command.getNumeroEdicao());
-	}
-	
-	/**
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public DocumentoId handle(GerarDocumentoComTagsCommand command) {
-		List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
-		        .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
-		return documentoService.gerarDocumentoTemporarioComTags(new DocumentoId(command.getDocumentoId()), substituicoesTag);
-	}
+        DocumentoTemporario documentoTemporario =
+                new DocumentoTemporario(new DocxMultipartFile("documento.docx", command.getConteudo()));
 
-	/**
-	 * @param command
-	 * @return
-	 */
-	@Command
-	public DocumentoId handle(GerarDocumentoFinalCommand command) {
-		DocumentoTemporario documentoTemporario = conversorDocumentoService.converterDocumentoFinal(new DocumentoId(command.getDocumento()));
-		String documentoTemporarioId = documentoService.salvarDocumentoTemporario(documentoTemporario);
-		return documentoService.salvar(new DocumentoTemporarioId(documentoTemporarioId));
-	}
-	
+        Documento documento = documentoRepository.findOne(documentoId);
+        conteudoDocumentoRepository.deleteConteudo(documento.numeroConteudo());
+        String numeroConteudo = conteudoDocumentoRepository.save(documentoId, documentoTemporario);
+        documento.alterarConteudo(numeroConteudo, documentoService.contarPaginas(documentoTemporario));
+        documentoRepository.save(documento);
+        controladorEdicaoDocumento.excluirEdicao(command.getNumeroEdicao());
+    }
+
+    /**
+     * @param command
+     * @return
+     */
+    @Command
+    public DocumentoId handle(GerarDocumentoComTagsCommand command) {
+        List<SubstituicaoTag> substituicoesTag = command.getSubstituicoes().stream()
+                .map(std -> new SubstituicaoTag(std.getNome(), std.getValor())).collect(Collectors.toList());
+        return documentoService.gerarDocumentoTemporarioComTags(new DocumentoId(command.getDocumentoId()),
+                substituicoesTag);
+    }
+
 }

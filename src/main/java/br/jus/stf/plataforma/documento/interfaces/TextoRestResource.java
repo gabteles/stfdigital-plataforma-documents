@@ -1,6 +1,8 @@
 package br.jus.stf.plataforma.documento.interfaces;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -10,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,75 +38,104 @@ import br.jus.stf.plataforma.documento.interfaces.dto.DocumentoDtoAssembler;
 @RequestMapping("/api/textos")
 public class TextoRestResource {
 
-	@Autowired
-	private TextoRepository textoRepository;
-	
-	@Autowired
-	private DocumentoRepository documentoRepository;
-	
-	@Autowired
-	private TextoApplicationService textoApplicationService;
-	
-	@Autowired
-	private DocumentoDtoAssembler documentoDtoAssembler;
-	
-	/**
-	 * @param textoId
-	 * @return
-	 * @throws IOException
-	 */
-	@ApiOperation("Recupera o conteúdo pdf associado a um texto.")
-	@RequestMapping(value = "/{textoId}/conteudo.pdf", method = RequestMethod.GET)
-	public ResponseEntity<InputStreamResource> recuperarConteudoPdf(@PathVariable("textoId") Long textoId) throws IOException {
-		Texto texto = textoRepository.findOne(new TextoId(textoId));
-		ConteudoDocumento documento = documentoRepository.download(texto.documentoFinal());
-		InputStreamResource is = new InputStreamResource(documento.stream());
-		HttpHeaders headers = createResponseHeaders(documento.tamanho());
-		return new ResponseEntity<>(is, headers, HttpStatus.OK);
-	}
-	
-	/**
-	 * @param textoId
-	 * @return
-	 */
-	@ApiOperation("Recupera o documento final associado a um texto")
-	@RequestMapping(value = "/{textoId}/documento-final", method = RequestMethod.GET)
-	public DocumentoDto recuperarDocumentoFinal(@PathVariable("textoId") Long textoId) {
-		Texto texto = textoRepository.findOne(new TextoId(textoId));
-		Documento documentoFinal = documentoRepository.findOne(texto.documentoFinal());
-		return documentoDtoAssembler.toDo(documentoFinal);
-	}
-	
-	/**
-	 * @param command
-	 */
-	@ApiOperation("Conclui um texto, gerando seu documento final associado")
-	@RequestMapping(value = "/concluir", method = RequestMethod.POST)
-	public void concluir(@RequestBody @Valid ConcluirTextoCommand command) {
-		textoApplicationService.handle(command);
-	}
-	
-	/**
-	 * @param command
-	 */
-	@ApiOperation("Realiza a assinatura do texto")
-	@RequestMapping(value = "/assinar", method = RequestMethod.POST)
-	public void assinar(@RequestBody @Valid AssinarTextoCommand command) {
-		textoApplicationService.handle(command);
-	}
-	
-	/**
-	 * Define os headers para o pdf 
-	 * 
-	 * @param documentoId
-	 * @param response
-	 */
-	private HttpHeaders createResponseHeaders(Long tamanho) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentLength(tamanho);
-		headers.setContentType(MediaType.parseMediaType("application/pdf"));
-		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-		return headers;
-	}
-	
+    private static final String TEXTO_INVALIDO_PATTERN = "Texto Inválido: %S";
+
+    @Autowired
+    private TextoRepository textoRepository;
+
+    @Autowired
+    private DocumentoRepository documentoRepository;
+
+    @Autowired
+    private TextoApplicationService textoApplicationService;
+
+    @Autowired
+    private DocumentoDtoAssembler documentoDtoAssembler;
+
+    /**
+     * @param textoId Identificador do texto procurado.
+     * @return Stream com o conteúdo do texto.
+     * @throws IOException
+     */
+    @ApiOperation("Recupera o conteúdo pdf associado a um texto.")
+    @RequestMapping(value = "/{textoId}/documento/conteudo", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> recuperarConteudoPdf(@PathVariable("textoId") Long textoId)
+            throws IOException {
+        Texto texto = textoRepository.findOne(new TextoId(textoId));
+        ConteudoDocumento documento = documentoRepository.download(texto.documentoFinal());
+        InputStreamResource is = new InputStreamResource(documento.stream());
+        HttpHeaders headers = createResponseHeaders(documento.tamanho());
+
+        return new ResponseEntity<>(is, headers, HttpStatus.OK);
+    }
+
+    private HttpHeaders createResponseHeaders(Long tamanho) {
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.setContentLength(tamanho);
+        headers.setContentType(MediaType.parseMediaType("application/pdf"));
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+
+        return headers;
+    }
+
+    /**
+     * @param textoId Identificador do texto procurado.
+     * @return Dados do documento final associado ao texto.
+     */
+    @ApiOperation("Recupera o documento final associado a um texto.")
+    @RequestMapping(value = "/{textoId}/documento", method = RequestMethod.GET)
+    public DocumentoDto recuperarDocumentoFinal(@PathVariable("textoId") Long textoId) {
+        Texto texto = textoRepository.findOne(new TextoId(textoId));
+        Documento documentoFinal = documentoRepository.findOne(texto.documentoFinal());
+
+        return documentoDtoAssembler.toDo(documentoFinal);
+    }
+
+    /**
+     * @param textoId Identificador do texto associado ao comando.
+     * @param command Comando com dados para conclusão do texto.
+     * @param binding Resultado das validações.
+     */
+    @ApiOperation("Conclui um texto, gerando seu documento final associado.")
+    @RequestMapping(value = "/{textoId}/conclusao", method = RequestMethod.PUT)
+    public void concluir(@PathVariable("textoId") Long textoId, @RequestBody @Valid ConcluirTextoCommand command,
+            BindingResult binding) {
+        isValid(textoId, command.getTextoId(), binding);
+        textoApplicationService.handle(command);
+    }
+
+    /**
+     * @param textoId Identificador do texto associado ao comando.
+     * @param command Comando com dados para conclusão do texto.
+     * @param binding Resultado das validações.
+     */
+    @ApiOperation("Realiza a assinatura do texto.")
+    @RequestMapping(value = "/{textoId}/assinatura", method = RequestMethod.PUT)
+    public void assinar(@PathVariable("textoId") Long textoId, @RequestBody @Valid AssinarTextoCommand command,
+            BindingResult binding) {
+        isValid(textoId, command.getTextoId(), binding);
+        textoApplicationService.handle(command);
+    }
+
+    private static void isValid(Long textoIdPath, Long textoIdCommand, BindingResult binding) {
+        isValid(binding);
+
+        if (!textoIdPath.equals(textoIdCommand)) {
+            throw new IllegalArgumentException(message(
+                    Arrays.asList(
+                            new ObjectError("Texto", "Identificadores do comando incompatíveis."))));
+        }
+    }
+
+    private static void isValid(BindingResult binding) {
+        if (binding.hasErrors()) {
+            throw new IllegalArgumentException(message(binding.getAllErrors()));
+        }
+    }
+
+    private static String message(List<ObjectError> errors) {
+        return String.format(TEXTO_INVALIDO_PATTERN, errors);
+    }
+
 }
